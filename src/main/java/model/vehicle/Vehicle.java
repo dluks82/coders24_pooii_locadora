@@ -1,4 +1,6 @@
-public class Vehicle {
+package model.vehicle;
+
+public abstract class Vehicle {
     private String id;
     private String licensePlate;
     private String model;
