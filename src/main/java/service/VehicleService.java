@@ -16,12 +16,12 @@ public interface VehicleService {
 
     List<Vehicle> findAllVehicles();
 
-    List<Vehicle> findVehicleByPlate(String plate);
+    Vehicle findVehicleByPlate(String plate);
 
     List<Vehicle> findVehicleByModel(String model);
 
     List<Vehicle> findVehicleByBrand(String brand);
 
-    List<Vehicle> findVehicleByAgency(String agency);
+    List<Vehicle> findVehicleByAgencyId(String agencyId);
 
 }
