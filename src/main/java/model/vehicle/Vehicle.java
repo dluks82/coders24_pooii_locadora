@@ -29,8 +29,8 @@ public abstract class Vehicle {
     public abstract BigDecimal getDailyRate();
 
     public final BigDecimal calculateRentalPrice(int rentalDays) {
-        if(rentalDays < 0) throw new InputMismatchException();
-        else if (rentalDays % 1 != 0) throw new InputMismatchException();
+        if(rentalDays < 0) throw new IllegalArgumentException("Dias alugados não podem ser negativos");
+
         return getDailyRate().multiply(new BigDecimal(rentalDays));
     }
 
