@@ -28,13 +28,10 @@ public abstract class Vehicle {
 
     public abstract BigDecimal getDailyRate();
 
-    public final BigDecimal calculateRentalPrice(double daysRented) {
-        if(daysRented < 0) {
-            throw new InputMismatchException();
-        }else if (daysRented % 1 != 0) {
-            throw new InputMismatchException();
-        }
-        return getDailyRate().multiply(new BigDecimal(daysRented));
+    public final BigDecimal calculateRentalPrice(int rentalDays) {
+        if(rentalDays < 0) throw new InputMismatchException();
+        else if (rentalDays % 1 != 0) throw new InputMismatchException();
+        return getDailyRate().multiply(new BigDecimal(rentalDays));
     }
 
     public String getId() {
