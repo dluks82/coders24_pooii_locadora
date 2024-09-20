@@ -1,12 +1,16 @@
 package model.rental;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import model.agency.Agency;
 import model.customer.Customer;
+import model.vehicle.Car;
 import model.vehicle.Vehicle;
+import repository.RentalRepository;
 
-public class Rental {
+public class Rental implements RentalRepository{
 
     private String id;
     private Customer customer;
@@ -73,4 +77,63 @@ public class Rental {
     public void setRentalDays(int rentalDays) {
         this.rentalDays = rentalDays;
     }
+    
+    // class methods
+    public BigDecimal calculateTotalCost() {
+        BigDecimal big = new BigDecimal(0);
+        return big;
+    } 
+
+    public void seiActualReturnDate(LocalDateTime actualReturnDate) { }
+
+    public String generatePickupReceipt() {
+        return "retorno";
+    }
+
+    public String generateReturnReceipt() {
+        return "retorno";
+    }
+
+    // interface methods
+    @Override
+    public Rental save(Rental entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+    @Override
+    public Rental update(Rental entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+    @Override
+    public boolean delete(Rental entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+    @Override
+    public Rental findById(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+    @Override
+    public List<Rental> findAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+    @Override
+    public List<Rental> findByCustomer(Customer customer) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByCustomer'");
+    }
+    @Override
+    public List<Rental> findByCar(Car car) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByCar'");
+    }
+    @Override
+    public List<Rental> findOpenRentals() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findOpenRentals'");
+    }
+    
 }
