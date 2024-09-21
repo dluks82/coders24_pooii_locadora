@@ -1,12 +1,13 @@
 package service;
 
+import dto.CreateVehicleDTO;
 import model.vehicle.Vehicle;
 
 import java.util.List;
 
 public interface VehicleService {
 
-    Vehicle createVehicle(Vehicle vehicle);
+    Vehicle createVehicle(CreateVehicleDTO vehicleDTO);
 
     Vehicle updateVehicle(Vehicle vehicle);
 
