@@ -1,11 +1,5 @@
 package model.customer;
 
-
-import model.rental.Rental;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Customer {
 
     protected String id;
