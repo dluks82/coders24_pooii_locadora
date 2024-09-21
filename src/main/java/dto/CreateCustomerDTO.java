@@ -1,4 +1,9 @@
 package dto;
 
-public record CreateCustomerDTO(String name, String numberPhone, String documentId) {
+public record CreateCustomerDTO(
+        String type,
+        String name,
+        String numberPhone,
+        String documentId
+) {
 }
