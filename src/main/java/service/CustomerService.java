@@ -1,12 +1,13 @@
 package service;
 
+import dto.CreateCustomerDTO;
 import model.customer.Customer;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    Customer createCustomer(Customer customer);
+    Customer createCustomer(CreateCustomerDTO customerDTO);
 
     Customer updateCustomer(Customer customer);
 
