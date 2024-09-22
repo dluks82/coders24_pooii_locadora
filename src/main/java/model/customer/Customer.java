@@ -1,14 +1,38 @@
 package model.customer;
 
-import java.util.ArrayList;
-
 public abstract class Customer {
 
-    private String id;
-    private String name;
-    private String documentId;
-  //  List<Rental> rentals = new ArrayList<>();
+    protected String id;
+    protected String name;
+    protected String NumberPhone;
+    protected String documentId;
 
-    public abstract void setDocumentId();
 
-   }
+    public Customer(String id, String name, String numberPhone, String documentId) {
+        this.id = id;
+        this.name = name;
+        this.NumberPhone = numberPhone;
+        setDocumentId(documentId);
+
+    }
+
+    public abstract void setDocumentId(String documentId);
+
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNumberPhone() {
+        return NumberPhone;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+}

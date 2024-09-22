@@ -1,15 +1,15 @@
 package service;
 
-import model.agency.Agency;
 import model.customer.Customer;
 import model.rental.Rental;
-import model.vehicle.Vehicle;
 
 import java.util.List;
 
+import dto.CreateRentalDTO;
+
 public interface RentalService {
 
-    Rental createRental(Rental rental);
+    Rental createRental(CreateRentalDTO rentalDto);
 
     Rental updateRental(Rental rental);
 
@@ -21,12 +21,6 @@ public interface RentalService {
 
     List<Rental> findRentalByCustomer(Customer customer);
 
-    List<Rental> findRentalByAgency(Agency agency);
-
-    List<Rental> findRentalByVehicle(Vehicle vehicle);
-
     List<Rental> findOpenRentals();
-
-    List<Rental> findClosedRentals();
 
 }

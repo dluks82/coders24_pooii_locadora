@@ -1,12 +1,13 @@
 package service;
 
+import dto.CreateAgencyDTO;
 import model.agency.Agency;
 
 import java.util.List;
 
 public interface AgencyService {
 
-    Agency createAgency(Agency agency);
+    Agency createAgency(CreateAgencyDTO agencyDTO);
 
     Agency updateAgency(Agency agency);
 
