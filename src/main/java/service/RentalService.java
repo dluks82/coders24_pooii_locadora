@@ -5,9 +5,11 @@ import model.rental.Rental;
 
 import java.util.List;
 
+import dto.CreateRentalDTO;
+
 public interface RentalService {
 
-    Rental createRental(Rental rental);
+    Rental createRental(CreateRentalDTO rentalDto);
 
     Rental updateRental(Rental rental);
 

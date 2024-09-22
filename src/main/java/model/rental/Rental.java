@@ -1,5 +1,6 @@
 package model.rental;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import model.agency.Agency;
@@ -14,63 +15,45 @@ public class Rental {
     private Agency pickUpAgency;
     private LocalDateTime pickUpDate;
     private Agency returnAgency;
-    private LocalDateTime returnDate;
-    private int rentalDays;
+    private LocalDateTime estimatedReturnDate;
+    private LocalDateTime actualReturnDate;
 
-    // getters ans setters
+    //constructor
+    public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDateTime pickUpDate,
+            Agency returnAgency, LocalDateTime estimatedReturnDate, LocalDateTime actualReturnDate) {
+        this.id = id;
+        this.customer = customer;
+        this.vehicle = vehicle;
+        this.pickUpAgency = pickUpAgency;
+        this.pickUpDate = pickUpDate;
+        this.returnAgency = returnAgency;
+        this.estimatedReturnDate = estimatedReturnDate;
+        this.actualReturnDate = actualReturnDate;
+    }   
+
+    //getters and setters
     public String getId() {
         return id;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    
     public Customer getCustomer() {
         return customer;
     }
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+
+    // class methods
+    public BigDecimal calculateTotalCost() {
+        BigDecimal big = new BigDecimal(0);
+        return big;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setActualReturnDate(LocalDateTime actualReturnDate) { }
+
+    public String generatePickupReceipt() {
+        return "retorno";
     }
 
-    public Agency getPickUpAgency() {
-        return pickUpAgency;
+    public String generateReturnReceipt() {
+        return "retorno";
     }
-    public void setPickUpAgency(Agency pickUpAgency) {
-        this.pickUpAgency = pickUpAgency;
-    }
-
-    public LocalDateTime getPickUpDate() {
-        return pickUpDate;
-    }
-    public void setPickUpDate(LocalDateTime pickUpDate) {
-        this.pickUpDate = pickUpDate;
-    }
-
-    public Agency getReturnAgency() {
-        return returnAgency;
-    }
-    public void setReturnAgency(Agency returnAgency) {
-        this.returnAgency = returnAgency;
-    }
-
-    public LocalDateTime getReturnDate() {
-        return returnDate;
-    }
-    public void setReturnDate(LocalDateTime returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public int getRentalDays() {
-        return rentalDays;
-    }
-    public void setRentalDays(int rentalDays) {
-        this.rentalDays = rentalDays;
-    }
+    
 }
