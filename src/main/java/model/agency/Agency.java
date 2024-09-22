@@ -6,6 +6,13 @@ public class Agency {
     private String address;
     private String phone;
 
+    public Agency(String id, String name, String address, String phone) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
+
     public String getId() {
         return id;
     }
