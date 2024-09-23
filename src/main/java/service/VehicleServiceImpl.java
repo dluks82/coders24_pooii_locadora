@@ -93,7 +93,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<Vehicle> findVehicleByBrand(String brand) {
-        //quantidade de letras
+        if(brand == null || brand.length() < 3){
+            throw new IllegalArgumentException("O nome deve ter ao menos 3 caracteres.");
+        }
         return vehicleRepository.findByBrand(brand);
     }
 
