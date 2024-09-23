@@ -1,5 +1,5 @@
 package model.vehicle;
-
+import utils.VehicleType;
 import java.math.BigDecimal;
 
 public abstract class Vehicle {
@@ -9,7 +9,7 @@ public abstract class Vehicle {
     private String brand;
     private boolean available;
     private String agencyId;
-    private String type;
+    private VehicleType type;
 
 
     public Vehicle(String id, String plate, String model, String brand, String agencyId) {
@@ -68,10 +68,12 @@ public abstract class Vehicle {
     public void setAgencyId(String agencyId) {
         this.agencyId = agencyId;
     }
-    public void setType(String type) {
+
+    public void setType(VehicleType type) {
         this.type = type;
     }
-    public String getType() {
+
+    public VehicleType getType() {
         return type;
     }
 }

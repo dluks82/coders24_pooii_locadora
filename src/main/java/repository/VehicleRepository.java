@@ -13,8 +13,7 @@ public interface VehicleRepository extends Repository<Vehicle> {
 
     List<Vehicle> findByBrand(String brand);
 
-    List<Vehicle> findByAgency(Agency agency);
+    List<Vehicle> findByAgencyId(String agency);
 
-    List<Vehicle> getVehicles();
 
 }
