@@ -17,7 +17,6 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     @Override
     public Vehicle save(Vehicle entity) {
         vehicles.add(entity);
-
         return entity;
     }
 
@@ -64,5 +63,9 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     @Override
     public List<Vehicle> findByAgency(Agency agency) {
         return List.of();
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
     }
 }

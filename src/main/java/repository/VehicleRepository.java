@@ -15,4 +15,6 @@ public interface VehicleRepository extends Repository<Vehicle> {
 
     List<Vehicle> findByAgency(Agency agency);
 
+    List<Vehicle> getVehicles();
+
 }
