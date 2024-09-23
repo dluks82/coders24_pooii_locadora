@@ -2,9 +2,9 @@ package repository;
 
 import model.agency.Agency;
 import model.vehicle.Vehicle;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InMemoryVehicleRepository implements VehicleRepository {
 
@@ -17,12 +17,17 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     @Override
     public Vehicle save(Vehicle entity) {
         vehicles.add(entity);
-
         return entity;
     }
 
     @Override
     public Vehicle update(Vehicle entity) {
+        for(int i=0; i<vehicles.size(); i++){
+            if(Objects.equals(vehicles.get(i).getId(), entity.getId())){
+                vehicles.set(i, entity);
+                return entity;
+            }
+        }
         return null;
     }
 
@@ -33,18 +38,23 @@ public class InMemoryVehicleRepository implements VehicleRepository {
 
     @Override
     public Vehicle findById(String id) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getId().equals(id)) {
+                return vehicle;
+            }
+        }
         return null;
     }
 
     @Override
     public List<Vehicle> findAll() {
-        return List.of();
+        return vehicles;
     }
 
     @Override
     public Vehicle findByPlate(String plate) {
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getPlate().equals(plate)) {
+            if(vehicle.getPlate().equalsIgnoreCase(plate)) {
                 return vehicle;
             }
         }
@@ -53,16 +63,36 @@ public class InMemoryVehicleRepository implements VehicleRepository {
 
     @Override
     public List<Vehicle> findByModel(String model) {
-        return List.of();
+        List<Vehicle> vehiclesFoundByModel = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if(vehicle.getModel().toLowerCase().contains(model.toLowerCase())) {
+                vehiclesFoundByModel.add(vehicle);
+            }
+        }
+        return vehiclesFoundByModel;
     }
 
     @Override
     public List<Vehicle> findByBrand(String brand) {
-        return List.of();
+        List<Vehicle> vehiclesFoundByBrand = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if(vehicle.getBrand().toLowerCase().contains(brand.toLowerCase())) {
+                vehiclesFoundByBrand.add(vehicle);
+            }
+        }
+        return vehiclesFoundByBrand;
     }
 
     @Override
-    public List<Vehicle> findByAgency(Agency agency) {
-        return List.of();
+    public List<Vehicle> findByAgencyId(String agencyId) {
+
+        List<Vehicle> vehiclesFound = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getAgencyId().equalsIgnoreCase(agencyId)) {
+                vehiclesFound.add(vehicle);
+            }
+        }
+        return vehiclesFound;
     }
+
 }

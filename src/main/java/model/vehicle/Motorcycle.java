@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Motorcycle extends Vehicle {
-    final BigDecimal DAILY_RATE = BigDecimal.valueOf(50.00);
+    final BigDecimal DAILY_RATE = BigDecimal.valueOf(100.00);
 
     public Motorcycle(String id, String plate, String model, String brand, String agencyId) {
         super(id, plate, model, brand, agencyId);

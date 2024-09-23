@@ -1,7 +1,9 @@
 package dto;
 
+import utils.VehicleType;
+
 public record CreateVehicleDTO(
-        String type,
+        VehicleType type,
         String id,
         String plate,
         String model,

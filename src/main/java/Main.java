@@ -1,4 +1,7 @@
 import java.time.LocalDateTime;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 
 import dto.CreateRentalDTO;
 import dto.CreateVehicleDTO;
@@ -15,33 +18,42 @@ import service.RentalService;
 import service.RentalServiceImpl;
 import service.VehicleService;
 import service.VehicleServiceImpl;
+import utils.VehicleType;
 
 public class Main {
     public static void main(String[] args) {
+        //Scanner stdin = new Scanner(System.in);
 
         VehicleRepository vehicleRepository = new InMemoryVehicleRepository();
 
         VehicleService vehicleService = new VehicleServiceImpl(vehicleRepository);
 
         String id = "id";
-        String type = "car";
+        VehicleType type = VehicleType.CAR;
         String plate = "AAA-999";
         String model = "Gol";
-        String brand = "Volkswagem";
-        String agencyId = "Batata";
+        String brand = "LAMBO";
+        String agencyId = "Potato";
 
-        CreateVehicleDTO createVehicleDTO = new CreateVehicleDTO(
-                type, id, plate, model, brand, agencyId
-        );
 
-        try {
-            vehicleService.createVehicle(createVehicleDTO);
-            vehicleService.createVehicle(createVehicleDTO);
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
-        }
-        //-----------------------------------------------
-        RentalRepository rentalRepository =  new InMemoryRentalRepository();
+        CreateVehicleDTO createVehicleDTO = new CreateVehicleDTO(type, id, plate, model, brand, agencyId);
+
+        id = "id1FOUNDED";
+        plate = "AAA-998";
+        model = "Golew";
+        brand = "Volkswagem";
+        agencyId = "Batata";
+
+        CreateVehicleDTO createVehicleDTO1 = new CreateVehicleDTO(type, id, plate, model, brand, agencyId);
+
+        vehicleService.createVehicle(createVehicleDTO);
+        vehicleService.createVehicle(createVehicleDTO1);
+
+/*
+        -----------------------------------------------
+
+    }
+    RentalRepository rentalRepository =  new InMemoryRentalRepository();
 
         RentalService rentalService = new RentalServiceImpl(rentalRepository);
 
@@ -83,5 +95,8 @@ public class Main {
         }catch(IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
         }
+
+ */
+
     }
 }

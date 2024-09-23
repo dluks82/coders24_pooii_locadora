@@ -2,10 +2,12 @@ package service;
 
 import dto.CreateVehicleDTO;
 import model.vehicle.Car;
+import model.vehicle.Motorcycle;
+import model.vehicle.Truck;
 import model.vehicle.Vehicle;
 import repository.VehicleRepository;
-
-import java.math.BigDecimal;
+import utils.VehicleType;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleServiceImpl implements VehicleService {
@@ -25,13 +27,25 @@ public class VehicleServiceImpl implements VehicleService {
 
         Vehicle newVehicle = null;
 
-        if (vehicleDTO.type().equals("car")) {
+        if (vehicleDTO.type()== VehicleType.CAR) {
             newVehicle = new Car(vehicleDTO.id(),
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
                     vehicleDTO.agencyId()
             );
+        }else if (vehicleDTO.type() == VehicleType.TRUCK) {
+            newVehicle = new Truck(vehicleDTO.id(),
+                    vehicleDTO.plate(),
+                    vehicleDTO.model(),
+                    vehicleDTO.brand(),
+                    vehicleDTO.agencyId());
+        }else if (vehicleDTO.type() == VehicleType.MOTORCYCLE) {
+            newVehicle = new Motorcycle(vehicleDTO.id(),
+                    vehicleDTO.plate(),
+                    vehicleDTO.model(),
+                    vehicleDTO.brand(),
+                    vehicleDTO.agencyId());
         }
 
         if (newVehicle != null) {
@@ -44,41 +58,49 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle updateVehicle(Vehicle vehicle) {
-        return null;
+        Vehicle vehicleFoundByPlate = vehicleRepository.findByPlate(vehicle.getPlate());
+        if(vehicleFoundByPlate != null && !vehicleFoundByPlate.getId().equals(vehicle.getId())) {
+            throw new IllegalArgumentException("Placa já existe!");
+        }
+        return vehicleRepository.update(vehicle);
     }
 
     @Override
     public boolean deleteVehicle(Vehicle vehicle) {
+
         return false;
     }
 
     @Override
     public Vehicle findVehicleById(String id) {
-        return null;
+        return vehicleRepository.findById(id);
     }
 
     @Override
     public List<Vehicle> findAllVehicles() {
-        return List.of();
+        return vehicleRepository.findAll();
     }
 
     @Override
     public Vehicle findVehicleByPlate(String plate) {
-        return null;
+            return vehicleRepository.findByPlate(plate);
     }
 
     @Override
     public List<Vehicle> findVehicleByModel(String model) {
-        return List.of();
+        return vehicleRepository.findByModel(model);
     }
 
     @Override
     public List<Vehicle> findVehicleByBrand(String brand) {
-        return List.of();
+        if(brand == null || brand.length() < 3){
+            throw new IllegalArgumentException("O nome deve ter ao menos 3 caracteres.");
+        }
+        return vehicleRepository.findByBrand(brand);
     }
 
     @Override
     public List<Vehicle> findVehicleByAgencyId(String agencyId) {
-        return List.of();
+        return vehicleRepository.findByAgencyId(agencyId);
     }
 }

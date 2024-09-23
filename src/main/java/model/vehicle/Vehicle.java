@@ -1,8 +1,6 @@
 package model.vehicle;
-
+import utils.VehicleType;
 import java.math.BigDecimal;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public abstract class Vehicle {
     private String id;
@@ -11,6 +9,7 @@ public abstract class Vehicle {
     private String brand;
     private boolean available;
     private String agencyId;
+    private VehicleType type;
 
 
     public Vehicle(String id, String plate, String model, String brand, String agencyId) {
@@ -50,5 +49,31 @@ public abstract class Vehicle {
         return agencyId;
     }
 
+    public void setPlate(String plate) {
+        this.plate = plate;
+    }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public void setAgencyId(String agencyId) {
+        this.agencyId = agencyId;
+    }
+
+    public void setType(VehicleType type) {
+        this.type = type;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
 }
