@@ -1,7 +1,9 @@
 package dto;
 
+import utils.CustomerType;
+
 public record CreateCustomerDTO(
-        utils.CustomerType type,
+        CustomerType type,
         String name,
         String numberPhone,
         String documentId
