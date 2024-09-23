@@ -1,12 +1,14 @@
 package service;
 
 import dto.CreateCustomerDTO;
+import exceptions.DuplicateDocumentException;
+import exceptions.InvalidDocumentException;
 import model.customer.Customer;
 import model.customer.Individual;
 import model.customer.LegalEntity;
-import org.w3c.dom.html.HTMLTableRowElement;
 import repository.CustomerRepository;
 import utils.CustomerType;
+import utils.Validator;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,15 +18,18 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
-          this.customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public Customer createCustomer(CreateCustomerDTO customerDTO) {
         Customer existCustomer = customerRepository.findByDocument(customerDTO.documentId());
 
-        if (existCustomer != null) {
-            throw new IllegalArgumentException("Já existe um cliente com esse documento");
+        if (existCustomer != null && existCustomer.getType()== CustomerType.INDIVIDUAL) {
+            throw new DuplicateDocumentException("CPF já cadastrado!");
+        }
+        if (existCustomer != null && existCustomer.getType()== CustomerType.LEGALENTITY) {
+            throw new DuplicateDocumentException("CNPJ já cadastrado!");
         }
 
         Customer newCustomer = null;
@@ -32,22 +37,33 @@ public class CustomerServiceImpl implements CustomerService {
         String customerId = UUID.randomUUID().toString();
 
         if (customerDTO.type().equals(CustomerType.LEGALENTITY)) {
-            newCustomer = new LegalEntity(
-                    customerId,
-                    customerDTO.name(),
-                    customerDTO.numberPhone(),
-                    customerDTO.documentId()
-            );
+            if (Validator.isValidCnpj(customerDTO.documentId())) {
+                newCustomer = new LegalEntity(
+                        customerId,
+                        customerDTO.name(),
+                        customerDTO.numberPhone(),
+                        Validator.sanitizeCnpj(customerDTO.documentId()),
+                        customerDTO.type()
+                );
+            } else {
+                throw new InvalidDocumentException("CNPJ Inválido");
+            }
+
         } else if (customerDTO.type().equals(CustomerType.INDIVIDUAL)) {
-            newCustomer = new Individual(
-                    customerId,
-                    customerDTO.name(),
-                    customerDTO.numberPhone(),
-                    customerDTO.documentId()
-            );
+            if (Validator.isValidCpf(customerDTO.documentId())) {
+                newCustomer = new Individual(
+                        customerId,
+                        customerDTO.name(),
+                        customerDTO.numberPhone(),
+                        Validator.sanitizeCpf(customerDTO.documentId()),
+                        customerDTO.type()
+                );
+            } else {
+                throw new InvalidDocumentException("CPF Inválido");
+            }
         }
 
-        if(newCustomer != null) {
+        if (newCustomer != null) {
             customerRepository.save(newCustomer);
             return newCustomer;
         }
@@ -57,14 +73,26 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(Customer customer) {
-        return null;
+        if(customer.getType().equals(CustomerType.LEGALENTITY) && !Validator.isValidCnpj(customer.getDocumentId())) {
+            throw new InvalidDocumentException("CNPJ Inválido");
+        }
+        if(customer.getType().equals(CustomerType.INDIVIDUAL) && !Validator.isValidCpf(customer.getDocumentId())) {
+            throw new InvalidDocumentException("CPF Inválido");
+        }
+        Customer existCustomer = customerRepository.findByDocument(customer.getDocumentId());
+        if (existCustomer != null && !existCustomer.getId().equals(customer.getId())) {
+            throw new DuplicateDocumentException("Documento já Cadastrado");
+        }
+        return customerRepository.update(customer);
+
     }
+
 
     @Override
     public boolean deleteCustomer(Customer customer) {
         Customer existCustomer = customerRepository.findByDocument(customer.getDocumentId());
         if (existCustomer == null) {
-            throw  new IllegalArgumentException("Esse cliente não existe");
+            throw new IllegalArgumentException("Esse cliente não existe");
         }
         customerRepository.delete(customer);
         return true;
@@ -72,7 +100,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerById(String id) {
-        return null;
+
+        return customerRepository.findById(id);
     }
 
     @Override
@@ -83,11 +112,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findCustomerByName(String name) {
-        return List.of();
+
+        return customerRepository.findByName(name);
     }
 
     @Override
     public Customer findCustomerByDocument(String document) {
-        return null;
+
+        return customerRepository.findByDocument(document);
     }
 }

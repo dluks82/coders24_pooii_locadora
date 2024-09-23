@@ -1,9 +1,11 @@
 package model.customer;
 
+import utils.CustomerType;
+
 public class LegalEntity extends Customer {
 
-    public LegalEntity(String id, String name, String numberPhone, String documentId) {
-        super(id, name, numberPhone, documentId);
+    public LegalEntity(String id, String name, String numberPhone, String documentId, CustomerType type) {
+        super(id, name, numberPhone, documentId, type);
     }
 
     @Override
