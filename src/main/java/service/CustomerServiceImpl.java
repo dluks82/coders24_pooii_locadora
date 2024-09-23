@@ -4,16 +4,19 @@ import dto.CreateCustomerDTO;
 import model.customer.Customer;
 import model.customer.Individual;
 import model.customer.LegalEntity;
+import org.w3c.dom.html.HTMLTableRowElement;
 import repository.CustomerRepository;
+import utils.CustomerType;
 
 import java.util.List;
 import java.util.UUID;
 
 public class CustomerServiceImpl implements CustomerService {
+
     private CustomerRepository customerRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+          this.customerRepository = customerRepository;
     }
 
     @Override
@@ -28,14 +31,14 @@ public class CustomerServiceImpl implements CustomerService {
 
         String customerId = UUID.randomUUID().toString();
 
-        if (customerDTO.type().equals("legal")) {
+        if (customerDTO.type().equals(CustomerType.LEGALENTITY)) {
             newCustomer = new LegalEntity(
                     customerId,
                     customerDTO.name(),
                     customerDTO.numberPhone(),
                     customerDTO.documentId()
             );
-        } else if (customerDTO.type().equals("individual")) {
+        } else if (customerDTO.type().equals(CustomerType.INDIVIDUAL)) {
             newCustomer = new Individual(
                     customerId,
                     customerDTO.name(),
@@ -59,7 +62,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean deleteCustomer(Customer customer) {
-        return false;
+        Customer existCustomer = customerRepository.findByDocument(customer.getDocumentId());
+        if (existCustomer == null) {
+            throw  new IllegalArgumentException("Esse cliente não existe");
+        }
+        customerRepository.delete(customer);
+        return true;
     }
 
     @Override
@@ -69,7 +77,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findAllCustomers() {
-        return List.of();
+
+        return customerRepository.findAll();
     }
 
     @Override
