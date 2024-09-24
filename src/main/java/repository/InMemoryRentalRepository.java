@@ -23,8 +23,13 @@ public class InMemoryRentalRepository implements RentalRepository{
 
     @Override
     public Rental update(Rental entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        for(int i=0; i<rentals.size(); i++) {
+            if(rentals.get(i).getId().equals(entity.getId())) {
+                rentals.set(i, entity);
+                return entity;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class InMemoryRentalRepository implements RentalRepository{
     @Override
     public Rental findById(String id) {
         for(Rental r : rentals) {
-            if(r.getId() == id)
+            if(r.getId().equals(id))
                 return r;
         }
         return null;
