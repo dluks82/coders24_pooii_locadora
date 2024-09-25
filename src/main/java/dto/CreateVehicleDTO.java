@@ -1,6 +1,6 @@
 package dto;
 
-import utils.VehicleType;
+import enums.VehicleType;
 
 public record CreateVehicleDTO(
         VehicleType type,

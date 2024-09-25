@@ -1,6 +1,6 @@
 package model.customer;
 
-import utils.CustomerType;
+import enums.CustomerType;
 
 public abstract class Customer {
 
