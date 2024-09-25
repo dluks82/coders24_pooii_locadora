@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
                         customerId,
                         customerDTO.name(),
                         customerDTO.numberPhone(),
-                        Validator.sanitizeCnpj(customerDTO.documentId()),
+                        Validator.sanitizeDocument(customerDTO.documentId()),
                         customerDTO.type()
                 );
             } else {
@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
                         customerId,
                         customerDTO.name(),
                         customerDTO.numberPhone(),
-                        Validator.sanitizeCpf(customerDTO.documentId()),
+                        Validator.sanitizeDocument(customerDTO.documentId()),
                         customerDTO.type()
                 );
             } else {
@@ -100,25 +100,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerById(String id) {
-
         return customerRepository.findById(id);
     }
 
     @Override
     public List<Customer> findAllCustomers() {
-
         return customerRepository.findAll();
     }
 
     @Override
     public List<Customer> findCustomerByName(String name) {
-
         return customerRepository.findByName(name);
     }
 
     @Override
     public Customer findCustomerByDocument(String document) {
-
+        document = Validator.sanitizeDocument(document);
         return customerRepository.findByDocument(document);
     }
+
 }
