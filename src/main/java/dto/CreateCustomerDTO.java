@@ -1,6 +1,6 @@
 package dto;
 
-import utils.CustomerType;
+import enums.CustomerType;
 
 public record CreateCustomerDTO(
         CustomerType type,

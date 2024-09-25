@@ -6,7 +6,7 @@ import model.vehicle.Motorcycle;
 import model.vehicle.Truck;
 import model.vehicle.Vehicle;
 import repository.vehicle.VehicleRepository;
-import utils.VehicleType;
+import enums.VehicleType;
 
 import java.util.List;
 

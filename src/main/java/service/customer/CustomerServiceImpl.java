@@ -7,7 +7,7 @@ import model.customer.Customer;
 import model.customer.Individual;
 import model.customer.LegalEntity;
 import repository.customer.CustomerRepository;
-import utils.CustomerType;
+import enums.CustomerType;
 import utils.Validator;
 
 import java.util.List;

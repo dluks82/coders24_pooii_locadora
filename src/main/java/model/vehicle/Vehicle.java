@@ -1,5 +1,5 @@
 package model.vehicle;
-import utils.VehicleType;
+import enums.VehicleType;
 import java.math.BigDecimal;
 
 public abstract class Vehicle {
