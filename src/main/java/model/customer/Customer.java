@@ -40,6 +40,21 @@ public abstract class Customer {
 
     public CustomerType getType() { return type; }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        NumberPhone = numberPhone;
+    }
+
+    public void setType(CustomerType type) {
+        this.type = type;
+    }
 
     @Override
     public String toString() {
