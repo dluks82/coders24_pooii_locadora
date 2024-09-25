@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 public class Validator {
 
     public static boolean isValidCpf(String cpf) {
-        cpf = cpf.replaceAll("\\D", "");
+        cpf = sanitizeDocument(cpf);
 
         // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida (invalida)
         if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
@@ -43,7 +43,7 @@ public class Validator {
 
 
     public static boolean isValidCnpj(String cnpj) {
-        cnpj = cnpj.replaceAll("\\D", "");
+        cnpj = sanitizeDocument(cnpj);
 
         try {
             Long.parseLong(cnpj);
@@ -110,14 +110,11 @@ public class Validator {
 
 
     //Limpa CPF e CNPJ
-    public static String sanitizeCpf(String cpf) {
-        cpf = cpf.replaceAll("\\D", "");
-        return cpf;
+    public static String sanitizeDocument(String document) {
+        document = document.replaceAll("\\D", "");
+        return document;
     }
 
-    public static String sanitizeCnpj(String cnpj) {
-        cnpj = cnpj.replaceAll("\\D", "");
-        return cnpj;
-    }
+
 
 }
