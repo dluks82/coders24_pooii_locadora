@@ -43,7 +43,7 @@ public class AgencyCreateScreen extends Screen {
             switch (currentField) {
                 case 0 -> {
                     String inputName = Input.getAsString(scanner, "Nome: ", false, false);
-                    if (processarEntradaComandos(inputName)) {
+                    if (processInputCommands(inputName)) {
                         break;
                     }
                     name = inputName;
@@ -51,7 +51,7 @@ public class AgencyCreateScreen extends Screen {
                 }
                 case 1 -> {
                     String addressInput = Input.getAsString(scanner, "Endereço: ", false, false);
-                    if (processarEntradaComandos(addressInput)) {
+                    if (processInputCommands(addressInput)) {
                         break;
                     }
                     address = addressInput;
@@ -59,18 +59,18 @@ public class AgencyCreateScreen extends Screen {
                 }
                 case 2 -> {
                     String phoneInput = Input.getAsString(scanner, "Telefone: ", false, false);
-                    if (processarEntradaComandos(phoneInput)) {
+                    if (processInputCommands(phoneInput)) {
                         break;
                     }
                     phone = phoneInput;
                     currentField = 3;
                 }
-                case 3 -> confirmarCadastro();
+                case 3 -> confirmRegistration();
             }
         } while (true);
     }
 
-    private void confirmarCadastro() {
+    private void confirmRegistration() {
         String input = Input.getAsString(scanner, "Confirma o cadastro? (S/n): ", true, false);
         input = input.isEmpty() ? "s" : input;
 
@@ -87,20 +87,20 @@ public class AgencyCreateScreen extends Screen {
         flowController.goBack();
     }
 
-    private boolean processarEntradaComandos(String input) {
+    private boolean processInputCommands(String input) {
         if (input.equalsIgnoreCase("v")) {
             if (currentField > 0) {
                 currentField--;
             }
             return true;
         } else if (input.equalsIgnoreCase("c")) {
-            cancelarCadastro();
+            cancelRegistration();
             return true;
         }
         return false;
     }
 
-    private void cancelarCadastro() {
+    private void cancelRegistration() {
         flowController.goBack();
     }
 
