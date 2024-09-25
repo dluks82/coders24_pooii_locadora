@@ -20,7 +20,7 @@ public class Rental {
 
     //constructor
     public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDateTime pickUpDate,
-            Agency returnAgency, LocalDateTime estimatedReturnDate, LocalDateTime actualReturnDate) {
+                  Agency returnAgency, LocalDateTime estimatedReturnDate, LocalDateTime actualReturnDate) {
         this.id = id;
         this.customer = customer;
         this.vehicle = vehicle;
