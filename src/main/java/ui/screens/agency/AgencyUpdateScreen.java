@@ -32,55 +32,67 @@ public class AgencyUpdateScreen extends Screen {
 
             System.out.println("=== Editar Agência ===");
 
-            if (agencyToUpdate == null && !isSelectionListCalled) {
-                isSelectionListCalled = true;
-                currentField = 0;
-
-                AgencyListScreen agencyListScreen = new AgencyListScreen(flowController, scanner, agencyService);
-                flowController.goTo(agencyListScreen);
-
-                agencyToUpdate = agencyListScreen.getSelectedAgency();
-
-                flowController.goBack();
-                return;
-            }
-
             if (agencyToUpdate != null) {
                 System.out.println("Nome: " + agencyToUpdate.getName());
                 System.out.println("Endereço: " + agencyToUpdate.getAddress());
                 System.out.println("Telefone: " + agencyToUpdate.getPhone());
-
-                switch (currentField) {
-                    case 0 -> {
-                        String inputName = Input.getAsString(scanner, "Nome: ", true, false);
-                        if (processInputCommands(inputName)) break;
-                        if (!inputName.isEmpty())
-                            agencyToUpdate.setName(inputName);
-                        currentField = 1;
-                    }
-                    case 1 -> {
-                        String addressInput = Input.getAsString(scanner, "Endereço: ", true, false);
-                        if (processInputCommands(addressInput)) break;
-                        if (!addressInput.isEmpty())
-                            agencyToUpdate.setAddress(addressInput);
-                        currentField = 2;
-                    }
-                    case 2 -> {
-                        String phoneInput = Input.getAsString(scanner, "Telefone: ", true, false);
-                        if (processInputCommands(phoneInput)) break;
-                        if (!phoneInput.isEmpty())
-                            agencyToUpdate.setPhone(phoneInput);
-                        currentField = 3;
-                    }
-                    case 3 -> confirmUpdate();
-                }
-            } else {
-                System.out.println("Nenhuma agência selecionada para edição.");
-                scanner.nextLine();
-                flowController.goBack();
-                return;
             }
+            switch (currentField) {
+                case 0 -> {
+                    if (!isSelectionListCalled) {
+                        isSelectionListCalled = true;
 
+                        AgencyListScreen agencyListScreen = new AgencyListScreen(flowController, scanner, agencyService, true);
+                        flowController.goTo(agencyListScreen);
+
+                        agencyToUpdate = agencyListScreen.getSelectedAgency();
+
+                        flowController.goBack();
+                    }
+
+                    if (agencyToUpdate == null) {
+                        Output.error("Você precisa selecionar uma agência válida!");
+
+                        System.out.println("1 - Tentar novamente");
+                        System.out.println("2 - Cancelar o cadastro");
+
+                        int option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+                        switch (option) {
+                            case 1:
+                                isSelectionListCalled = false;
+                                break;
+                            case 2:
+                                cancelUpdate();
+                                break;
+                        }
+                        break;
+                    }
+                    currentField = 1;
+                }
+
+                case 1 -> {
+                    String inputName = Input.getAsString(scanner, "Nome: ", true, false);
+                    if (processInputCommands(inputName)) break;
+                    if (!inputName.isEmpty())
+                        agencyToUpdate.setName(inputName);
+                    currentField = 2;
+                }
+                case 2 -> {
+                    String addressInput = Input.getAsString(scanner, "Endereço: ", true, false);
+                    if (processInputCommands(addressInput)) break;
+                    if (!addressInput.isEmpty())
+                        agencyToUpdate.setAddress(addressInput);
+                    currentField = 3;
+                }
+                case 3 -> {
+                    String phoneInput = Input.getAsString(scanner, "Telefone: ", true, false);
+                    if (processInputCommands(phoneInput)) break;
+                    if (!phoneInput.isEmpty())
+                        agencyToUpdate.setPhone(phoneInput);
+                    currentField = 4;
+                }
+                case 4 -> confirmUpdate();
+            }
         } while (true);
     }
 
