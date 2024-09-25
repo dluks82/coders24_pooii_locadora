@@ -1,6 +1,5 @@
 package ui.screens.agency;
 
-import dto.UpdateAgencyDTO;
 import model.agency.Agency;
 import service.AgencyService;
 import ui.core.Screen;
@@ -91,13 +90,13 @@ public class AgencyUpdateScreen extends Screen {
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de atualização
-            UpdateAgencyDTO updateAgencyDTO = new UpdateAgencyDTO(
+            Agency updatedAgency = new Agency(
                     agencyToUpdate.getId(),
                     agencyToUpdate.getName(),
                     agencyToUpdate.getAddress(),
                     agencyToUpdate.getPhone()
             );
-            agencyService.updateAgency(updateAgencyDTO);
+            agencyService.updateAgency(updatedAgency);
 
             Output.info("Edição realizada com sucesso!");
         } else {
