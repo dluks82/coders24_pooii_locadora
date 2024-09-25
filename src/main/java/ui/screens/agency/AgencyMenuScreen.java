@@ -42,7 +42,7 @@ public class AgencyMenuScreen extends Screen {
                     break;
                 case 2:
                     flowController.goTo(
-                            new AgencyListScreen(flowController, scanner, agencyService));
+                            new AgencyListScreen(flowController, scanner, agencyService, false));
                     break;
                 case 3:
                     flowController.goTo(

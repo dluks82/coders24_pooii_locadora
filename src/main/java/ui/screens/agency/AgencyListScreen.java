@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class AgencyListScreen extends Screen {
     private final Scanner scanner;
     private final AgencyService agencyService;
+    private final boolean isModal;
 
     private Agency selectedAgency;
 
@@ -22,10 +23,15 @@ public class AgencyListScreen extends Screen {
     private static final int PAGE_SIZE = 2;
     private List<Agency> filteredAgencies;
 
-    public AgencyListScreen(FlowController flowController, Scanner scanner, AgencyService agencyService) {
+    public AgencyListScreen(
+            FlowController flowController,
+            Scanner scanner,
+            AgencyService agencyService,
+            boolean isModal) {
         super(flowController);
         this.scanner = scanner;
         this.agencyService = agencyService;
+        this.isModal = isModal;
     }
 
     private boolean agencySelected = false;
@@ -37,12 +43,23 @@ public class AgencyListScreen extends Screen {
 
         do {
             ScreenUtils.clearScreen();
-            System.out.println("=== Lista de Agências ===");
+
+            if (isModal) {
+                System.out.println("=== Selecione uma Agência ===");
+            } else {
+                System.out.println("=== Lista de Agências ===");
+            }
 
             listPaginatedAgencies(filteredAgencies, currentPage);
 
-            Output.info("'B' para buscar, 'A' para avançar página, 'V' para voltar página, 'C' para cancelar.");
-            String input = Input.getAsString(scanner, "Selecione uma agência pelo número ou utilize os comandos acima: ", false, false);
+            Output.info("'F' para filtrar, 'L' para limpar filtro.");
+            Output.info("'A' para avançar página, 'V' para voltar página");
+            Output.info("'X' para voltar");
+
+            String promptMessage = isModal ? "Selecione uma agência pelo número ou utilize os comandos acima: "
+                    : "Utilize os comandos de navegação: ";
+
+            String input = Input.getAsString(scanner, promptMessage, true, false);
 
             if (processInputCommands(input, agencies)) {
                 break;
@@ -82,28 +99,35 @@ public class AgencyListScreen extends Screen {
                 }
                 break;
 
-            case "b":
+            case "f":
                 searchAgencies(agencies);
                 break;
 
-            case "c":
+            case "l":
+                filteredAgencies = agencies;
+                currentPage = 0;
+                break;
+
+            case "x":
                 back();
                 return true;
 
             default:
-                try {
-                    int agencyIndex = Integer.parseInt(input) - 1;
-                    if (agencyIndex >= 0 && agencyIndex < filteredAgencies.size()) {
-                        selectAgency(filteredAgencies.get(agencyIndex));
-                        agencySelected = true;
-                        return true;
-                    } else {
-                        System.out.println("Opção inválida.");
+                if (isModal) {
+                    try {
+                        int agencyIndex = Integer.parseInt(input) - 1;
+                        if (agencyIndex >= 0 && agencyIndex < filteredAgencies.size()) {
+                            selectAgency(filteredAgencies.get(agencyIndex));
+                            agencySelected = true;
+                            return true;
+                        } else {
+                            System.out.println("Opção inválida.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Entrada inválida. Tente novamente.");
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Entrada inválida. Tente novamente.");
                 }
-                break;
+                return false;
         }
         return false;
     }
@@ -130,7 +154,6 @@ public class AgencyListScreen extends Screen {
     }
 
     private void selectAgency(Agency agency) {
-        System.out.println("\nAgência selecionada: " + agency);
         this.selectedAgency = agency;
         this.agencySelected = true;
     }
