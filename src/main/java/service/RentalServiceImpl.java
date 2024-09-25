@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+import java.util.UUID;
 
 import dto.CreateRentalDTO;
 import model.customer.Customer;
@@ -17,18 +18,20 @@ public class RentalServiceImpl implements RentalService{
 
     @Override
     public Rental createRental(CreateRentalDTO rentalDTO) {
-        Rental existRental = rentalRepository.findById(rentalDTO.id());
-        if(existRental!=null) throw new IllegalArgumentException("Locadora já existe!");
+        String rentalId = UUID.randomUUID().toString();
         Rental newRental = null;
+        /*
+        LÓGICA DE CUSTOMER ALUGAR SOMENTE 1 CARRO NÃO APLICADA
+        */
         newRental = new Rental(
-              rentalDTO.id()
+              rentalId
             , rentalDTO.customer()
             , rentalDTO.vehicle()
             , rentalDTO.pickUpAgency()
             , rentalDTO.pickUpDate()
-            , rentalDTO.returnAgency()
+            , null
             , rentalDTO.estimatedReturnDate()
-            , rentalDTO.actualReturnDate()
+            , null
         );
         if (newRental != null) {
             rentalRepository.save(newRental);
@@ -39,8 +42,11 @@ public class RentalServiceImpl implements RentalService{
 
     @Override
     public Rental updateRental(Rental rental) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateRental'");
+        Rental existingRental = rentalRepository.findById(rental.getId());
+        if(existingRental==null)
+            throw new IllegalArgumentException("Locacao nao existe!");
+        rentalRepository.update(rental);
+        return rental;
     }
 
     @Override
@@ -51,20 +57,22 @@ public class RentalServiceImpl implements RentalService{
 
     @Override
     public Rental findRentalById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findRentalById'");
+        if(id.isEmpty() || id.equals(null)) {
+            throw new IllegalArgumentException("ID vazio ou nulo");
+        }
+        return rentalRepository.findById(id);
     }
 
     @Override
     public List<Rental> findAllRentals() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllRentals'");
+        return rentalRepository.findAll();
     }
 
     @Override
     public List<Rental> findRentalByCustomer(Customer customer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findRentalByCustomer'");
+        if(customer == null)
+            throw new IllegalArgumentException("Custumer is null");
+        return rentalRepository.findByCustomer(customer);
     }
 
     @Override
