@@ -34,7 +34,7 @@ no sistema. Se preferir, também pode rodar diretamente com o Maven instalado.
     ```
 4. Para executar a aplicação, use:
     ```sh
-    ./mvnw exec:java -Dexec.mainClass="com.example.Main"
+    ./mvnw exec:java -Dexec.mainClass="CodersRentalApp"
     ```
 
 #### No Windows
@@ -47,7 +47,7 @@ no sistema. Se preferir, também pode rodar diretamente com o Maven instalado.
     ```
 4. Para executar a aplicação, use:
     ```sh
-    mvnw.cmd exec:java -Dexec.mainClass="com.example.Main"
+    mvnw.cmd exec:java -Dexec.mainClass="CodersRentalApp"
     ```
 
 ### Usando o Maven Diretamente
@@ -64,7 +64,7 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
     ```
 4. Para executar a aplicação, use:
     ```sh
-    mvn exec:java -Dexec.mainClass="com.example.Main"
+    mvn exec:java -Dexec.mainClass="CodersRentalApp"
     ```
 
 #### No Windows
@@ -77,7 +77,7 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
     ```
 4. Para executar a aplicação, use:
     ```sh
-    mvn exec:java -Dexec.mainClass="com.example.Main"
+    mvn exec:java -Dexec.mainClass="CodersRentalApp"
     ```
 
 ## Licença
