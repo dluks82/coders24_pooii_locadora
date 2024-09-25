@@ -1,4 +1,4 @@
-package service;
+package service.rental;
 
 import model.customer.Customer;
 import model.rental.Rental;

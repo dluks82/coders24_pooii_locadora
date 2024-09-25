@@ -1,7 +1,9 @@
 package ui.screens;
 
-import repository.*;
-import service.*;
+import repository.agency.AgencyRepository;
+import repository.agency.InMemoryAgencyRepositoryImpl;
+import service.agency.AgencyService;
+import service.agency.AgencyServiceImpl;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyMenuScreen;

@@ -1,7 +1,7 @@
-package repository;
+package repository.vehicle;
 
-import model.agency.Agency;
 import model.vehicle.Vehicle;
+import repository.Repository;
 
 import java.util.List;
 

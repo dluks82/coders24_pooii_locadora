@@ -1,4 +1,4 @@
-package repository;
+package repository.rental;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import model.customer.Customer;
 import model.rental.Rental;
 
-public class InMemoryRentalRepository implements RentalRepository{
+public class InMemoryRentalRepository implements RentalRepository {
 
     private List<Rental> rentals;
 

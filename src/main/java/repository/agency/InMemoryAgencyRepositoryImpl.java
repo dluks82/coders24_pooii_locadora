@@ -1,4 +1,4 @@
-package repository;
+package repository.agency;
 
 import model.agency.Agency;
 

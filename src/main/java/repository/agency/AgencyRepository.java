@@ -1,6 +1,7 @@
-package repository;
+package repository.agency;
 
 import model.agency.Agency;
+import repository.Repository;
 
 import java.util.List;
 

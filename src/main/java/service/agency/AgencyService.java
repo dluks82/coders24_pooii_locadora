@@ -1,4 +1,4 @@
-package service;
+package service.agency;
 
 import dto.CreateAgencyDTO;
 import model.agency.Agency;

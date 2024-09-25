@@ -1,8 +1,8 @@
-package service;
+package service.agency;
 
 import dto.CreateAgencyDTO;
 import model.agency.Agency;
-import repository.AgencyRepository;
+import repository.agency.AgencyRepository;
 
 import java.util.List;
 import java.util.UUID;
