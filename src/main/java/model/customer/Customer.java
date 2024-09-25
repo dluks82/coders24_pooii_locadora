@@ -40,4 +40,15 @@ public abstract class Customer {
 
     public CustomerType getType() { return type; }
 
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", NumberPhone='" + NumberPhone + '\'' +
+                ", documentId='" + documentId + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }
