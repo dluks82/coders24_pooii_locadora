@@ -16,6 +16,27 @@ funcionalidades para listar, filtrar e selecionar clientes e agências.
 
 - **Java 11** ou superior
 - **Maven 3.6.3** ou superior
+- **Git** instalado para clonar o repositório
+
+## Como Baixar e Executar o Projeto
+
+Siga as instruções abaixo para baixar e executar o projeto localmente.
+
+### Clonando o Repositório
+
+1. Abra um terminal (ou Prompt de Comando no Windows).
+
+2. Navegue até o diretório onde deseja armazenar o projeto.
+
+3. Execute o seguinte comando para clonar o repositório:
+```sh
+git clone https://github.com/dluks82/coders24_pooii_locadora.git
+```
+
+4. Entre no diretório do projeto:
+```sh
+cd coders24_pooii_locadora
+```
 
 ## Configuração e Execução
 
