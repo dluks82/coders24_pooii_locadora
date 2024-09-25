@@ -2,14 +2,21 @@ package ui.screens;
 
 import repository.agency.AgencyRepository;
 import repository.agency.InMemoryAgencyRepositoryImpl;
+import repository.customer.CustomerRepository;
+import repository.customer.InMemoryCustomerRepositoryImpl;
+import repository.vehicle.InMemoryVehicleRepository;
+import repository.vehicle.VehicleRepository;
 import service.agency.AgencyService;
 import service.agency.AgencyServiceImpl;
+import service.customer.CustomerService;
+import service.customer.CustomerServiceImpl;
+import service.vehicle.VehicleService;
+import service.vehicle.VehicleServiceImpl;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyMenuScreen;
-//import ui.screens.customer.CustomerMenuScreen;
-//import ui.screens.rental.RentalMenuScreen;
-//import ui.screens.vehicle.VehicleMenuScreen;
+import ui.screens.customer.CustomerMenuScreen;
+import ui.screens.vehicle.VehicleMenuScreen;
 import ui.utils.Input;
 import ui.utils.Output;
 import ui.utils.ScreenUtils;
@@ -20,8 +27,8 @@ public class MainMenuScreen extends Screen {
     private final Scanner scanner;
 
     private final AgencyService agencyService;
-//    private final VehicleService vehicleService;
-//    private final CustomerService customerService;
+    private final VehicleService vehicleService;
+    private final CustomerService customerService;
 //    private final RentalService rentalService;
 
     public MainMenuScreen(FlowController flowController,
@@ -30,13 +37,13 @@ public class MainMenuScreen extends Screen {
         this.scanner = scanner;
 
         AgencyRepository agencyRepository = new InMemoryAgencyRepositoryImpl();
-//        VehicleRepository vehicleRepository = new InMemoryVehicleRepository();
-//        CustomerRepository customerRepository = new InMemoryCustomerRepositoryImpl();
+        VehicleRepository vehicleRepository = new InMemoryVehicleRepository();
+        CustomerRepository customerRepository = new InMemoryCustomerRepositoryImpl();
 //        RentalRepository rentalRepository = new InMemoryRentalRepository();
 
         agencyService = new AgencyServiceImpl(agencyRepository);
-//        vehicleService = new VehicleServiceImpl(vehicleRepository);
-//        customerService = new CustomerServiceImpl(customerRepository);
+        vehicleService = new VehicleServiceImpl(vehicleRepository);
+        customerService = new CustomerServiceImpl(customerRepository);
 //        rentalService = new RentalServiceImpl(rentalRepository);
 
     }
@@ -63,12 +70,12 @@ public class MainMenuScreen extends Screen {
                             new AgencyMenuScreen(flowController, scanner, agencyService));
                     break;
                 case 2:
-//                    flowController.goTo(
-//                            new VehicleMenuScreen(flowController, scanner, vehicleService));
+                    flowController.goTo(
+                            new VehicleMenuScreen(flowController, scanner, agencyService, vehicleService));
                     break;
                 case 3:
-//                    flowController.goTo(
-//                            new CustomerMenuScreen(flowController, scanner, customerService));
+                    flowController.goTo(
+                            new CustomerMenuScreen(flowController, scanner, customerService));
                     break;
                 case 4:
 //                    flowController.goTo(
