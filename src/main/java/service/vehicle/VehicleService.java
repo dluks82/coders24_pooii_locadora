@@ -1,4 +1,4 @@
-package service;
+package service.vehicle;
 
 import dto.CreateVehicleDTO;
 import model.vehicle.Vehicle;

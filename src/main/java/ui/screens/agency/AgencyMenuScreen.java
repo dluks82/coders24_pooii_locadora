@@ -1,6 +1,6 @@
 package ui.screens.agency;
 
-import service.AgencyService;
+import service.agency.AgencyService;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;

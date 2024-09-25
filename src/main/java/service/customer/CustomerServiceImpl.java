@@ -1,4 +1,4 @@
-package service;
+package service.customer;
 
 import dto.CreateCustomerDTO;
 import exceptions.DuplicateDocumentException;
@@ -6,7 +6,7 @@ import exceptions.InvalidDocumentException;
 import model.customer.Customer;
 import model.customer.Individual;
 import model.customer.LegalEntity;
-import repository.CustomerRepository;
+import repository.customer.CustomerRepository;
 import utils.CustomerType;
 import utils.Validator;
 

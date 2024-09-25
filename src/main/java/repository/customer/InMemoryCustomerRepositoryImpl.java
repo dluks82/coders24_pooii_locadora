@@ -1,11 +1,11 @@
-package repository;
+package repository.customer;
 
 import model.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryCustomerRepositoryImpl implements CustomerRepository{
+public class InMemoryCustomerRepositoryImpl implements CustomerRepository {
 
     private List<Customer> customers;
 

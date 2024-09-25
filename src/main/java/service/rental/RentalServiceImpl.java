@@ -1,4 +1,4 @@
-package service;
+package service.rental;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,9 +6,9 @@ import java.util.UUID;
 import dto.CreateRentalDTO;
 import model.customer.Customer;
 import model.rental.Rental;
-import repository.RentalRepository;
+import repository.rental.RentalRepository;
 
-public class RentalServiceImpl implements RentalService{
+public class RentalServiceImpl implements RentalService {
 
     private RentalRepository rentalRepository;
 

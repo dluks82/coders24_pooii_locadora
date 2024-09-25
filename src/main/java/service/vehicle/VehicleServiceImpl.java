@@ -1,13 +1,13 @@
-package service;
+package service.vehicle;
 
 import dto.CreateVehicleDTO;
 import model.vehicle.Car;
 import model.vehicle.Motorcycle;
 import model.vehicle.Truck;
 import model.vehicle.Vehicle;
-import repository.VehicleRepository;
+import repository.vehicle.VehicleRepository;
 import utils.VehicleType;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class VehicleServiceImpl implements VehicleService {
