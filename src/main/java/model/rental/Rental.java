@@ -52,6 +52,30 @@ public class Rental {
         return vehicle;
     }
 
+    public Agency getPickUpAgency() {
+        return pickUpAgency;
+    }
+
+    public LocalDateTime getPickUpDate() {
+        return pickUpDate;
+    }
+
+    public Agency getReturnAgency() {
+        return returnAgency;
+    }
+
+    public LocalDateTime getEstimatedReturnDate() {
+        return estimatedReturnDate;
+    }
+
+    public void setActualReturnDate(LocalDateTime actualReturnDate) {
+        this.actualReturnDate = actualReturnDate;
+    }
+
+    public void setReturnAgency(Agency returnAgency) {
+        this.returnAgency = returnAgency;
+    }
+
     // class methods
     public BigDecimal calculateTotalCost() {
         BigDecimal big = BigDecimal.ZERO;
