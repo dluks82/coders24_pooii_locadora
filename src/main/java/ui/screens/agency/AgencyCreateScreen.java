@@ -13,6 +13,8 @@ import java.util.Scanner;
 public class AgencyCreateScreen extends Screen {
     private final Scanner scanner;
 
+    private String errorMessage = "";
+
     private final AgencyService agencyService;
 
     private String name = "";
@@ -32,45 +34,78 @@ public class AgencyCreateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
+            ScreenUtils.showHeader("Cadastro de Agência");
 
-            System.out.println("=== Cadastro de Agência ===");
-            System.out.println("Nome: " + (name.isEmpty() ? "" : name));
-            System.out.println("Endereço: " + (address.isEmpty() ? "" : address));
-            System.out.println("Telefone: " + (phone.isEmpty() ? "" : phone));
+            displayAgencyRegistration();
 
             Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
 
-            switch (currentField) {
-                case 0 -> {
-                    String inputName =
-                            Input.getAsString(scanner, "Nome: ", false, false);
-                    if (processInputCommands(inputName)) {
-                        break;
-                    }
-                    name = inputName;
-                    currentField = 1;
-                }
-                case 1 -> {
-                    String addressInput =
-                            Input.getAsString(scanner, "Endereço: ", false, false);
-                    if (processInputCommands(addressInput)) {
-                        break;
-                    }
-                    address = addressInput;
-                    currentField = 2;
-                }
-                case 2 -> {
-                    String phoneInput =
-                            Input.getAsString(scanner, "Telefone: ", false, false);
-                    if (processInputCommands(phoneInput)) {
-                        break;
-                    }
-                    phone = phoneInput;
-                    currentField = 3;
-                }
-                case 3 -> confirmRegistration();
-            }
+            displayPendingMessages();
+
+            handleCurrentField();
+
+
         } while (true);
+    }
+
+    private void displayAgencyRegistration() {
+        String namePrompt = "Nome:";
+        String addressPrompt = "Endereço:";
+        String phonePrompt = "Telefone:";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : " " + name));
+        System.out.printf("║   %-43s ║%n", addressPrompt + (address.isEmpty() ? "" : " " + address));
+        System.out.printf("║   %-43s ║%n", phonePrompt + (phone.isEmpty() ? "" : " " + phone));
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
+    }
+
+    private void displayPendingMessages() {
+        if (!errorMessage.isEmpty()) {
+            Output.error(errorMessage);
+            errorMessage = "";
+        }
+    }
+
+    private void handleCurrentField() {
+        switch (currentField) {
+            case 0 -> {
+                String inputName =
+                        Input.getAsString(scanner, "Nome: ", false, false);
+                if (processInputCommands(inputName)) {
+                    break;
+                }
+                name = inputName;
+                currentField = 1;
+            }
+            case 1 -> {
+                String addressInput =
+                        Input.getAsString(scanner, "Endereço: ", false, false);
+                if (processInputCommands(addressInput)) {
+                    break;
+                }
+                address = addressInput;
+                currentField = 2;
+            }
+            case 2 -> {
+                String phoneInput =
+                        Input.getAsString(scanner, "Telefone: ", false, false);
+                if (processInputCommands(phoneInput)) {
+                    break;
+                }
+                phone = phoneInput;
+                currentField = 3;
+            }
+            case 3 -> confirmRegistration();
+        }
     }
 
     private void confirmRegistration() {
@@ -84,13 +119,11 @@ public class AgencyCreateScreen extends Screen {
                 CreateAgencyDTO createAgencyDTO = new CreateAgencyDTO(name, address, phone);
                 agencyService.createAgency(createAgencyDTO);
             } catch (IllegalArgumentException e) {
-                Output.error(e.getMessage());
-                scanner.nextLine();
+                errorMessage = e.getMessage();
                 currentField = 0;
                 return;
             } catch (Exception e) {
-                Output.error("Erro desconhecido ao cadastrar a agência. Tente novamente!");
-                scanner.nextLine();
+                errorMessage = "Erro desconhecido ao cadastrar a agência. Tente novamente!";
                 currentField = 0;
                 return;
             }

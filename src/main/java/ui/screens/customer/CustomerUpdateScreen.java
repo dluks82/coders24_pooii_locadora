@@ -6,6 +6,7 @@ import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -56,8 +57,8 @@ public class CustomerUpdateScreen extends Screen {
                         System.out.println("1 - Tentar novamente");
                         System.out.println("2 - Cancelar o cadastro");
 
-                        int option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-                        switch (option) {
+                        Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+                        switch (option.getValue()) {
                             case 1:
                                 isSelectionListCalled = false;
                                 break;

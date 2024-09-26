@@ -11,25 +11,44 @@ public class Input {
 
     static String emptyLine = "";
 
-    public static int getAsInt(Scanner scanner, String promptMessage, boolean canBeNegative) {
-        while (true) {
-            Output.prompt(promptMessage);
-            try {
-                String value = scanner.nextLine();
+//    public static int getAsInt(Scanner scanner, String promptMessage, boolean canBeNegative) {
+//        while (true) {
+//            Output.prompt(promptMessage);
+//            try {
+//                String value = scanner.nextLine();
+//
+//                if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
+//
+//                int parsedValue = Integer.parseInt(value);
+//
+//                if (parsedValue >= 0 || canBeNegative) {
+//                    return parsedValue;
+//                }
+//                Output.error("Não pode ser negativo!");
+//                System.out.println(emptyLine);
+//            } catch (NumberFormatException e) {
+//                Output.error("Valor inválido! Por favor tente novamente...");
+//                System.out.println(emptyLine);
+//            }
+//        }
+//    }
 
-                if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
+    public static Result<Integer> getAsInt(Scanner scanner, String promptMessage, boolean canBeNegative) {
+        Output.prompt(promptMessage);
+        try {
+            String value = scanner.nextLine();
 
-                int parsedValue = Integer.parseInt(value);
+            if (value.equalsIgnoreCase("cancel"))
+                throw new DataInputInterruptedException();
 
-                if (parsedValue >= 0 || canBeNegative) {
-                    return parsedValue;
-                }
-                Output.error("Não pode ser negativo!");
-                System.out.println(emptyLine);
-            } catch (NumberFormatException e) {
-                Output.error("Valor inválido! Por favor tente novamente...");
-                System.out.println(emptyLine);
+            int parsedValue = Integer.parseInt(value);
+
+            if (parsedValue >= 0 || canBeNegative) {
+                return Result.success(parsedValue);
             }
+            return Result.fail("Não pode ser negativo!");
+        } catch (NumberFormatException e) {
+            return Result.fail("Valor inválido! Por favor tente novamente...");
         }
     }
 

@@ -24,7 +24,10 @@ public class AgencyListScreen extends Screen {
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
 
+    private String searchQuery = "";
     private List<Agency> filteredAgencies;
+
+    private String errorMessage = "";
 
     public AgencyListScreen(
             FlowController flowController, Scanner scanner, AgencyService agencyService, boolean isModal) {
@@ -42,17 +45,16 @@ public class AgencyListScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-
             listPaginatedAgencies(filteredAgencies, currentPage);
 
             // TODO: CRIAR UM MENU MAIS INTUITIVO
-            Output.info("'F' para filtrar, 'L' para limpar filtro.");
-            Output.info("'A' para avançar página, 'V' para voltar página");
+
             Output.info("'X' para voltar");
 
             String promptMessage = isModal ? "Selecione uma agência pelo número ou utilize os comandos acima: "
                     : "Utilize os comandos de navegação: ";
 
+            displayPendingMessages();
             String input = Input.getAsString(scanner, promptMessage, true, false);
 
             if (processInputCommands(input, agencies)) {
@@ -62,16 +64,26 @@ public class AgencyListScreen extends Screen {
         } while (!agencySelected);
     }
 
+    private void displayPendingMessages() {
+        if (!errorMessage.isEmpty()) {
+            Output.error(errorMessage);
+            errorMessage = "";
+        }
+    }
+
     private void listPaginatedAgencies(List<Agency> agencies, int page) {
         if (isModal) {
             ScreenUtils.showHeader("Selecione uma Agência");
         } else {
-            ScreenUtils.showHeader("Selecione uma Agência");
-            System.out.println("Lista de Agências");
+            ScreenUtils.showHeader("Lista de Agências");
+        }
+
+        if (!searchQuery.isEmpty()) {
+            System.out.println("Filtro: " + searchQuery);
         }
 
         if (agencies.isEmpty()) {
-            System.out.println("\nNenhuma agência encontrada.\n");
+            Output.info("Nenhuma agência encontrada.\n");
             return;
         }
 
@@ -93,10 +105,13 @@ public class AgencyListScreen extends Screen {
                     limitString(agency.getPhone(), 15));
         }
 
-        System.out.println("------------------------------------------------------------" +
+        System.out.print("------------------------------------------------------------" +
                 "-------------------------------------------");
 
-        System.out.println("\nPágina " + (page + 1) + " de " + totalPages);
+        System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
+
+        Output.info("'F' para filtrar, 'L' para limpar filtro.");
+        Output.info("'A' para avançar página, 'V' para voltar página");
     }
 
     private String limitString(String str, int maxLength) {
@@ -119,11 +134,17 @@ public class AgencyListScreen extends Screen {
                 }
                 break;
             case "f":
+                if (filteredAgencies.isEmpty())
+                    break;
+
                 searchAgencies(agencies);
                 break;
             case "l":
-                filteredAgencies = agencies;
-                currentPage = 0;
+                if (!searchQuery.isEmpty()) {
+                    searchQuery = "";
+                    filteredAgencies = agencies;
+                    currentPage = 0;
+                }
                 break;
             case "x":
                 back();
@@ -149,8 +170,9 @@ public class AgencyListScreen extends Screen {
     }
 
     private void searchAgencies(List<Agency> agencies) {
-        System.out.println("Digite o nome da agência que deseja buscar: ");
-        String searchQuery = scanner.nextLine().trim().toLowerCase();
+
+        searchQuery = Input.getAsString(scanner, "Filtrar por nome da agência: ", true, false);
+        searchQuery = searchQuery.trim().toLowerCase();
 
         filteredAgencies = agencies.stream()
                 .filter(agency -> agency.getName().toLowerCase().contains(searchQuery))
@@ -158,14 +180,10 @@ public class AgencyListScreen extends Screen {
         currentPage = 0;
 
         if (filteredAgencies.isEmpty()) {
-            System.out.println("Nenhuma agência encontrada com o nome: " + searchQuery);
+            errorMessage = "Nenhuma agência encontrada com o nome: " + searchQuery;
+            searchQuery = "";
             filteredAgencies = agencies;
-        } else {
-            System.out.println(filteredAgencies.size() + " agência(s) encontrada(s).");
         }
-
-        System.out.println("Pressione Enter para continuar.");
-        scanner.nextLine();
     }
 
     private void selectAgency(Agency agency) {

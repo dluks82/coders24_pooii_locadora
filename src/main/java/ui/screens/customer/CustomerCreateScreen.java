@@ -7,6 +7,7 @@ import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -53,13 +54,13 @@ public class CustomerCreateScreen extends Screen {
                     for (CustomerType type : CustomerType.values()) {
                         System.out.println(type.ordinal() + " - " + type.name());
                     }
-                    int inputType = Input.getAsInt(scanner, "Tipo: ", false);
-                    if (inputType < 0 || inputType >= CustomerType.values().length) {
+                    Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
+                    if (inputType.getValue() < 0 || inputType.getValue() >= CustomerType.values().length) {
                         Output.error("Tipo de cliente inválido!");
                         scanner.nextLine();
                         break;
                     }
-                    type = CustomerType.values()[inputType];
+                    type = CustomerType.values()[inputType.getValue()];
 
                     currentField = 1;
                 }
