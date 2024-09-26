@@ -1,8 +1,6 @@
 package ui.screens.rental;
 
 import dto.CreateRentalDTO;
-import dto.CreateVehicleDTO;
-import enums.VehicleType;
 import model.agency.Agency;
 import model.customer.Customer;
 import model.vehicle.Vehicle;
@@ -21,7 +19,6 @@ import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -65,28 +62,9 @@ public class RentalCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("===================================");
-            System.out.println("       === Nova Locação ===");
-            System.out.println("===================================");
+            ScreenUtils.showHeader("Cadastro de Locação");
 
-            // Exibe as informações já selecionadas
-            String agencyName = (selectedAgency != null) ? selectedAgency.getName() : "Não selecionada";
-            String vehicleName = (selectedVehicle != null) ? selectedVehicle.getModel() : "Não selecionado";
-            String customerName = (selectedCustomer != null) ? selectedCustomer.getName() : "Não selecionado";
-            String startDateStr = (startDate != null) ? startDate.toString() : "Não definido";
-            String estimatedEndDateStr = (estimatedEndDate != null) ? estimatedEndDate.toString() : "Não definido";
-            String rentalCostStr = (selectedVehicle != null && estimatedEndDate != null)
-                    ? "R$ " + selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays))
-                    : "Não definido";
-
-            System.out.printf("Agência selecionada: %s%n", agencyName);
-            System.out.printf("Veículo selecionado: %s%n", vehicleName);
-            System.out.printf("Cliente selecionado: %s%n", customerName);
-            System.out.printf("Data de início: %s%n", startDateStr);
-            System.out.printf("Data estimada de término: %s%n", estimatedEndDateStr);
-            System.out.printf("Custo estimado da locação: %s%n", rentalCostStr);
-
-            System.out.println("===================================");
+            displayRentalRegistration();
 
             Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
 
@@ -94,8 +72,6 @@ public class RentalCreateScreen extends Screen {
                 case 0 -> {
                     if (!isAgencySelectionListCalled) {
                         isAgencySelectionListCalled = true;
-                        System.out.println("\n--- Selecione a Agência ---");
-                        scanner.nextLine();
 
                         AgencyListScreen agencyListScreen = new AgencyListScreen(flowController, scanner, agencyService, true);
                         flowController.goTo(agencyListScreen);
@@ -116,8 +92,6 @@ public class RentalCreateScreen extends Screen {
                 case 1 -> {
                     if (!isVehicleSelectionListCalled) {
                         isVehicleSelectionListCalled = true;
-                        System.out.println("\n--- Selecione o Veículo ---");
-                        scanner.nextLine();
 
                         VehicleListScreen vehicleListScreen = new VehicleListScreen(flowController, scanner, vehicleService, true);
                         flowController.goTo(vehicleListScreen);
@@ -139,8 +113,6 @@ public class RentalCreateScreen extends Screen {
                 case 2 -> {
                     if (!isCustomerSelectionListCalled) {
                         isCustomerSelectionListCalled = true;
-                        System.out.println("\n--- Selecione o Cliente ---");
-                        scanner.nextLine();
 
                         CustomerListScreen customerListScreen = new CustomerListScreen(flowController, scanner, customerService, true);
                         flowController.goTo(customerListScreen);
@@ -180,6 +152,42 @@ public class RentalCreateScreen extends Screen {
                 case 5 -> confirmRegistration();
             }
         } while (true);
+    }
+
+    private void displayRentalRegistration() {
+
+        String agencyPrompt = "Agência: ";
+        String agencyValue = selectedAgency != null ? selectedAgency.getName() : "";
+        String vehiclePrompt = "Veículo: ";
+        String vehicleValue = selectedVehicle != null ? selectedVehicle.getModel() : "";
+        String customerPrompt = "Cliente: ";
+        String customerValue = selectedCustomer != null ? selectedCustomer.getName() : "";
+        String startDatePrompt = "Data de início: ";
+        String startDateValue = startDate != null ? startDate.toString() : "";
+        String estimatedEndDatePrompt = "Data estimada de término: ";
+        String estimatedEndDateValue = estimatedEndDate != null ? estimatedEndDate.toString() : "";
+        String rentalCostPrompt = "Custo estimado da locação: ";
+        String rentalCostValue = (selectedVehicle != null && estimatedEndDate != null)
+                ? "R$ " + selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays))
+                : "Não definido";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", agencyPrompt + agencyValue);
+        System.out.printf("║   %-43s ║%n", vehiclePrompt + vehicleValue);
+        System.out.printf("║   %-43s ║%n", customerPrompt + customerValue);
+        System.out.printf("║   %-43s ║%n", startDatePrompt + startDateValue);
+        System.out.printf("║   %-43s ║%n", estimatedEndDatePrompt + estimatedEndDateValue);
+        System.out.printf("║   %-43s ║%n", rentalCostPrompt + rentalCostValue);
+
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmRegistration() {

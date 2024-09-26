@@ -44,12 +44,6 @@ public class CustomerListScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            if (isModal) {
-                System.out.println("=== Selecione um Cliente ===");
-            } else {
-                System.out.println("=== Lista de Clientes ===");
-            }
-
             listPaginatedCustomers(filteredCustomers, currentPage);
 
             Output.info("'F' para filtrar, 'L' para limpar filtro.");
@@ -73,7 +67,13 @@ public class CustomerListScreen extends Screen {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, customers.size());
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Endereço", "Telefone");
+        if (isModal) {
+            ScreenUtils.showHeader("Selecione um Cliente");
+        } else {
+            ScreenUtils.showHeader("Lista de Clientes");
+        }
+
+        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Documento", "Telefone");
         System.out.println("--------------------------------------------------------------------------");
 
         for (int i = start; i < end; i++) {

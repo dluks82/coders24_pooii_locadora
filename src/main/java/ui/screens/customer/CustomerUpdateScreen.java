@@ -1,5 +1,6 @@
 package ui.screens.customer;
 
+import enums.CustomerType;
 import model.customer.Customer;
 import service.customer.CustomerService;
 import ui.core.Screen;
@@ -20,6 +21,11 @@ public class CustomerUpdateScreen extends Screen {
 
     private boolean isSelectionListCalled = false;
 
+    private String name = "";
+    private String phone = "";
+    private String document = "";
+    private CustomerType type;
+
     public CustomerUpdateScreen(FlowController flowController, Scanner scanner, CustomerService customerService) {
         super(flowController);
         this.scanner = scanner;
@@ -31,12 +37,11 @@ public class CustomerUpdateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("=== Editar Agência ===");
+            ScreenUtils.showHeader("Editar Cliente");
 
             if (customerToUpdate != null) {
-                System.out.println("Nome: " + customerToUpdate.getName());
-                System.out.println("Telefone: " + customerToUpdate.getNumberPhone());
-                System.out.println("Documento: " + customerToUpdate.getDocumentId());
+                displayCustomerUpdateForm();
+                Output.info("'V' para voltar campo, 'C' para cancelar a edição.");
             }
             switch (currentField) {
                 case 0 -> {
@@ -47,6 +52,11 @@ public class CustomerUpdateScreen extends Screen {
                         flowController.goTo(customerListScreen);
 
                         customerToUpdate = customerListScreen.getSelectedCustomer();
+                        if (customerToUpdate != null) {
+                            name = customerToUpdate.getName();
+                            phone = customerToUpdate.getNumberPhone();
+                            document = customerToUpdate.getDocumentId();
+                        }
 
                         flowController.goBack();
                     }
@@ -74,27 +84,48 @@ public class CustomerUpdateScreen extends Screen {
                 case 1 -> {
                     String inputName = Input.getAsString(scanner, "Nome: ", true, false);
                     if (processInputCommands(inputName)) break;
-                    if (!inputName.isEmpty())
-                        customerToUpdate.setName(inputName);
+                    name = inputName.trim().isEmpty() ? name : inputName;
                     currentField = 2;
                 }
                 case 2 -> {
                     String phoneInput = Input.getAsString(scanner, "Telefone: ", true, false);
                     if (processInputCommands(phoneInput)) break;
-                    if (!phoneInput.isEmpty())
-                        customerToUpdate.setNumberPhone(phoneInput);
+                    phone = phoneInput.trim().isEmpty() ? phone : phoneInput;
                     currentField = 3;
                 }
                 case 3 -> {
                     String DocumentInput = Input.getAsString(scanner, "Documento: ", true, false);
                     if (processInputCommands(DocumentInput)) break;
-                    if (!DocumentInput.isEmpty())
-                        customerToUpdate.setDocumentId(DocumentInput);
+                    document = DocumentInput.trim().isEmpty() ? document : DocumentInput;
                     currentField = 4;
                 }
                 case 4 -> confirmUpdate();
             }
         } while (true);
+    }
+
+    private void displayCustomerUpdateForm() {
+        String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
+
+        String documentPrompt = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
+
+        String namePrompt = "Nome: ";
+        String phonePrompt = "Telefone: ";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", typeName);
+        System.out.printf("║   %-43s ║%n", namePrompt + name);
+        System.out.printf("║   %-43s ║%n", phonePrompt + phone);
+        System.out.printf("║   %-43s ║%n", documentPrompt + document);
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmUpdate() {

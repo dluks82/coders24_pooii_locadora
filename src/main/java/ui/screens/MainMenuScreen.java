@@ -51,7 +51,7 @@ public class MainMenuScreen extends Screen {
     }
 
     private AgencyService createAgencyService() {
-        AgencyRepository agencyRepository = InMemoryAgencyRepositoryImpl.getInstance();
+        AgencyRepository agencyRepository = new InMemoryAgencyRepositoryImpl();
         return new AgencyServiceImpl(agencyRepository);
     }
 

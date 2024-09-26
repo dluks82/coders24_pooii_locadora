@@ -80,10 +80,8 @@ public class AgencyMenuScreen extends Screen {
     private void handleMenuOption(int option) {
         switch (option) {
             case 1 -> navigateTo(new AgencyCreateScreen(flowController, scanner, agencyService));
-            case 2 -> flowController.goTo(
-                    new AgencyListScreen(flowController, scanner, agencyService, false));
-            case 3 -> flowController.goTo(
-                    new AgencyUpdateScreen(flowController, scanner, agencyService));
+            case 2 -> navigateTo(new AgencyListScreen(flowController, scanner, agencyService, false));
+            case 3 -> navigateTo(new AgencyUpdateScreen(flowController, scanner, agencyService));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
         }
