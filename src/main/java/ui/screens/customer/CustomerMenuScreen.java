@@ -15,6 +15,8 @@ public class CustomerMenuScreen extends Screen {
 
     private final CustomerService customerService;
 
+    private String errorMessage = "";
+
     public CustomerMenuScreen(FlowController flowController,
                               Scanner scanner, CustomerService customerService) {
         super(flowController);
@@ -29,38 +31,64 @@ public class CustomerMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Clientes");
-
-            System.out.println("1 - Registrar Cliente");
-            System.out.println("2 - Listar Clientes");
-            System.out.println("3 - Atualizar Cliente");
-            System.out.println("0 - Voltar");
+            displayMenuOptions();
+            displayPendingMessages();
 
             option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
 
-            switch (option.getValue()) {
-                case 1:
-                    flowController.goTo(
-                            new CustomerCreateScreen(flowController, scanner, customerService));
-                    break;
-                case 2:
-                    flowController.goTo(
-                            new CustomerListScreen(flowController, scanner, customerService, false));
-                    break;
-                case 3:
-                    flowController.goTo(
-                            new CustomerUpdateScreen(flowController, scanner, customerService));
-                    break;
-                case 0:
-                    flowController.goBack();
-                    break;
-                default:
-                    Output.error("Opção inválida!");
-                    scanner.nextLine();
-                    break;
-            }
+            handleMenuOption(option.getValue());
 
         } while (option.getValue() != 0);
+    }
+
+    private void handleMenuOption(int option) {
+        switch (option) {
+            case 1 -> {
+                navigateTo(new CustomerCreateScreen(flowController, scanner, customerService));
+            }
+            case 2 -> {
+                navigateTo(new CustomerListScreen(flowController, scanner, customerService, false));
+            }
+            case 3 -> {
+                navigateTo(new CustomerUpdateScreen(flowController, scanner, customerService));
+            }
+            case 0 -> {
+                flowController.goBack();
+            }
+            default -> {
+                errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
+            }
+        }
+    }
+
+    private void displayPendingMessages() {
+        if (!errorMessage.isEmpty()) {
+            Output.error(errorMessage);
+            errorMessage = "";
+        }
+    }
+
+    private void displayMenuOptions() {
+        ScreenUtils.showHeader("Menu Clientes");
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", "[ 1 ] - Adicionar");
+        System.out.printf("║   %-43s ║%n", "[ 2 ] - Listar");
+        System.out.printf("║   %-43s ║%n", "[ 3 ] - Editar");
+        System.out.printf("║   %-43s ║%n", "[ 0 ] - Voltar");
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
+    }
+
+    private void navigateTo(Screen screen) {
+        flowController.goTo(screen);
     }
 
 }

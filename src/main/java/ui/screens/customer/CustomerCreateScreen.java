@@ -36,23 +36,18 @@ public class CustomerCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("=== Cadastro de Cliente ===");
+            ScreenUtils.showHeader("Cadastro de Cliente");
 
-            String typeName = type != null ? type.name().isEmpty() ? "" : type.name() : "";
-            String document = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
-
-            System.out.println("Tipo: " + typeName);
-            System.out.println(document + (documentId.isEmpty() ? "" : documentId));
-            System.out.println("Nome: " + (name.isEmpty() ? "" : name));
-            System.out.println("Telefone: " + (phoneNumber.isEmpty() ? "" : phoneNumber));
-
-            Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
+            if (type != null) {
+                displayCustomerRegistration();
+                Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
+            }
 
             switch (currentField) {
                 case 0 -> {
                     System.out.println("Selecione o tipo de cliente:");
                     for (CustomerType type : CustomerType.values()) {
-                        System.out.println(type.ordinal() + " - " + type.name());
+                        System.out.println(type.ordinal() + " - " + type.getDescription());
                     }
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
                     if (inputType.getValue() < 0 || inputType.getValue() >= CustomerType.values().length) {
@@ -65,7 +60,9 @@ public class CustomerCreateScreen extends Screen {
                     currentField = 1;
                 }
                 case 1 -> {
-                    String documentInput = Input.getAsString(scanner, document, false, false);
+                    String documentPrompt = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
+
+                    String documentInput = Input.getAsString(scanner, documentPrompt, false, false);
                     if (processInputCommands(documentInput)) {
                         break;
                     }
@@ -92,6 +89,31 @@ public class CustomerCreateScreen extends Screen {
                 case 4 -> confirmRegistration();
             }
         } while (true);
+    }
+
+    private void displayCustomerRegistration() {
+        String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
+
+        String documentPrompt = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
+
+        String typePrompt = "Tipo: ";
+        String namePrompt = "Nome: ";
+        String phonePrompt = "Telefone: ";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", typePrompt + typeName);
+        System.out.printf("║   %-43s ║%n", documentPrompt + (documentId.isEmpty() ? "" : documentId));
+        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : name));
+        System.out.printf("║   %-43s ║%n", phonePrompt + (name.isEmpty() ? "" : name));
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmRegistration() {

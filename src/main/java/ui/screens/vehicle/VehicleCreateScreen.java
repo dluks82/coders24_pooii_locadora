@@ -1,6 +1,7 @@
 package ui.screens.vehicle;
 
 import dto.CreateVehicleDTO;
+import enums.CustomerType;
 import enums.VehicleType;
 import model.agency.Agency;
 import service.agency.AgencyService;
@@ -46,16 +47,9 @@ public class VehicleCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("=== Cadastro de Veículo ===");
+            ScreenUtils.showHeader("Cadastro de Veículo");
 
-            String typeName = type != null ? type.name().isEmpty() ? "" : type.name() : "";
-            String agencyName = selectedAgency != null ? selectedAgency.getName().isEmpty() ? "" : selectedAgency.getName() : "";
-
-            System.out.println("Tipo: " + typeName);
-            System.out.println("Placa: " + (plate.isEmpty() ? "" : plate));
-            System.out.println("Modelo: " + (model.isEmpty() ? "" : model));
-            System.out.println("Marca: " + (brand.isEmpty() ? "" : brand));
-            System.out.println("Agencia: " + agencyName);
+            displayVehicleRegistration();
 
             Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
 
@@ -63,7 +57,8 @@ public class VehicleCreateScreen extends Screen {
                 case 0 -> {
                     System.out.println("Selecione o tipo de veículo:");
                     for (VehicleType type : VehicleType.values()) {
-                        System.out.println(type.ordinal() + " - " + type.name());
+
+                        System.out.println(type.ordinal() + " - " + type.getDescription());
                     }
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
                     if (inputType.getValue() < 0 || inputType.getValue() >= VehicleType.values().length) {
@@ -103,8 +98,6 @@ public class VehicleCreateScreen extends Screen {
 
                     if (!isSelectionListCalled) {
                         isSelectionListCalled = true;
-                        System.out.println("Selecione a agência:");
-                        scanner.nextLine();
 
                         AgencyListScreen agencyListScreen = new AgencyListScreen(flowController, scanner, agencyService, true);
                         flowController.goTo(agencyListScreen);
@@ -144,6 +137,40 @@ public class VehicleCreateScreen extends Screen {
                 case 5 -> confirmRegistration();
             }
         } while (true);
+    }
+
+    private void displayVehicleRegistration() {
+
+        String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
+        String agencyName = selectedAgency != null ? selectedAgency.getName().isEmpty() ? "" : selectedAgency.getName() : "";
+
+        System.out.println("Tipo: " + typeName);
+        System.out.println("Placa: " + (plate.isEmpty() ? "" : plate));
+        System.out.println("Modelo: " + (model.isEmpty() ? "" : model));
+        System.out.println("Marca: " + (brand.isEmpty() ? "" : brand));
+        System.out.println("Agencia: " + agencyName);
+
+        String typePrompt = "Tipo: ";
+        String plateInput = "Tipo: ";
+        String modelInput = "Tipo: ";
+        String brandInput = "Tipo: ";
+        String agencyInput = "Nome: ";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", typePrompt + typeName);
+        System.out.printf("║   %-43s ║%n", plateInput + (plate.isEmpty() ? "" : plate));
+        System.out.printf("║   %-43s ║%n", modelInput + (model.isEmpty() ? "" : model));
+        System.out.printf("║   %-43s ║%n", brandInput + (brand.isEmpty() ? "" : brand));
+        System.out.printf("║   %-43s ║%n", agencyInput + agencyName);
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmRegistration() {

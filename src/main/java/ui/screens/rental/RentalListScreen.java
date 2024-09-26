@@ -39,7 +39,6 @@ public class RentalListScreen extends Screen {
 
         do {
             ScreenUtils.clearScreen();
-            System.out.println("=== Lista de Veículos ===");
 
             listPaginatedRentals(filteredRentals, currentPage);
 
@@ -64,12 +63,18 @@ public class RentalListScreen extends Screen {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, rentals.size());
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Endereço", "Telefone");
+        if (isModal) {
+            ScreenUtils.showHeader("Selecione uma Locação");
+        } else {
+            ScreenUtils.showHeader("Lista de Locações");
+        }
+
+        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Cliente", "Data Início", "Data Estimada");
         System.out.println("--------------------------------------------------------------------------");
 
         for (int i = start; i < end; i++) {
             Rental rental = rentals.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), rental.getCustomer().getName(), rental.getCustomer().getName(), rental.getCustomer().getNumberPhone());
+            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), rental.getCustomer().getName(), "VERIFICARRR", "VERIFICARRR faltam Getters");
         }
 
         System.out.println("--------------------------------------------------------------------------");

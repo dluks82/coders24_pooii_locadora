@@ -1,5 +1,8 @@
 package ui.screens.vehicle;
 
+import model.vehicle.Car;
+import model.vehicle.Motorcycle;
+import model.vehicle.Truck;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
 import ui.core.Screen;
@@ -16,6 +19,12 @@ public class VehicleUpdateScreen extends Screen {
     private final VehicleService vehicleService;
     private Vehicle vehicleToUpdate;
 
+    private String model = "";
+    private String brand = "";
+    private String plate = "";
+
+    private String errorMessage = "";
+
     private int currentField = 0;
 
     private boolean isSelectionListCalled = false;
@@ -30,13 +39,12 @@ public class VehicleUpdateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
-
-            System.out.println("=== Editar Veículo ===");
+            ScreenUtils.showHeader("Editar Veículo");
 
             if (vehicleToUpdate != null) {
-                System.out.println("Modelo: " + vehicleToUpdate.getModel());
-                System.out.println("Marca: " + vehicleToUpdate.getBrand());
-                System.out.println("Placa: " + vehicleToUpdate.getPlate());
+                displayVehicleUpdateForm();
+
+                Output.info("'V' para voltar campo, 'C' para cancelar a edição.");
             }
             switch (currentField) {
                 case 0 -> {
@@ -47,6 +55,14 @@ public class VehicleUpdateScreen extends Screen {
                         flowController.goTo(vehicleListScreen);
 
                         vehicleToUpdate = vehicleListScreen.getSelectedVehicle();
+                        if (vehicleToUpdate != null) {
+                            model = vehicleToUpdate.getModel();
+                            brand = vehicleToUpdate.getBrand();
+                            plate = vehicleToUpdate.getPlate();
+
+                            System.out.println("Veículo selecionado:");
+                            System.out.println("Tipo: " + vehicleToUpdate.getType().getDescription());
+                        }
 
                         flowController.goBack();
                     }
@@ -74,27 +90,45 @@ public class VehicleUpdateScreen extends Screen {
                 case 1 -> {
                     String inputModel = Input.getAsString(scanner, "Modelo: ", true, false);
                     if (processInputCommands(inputModel)) break;
-                    if (!inputModel.isEmpty())
-                        vehicleToUpdate.setModel(inputModel);
+                    model = inputModel.trim().isEmpty() ? model : inputModel;
                     currentField = 2;
                 }
                 case 2 -> {
                     String brandInput = Input.getAsString(scanner, "Marca: ", true, false);
                     if (processInputCommands(brandInput)) break;
-                    if (!brandInput.isEmpty())
-                        vehicleToUpdate.setBrand(brandInput);
+                    brand = brandInput.trim().isEmpty() ? brand : brandInput;
                     currentField = 3;
                 }
                 case 3 -> {
                     String plateInput = Input.getAsString(scanner, "placa: ", true, false);
                     if (processInputCommands(plateInput)) break;
-                    if (!plateInput.isEmpty())
-                        vehicleToUpdate.setPlate(plateInput);
+                    plate = plateInput.trim().isEmpty() ? plate : plateInput;
                     currentField = 4;
                 }
                 case 4 -> confirmUpdate();
             }
         } while (true);
+    }
+
+    private void displayVehicleUpdateForm() {
+
+        String modelPrompt = "Modelo:";
+        String brandPrompt = "Marca:";
+        String platePrompt = "Placa:";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", modelPrompt + (model.isEmpty() ? "" : " " + model));
+        System.out.printf("║   %-43s ║%n", brandPrompt + (brand.isEmpty() ? "" : " " + brand));
+        System.out.printf("║   %-43s ║%n", platePrompt + (plate.isEmpty() ? "" : " " + plate));
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmUpdate() {
@@ -103,6 +137,23 @@ public class VehicleUpdateScreen extends Screen {
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de atualização
+            System.out.println("Veículo a ser atualizado:");
+            System.out.println(vehicleToUpdate);
+            switch (vehicleToUpdate.getType()) {
+                case CAR -> {
+                    Vehicle updatedVehicle = new Car(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    vehicleService.updateVehicle(updatedVehicle);
+                }
+                case MOTORCYCLE -> {
+                    Vehicle updatedVehicle = new Motorcycle(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    vehicleService.updateVehicle(updatedVehicle);
+                }
+                case TRUCK -> {
+                    Vehicle updatedVehicle = new Truck(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    vehicleService.updateVehicle(updatedVehicle);
+                }
+            }
+
             vehicleService.updateVehicle(vehicleToUpdate);
 
             Output.info("Edição realizada com sucesso!");

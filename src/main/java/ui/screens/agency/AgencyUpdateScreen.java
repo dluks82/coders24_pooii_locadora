@@ -16,7 +16,13 @@ public class AgencyUpdateScreen extends Screen {
     private final AgencyService agencyService;
     private Agency agencyToUpdate;
 
+    private String name = "";
+    private String address = "";
+    private String phone = "";
+
     private int currentField = 0;
+
+    private String errorMessage = "";
 
     private boolean isSelectionListCalled = false;
 
@@ -30,19 +36,15 @@ public class AgencyUpdateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
-
-            System.out.println("=== Editar Agência ===");
+            ScreenUtils.showHeader("Editar Agência");
 
             if (agencyToUpdate != null) {
-                System.out.println("Nome: " + agencyToUpdate.getName());
-                System.out.println("Endereço: " + agencyToUpdate.getAddress());
-                System.out.println("Telefone: " + agencyToUpdate.getPhone());
-
+                displayAgencyUpdateForm();
                 // Enviar vazio mantem o valor atual
                 Output.info("'V' para voltar campo, 'C' para cancelar a edição.");
-
             }
 
+            displayPendingMessages();
 
             switch (currentField) {
                 case 0 -> {
@@ -54,6 +56,11 @@ public class AgencyUpdateScreen extends Screen {
                         flowController.goTo(agencyListScreen);
 
                         agencyToUpdate = agencyListScreen.getSelectedAgency();
+                        if (agencyToUpdate != null) {
+                            name = agencyToUpdate.getName();
+                            address = agencyToUpdate.getAddress();
+                            phone = agencyToUpdate.getPhone();
+                        }
 
                         flowController.goBack();
                     }
@@ -81,27 +88,54 @@ public class AgencyUpdateScreen extends Screen {
                 case 1 -> {
                     String inputName = Input.getAsString(scanner, "Nome: ", true, false);
                     if (processInputCommands(inputName)) break;
-                    if (!inputName.isEmpty())
-                        agencyToUpdate.setName(inputName);
+
+                    name = inputName.trim().isEmpty() ? name : inputName;
                     currentField = 2;
                 }
                 case 2 -> {
                     String addressInput = Input.getAsString(scanner, "Endereço: ", true, false);
                     if (processInputCommands(addressInput)) break;
-                    if (!addressInput.isEmpty())
-                        agencyToUpdate.setAddress(addressInput);
+
+                    address = addressInput.trim().isEmpty() ? address : addressInput;
                     currentField = 3;
                 }
                 case 3 -> {
                     String phoneInput = Input.getAsString(scanner, "Telefone: ", true, false);
                     if (processInputCommands(phoneInput)) break;
-                    if (!phoneInput.isEmpty())
-                        agencyToUpdate.setPhone(phoneInput);
+
+                    phone = phoneInput.trim().isEmpty() ? phone : phoneInput;
                     currentField = 4;
                 }
                 case 4 -> confirmUpdate();
             }
         } while (true);
+    }
+
+    private void displayPendingMessages() {
+        if (!errorMessage.isEmpty()) {
+            Output.error(errorMessage);
+            errorMessage = "";
+        }
+    }
+
+    private void displayAgencyUpdateForm() {
+        String namePrompt = "Nome:";
+        String addressPrompt = "Endereço:";
+        String phonePrompt = "Telefone:";
+
+        int maxLineLength = 47; // Ajuste conforme necessário
+
+//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
+        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
+        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+
+//        System.out.println(topLine);
+        System.out.println(emptyLine);
+        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : " " + name));
+        System.out.printf("║   %-43s ║%n", addressPrompt + (address.isEmpty() ? "" : " " + address));
+        System.out.printf("║   %-43s ║%n", phonePrompt + (phone.isEmpty() ? "" : " " + phone));
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
     }
 
     private void confirmUpdate() {
@@ -112,9 +146,9 @@ public class AgencyUpdateScreen extends Screen {
             // Chamar o serviço de atualização
             Agency updatedAgency = new Agency(
                     agencyToUpdate.getId(),
-                    agencyToUpdate.getName(),
-                    agencyToUpdate.getAddress(),
-                    agencyToUpdate.getPhone()
+                    name.isEmpty() ? agencyToUpdate.getName() : name,
+                    address.isEmpty() ? agencyToUpdate.getAddress() : address,
+                    phone.isEmpty() ? agencyToUpdate.getPhone() : phone
             );
             agencyService.updateAgency(updatedAgency);
 

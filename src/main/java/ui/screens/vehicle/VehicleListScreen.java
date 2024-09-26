@@ -39,7 +39,6 @@ public class VehicleListScreen extends Screen {
 
         do {
             ScreenUtils.clearScreen();
-            System.out.println("=== Lista de Veículos ===");
 
             listPaginatedAgencies(filteredVehicles, currentPage);
 
@@ -64,12 +63,18 @@ public class VehicleListScreen extends Screen {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, vehicles.size());
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Endereço", "Telefone");
+        if (isModal) {
+            ScreenUtils.showHeader("Selecione um Veículo");
+        } else {
+            ScreenUtils.showHeader("Lista de Veículos");
+        }
+
+        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Placa", "Modelo", "Diária");
         System.out.println("--------------------------------------------------------------------------");
 
         for (int i = start; i < end; i++) {
             Vehicle vehicle = vehicles.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), vehicle.getPlate(), vehicle.getModel(), vehicle.getBrand());
+            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), vehicle.getPlate(), vehicle.getModel(), vehicle.getDailyRate());
         }
 
         System.out.println("--------------------------------------------------------------------------");
