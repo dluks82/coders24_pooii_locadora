@@ -111,52 +111,45 @@ public class Rental {
         return big;
     }
 
-    public void setActualReturnDate(LocalDateTime actualReturnDate) { 
-        this.actualReturnDate = actualReturnDate;
-    }
-
     public String generatePickupReceipt() {
-        StringBuilder recibo = new StringBuilder();
 
-        recibo.append("========== RECIBO DE ALUGUEL ==========\n")
-              .append("Cliente: ").append(customer.getName()).append("\n")
-              .append("Telefone: ").append(customer.getNumberPhone()).append("\n")
-              .append("Documento: ").append(customer.getDocumentId()).append("\n")
-              .append("Tipo de Cliente: ").append(customer.getType()).append("\n\n")
-              .append("=== DETALHES DO VEÍCULO ===\n")
-              .append("Modelo: ").append(vehicle.getModel()).append("\n")
-              .append("Marca: ").append(vehicle.getBrand()).append("\n")
-              .append("Placa: ").append(vehicle.getPlate()).append("\n\n")
-              .append("=== AGÊNCIA DE RETIRADA ===\n")
-              .append("Nome: ").append(pickUpAgency.getName()).append("\n")
-              .append("Endereço: ").append(pickUpAgency.getAddress()).append("\n")
-              .append("Telefone: ").append(pickUpAgency.getPhone()).append("\n")
-              .append("Data de Retirada: ").append(pickUpDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-              .append("=======================================\n");
-
-        return recibo.toString();
+        return "========== RECIBO DE ALUGUEL ==========\n" +
+                "Cliente: " + customer.getName() + "\n" +
+                "Telefone: " + customer.getNumberPhone() + "\n" +
+                "Documento: " + customer.getDocumentId() + "\n" +
+                "Tipo de Cliente: " + customer.getType() + "\n\n" +
+                "=== DETALHES DO VEÍCULO ===\n" +
+                "Modelo: " + vehicle.getModel() + "\n" +
+                "Marca: " + vehicle.getBrand() + "\n" +
+                "Placa: " + vehicle.getPlate() + "\n\n" +
+                "=== AGÊNCIA DE RETIRADA ===\n" +
+                "Nome: " + pickUpAgency.getName() + "\n" +
+                "Endereço: " + pickUpAgency.getAddress() + "\n" +
+                "Telefone: " + pickUpAgency.getPhone() + "\n" +
+                "Data de Retirada: " + pickUpDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                "=======================================\n";
     }
 
     public String generateReturnReceipt() {
-        StringBuilder recibo = new StringBuilder();
 
-        recibo.append("========== RECIBO DE DEVOLUÇÃO ==========\n")
-              .append("Cliente: ").append(customer.getName()).append("\n")
-              .append("Telefone: ").append(customer.getNumberPhone()).append("\n")
-              .append("Documento: ").append(customer.getDocumentId()).append("\n")
-              .append("Tipo de Cliente: ").append(customer.getType()).append("\n\n")
-              .append("=== DETALHES DO VEÍCULO ===\n")
-              .append("Modelo: ").append(vehicle.getModel()).append("\n")
-              .append("Marca: ").append(vehicle.getBrand()).append("\n")
-              .append("Placa: ").append(vehicle.getPlate()).append("\n\n")
-              .append("=== AGÊNCIA DE DEVOLUÇÃO ===\n")
-              .append("Nome: ").append(returnAgency.getName()).append("\n")
-              .append("Endereço: ").append(returnAgency.getAddress()).append("\n")
-              .append("Telefone: ").append(returnAgency.getPhone()).append("\n")
-              .append("Data Estimada de Devolução: ").append(estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-              .append("Data Real de Devolução: ").append(actualReturnDate != null ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A").append("\n")
-              .append("==========================================\n");
-
-        return recibo.toString();
+        return "========== RECIBO DE DEVOLUÇÃO ==========\n" +
+                "Cliente: " + customer.getName() + "\n" +
+                "Telefone: " + customer.getNumberPhone() + "\n" +
+                "Documento: " + customer.getDocumentId() + "\n" +
+                "Tipo de Cliente: " + customer.getType() + "\n\n" +
+                "=== DETALHES DO VEÍCULO ===\n" +
+                "Modelo: " + vehicle.getModel() + "\n" +
+                "Marca: " + vehicle.getBrand() + "\n" +
+                "Placa: " + vehicle.getPlate() + "\n\n" +
+                "=== AGÊNCIA DE DEVOLUÇÃO ===\n" +
+                "Nome: " + returnAgency.getName() + "\n" +
+                "Endereço: " + returnAgency.getAddress() + "\n" +
+                "Telefone: " + returnAgency.getPhone() + "\n" +
+                "Data Estimada de Devolução: "
+                + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                "Data Real de Devolução: "
+                + (actualReturnDate != null
+                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A") + "\n" +
+                "==========================================\n";
     }
 }
