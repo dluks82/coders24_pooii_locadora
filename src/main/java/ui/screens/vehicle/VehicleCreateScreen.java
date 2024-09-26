@@ -144,12 +144,6 @@ public class VehicleCreateScreen extends Screen {
         String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
         String agencyName = selectedAgency != null ? selectedAgency.getName().isEmpty() ? "" : selectedAgency.getName() : "";
 
-        System.out.println("Tipo: " + typeName);
-        System.out.println("Placa: " + (plate.isEmpty() ? "" : plate));
-        System.out.println("Modelo: " + (model.isEmpty() ? "" : model));
-        System.out.println("Marca: " + (brand.isEmpty() ? "" : brand));
-        System.out.println("Agencia: " + agencyName);
-
         String typePrompt = "Tipo: ";
         String plateInput = "Tipo: ";
         String modelInput = "Tipo: ";
