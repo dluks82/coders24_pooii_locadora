@@ -10,6 +10,7 @@ import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -64,13 +65,13 @@ public class VehicleCreateScreen extends Screen {
                     for (VehicleType type : VehicleType.values()) {
                         System.out.println(type.ordinal() + " - " + type.name());
                     }
-                    int inputType = Input.getAsInt(scanner, "Tipo: ", false);
-                    if (inputType < 0 || inputType >= VehicleType.values().length) {
+                    Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
+                    if (inputType.getValue() < 0 || inputType.getValue() >= VehicleType.values().length) {
                         Output.error("Tipo de veículo inválido!");
                         scanner.nextLine();
                         break;
                     }
-                    type = VehicleType.values()[inputType];
+                    type = VehicleType.values()[inputType.getValue()];
 
                     currentField = 1;
                 }
@@ -123,8 +124,8 @@ public class VehicleCreateScreen extends Screen {
                         System.out.println("2 - Tentar novamente");
                         System.out.println("3 - Cancelar o cadastro");
 
-                        int option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-                        switch (option) {
+                        Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+                        switch (option.getValue()) {
                             case 1:
                                 currentField = 3;
                                 isSelectionListCalled = false;

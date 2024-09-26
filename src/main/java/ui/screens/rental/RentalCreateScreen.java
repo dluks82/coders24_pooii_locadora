@@ -17,6 +17,7 @@ import ui.screens.customer.CustomerListScreen;
 import ui.screens.vehicle.VehicleListScreen;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.math.BigDecimal;
@@ -158,13 +159,13 @@ public class RentalCreateScreen extends Screen {
                     currentField = 3;
                 }
                 case 3 -> {
-                    int rentalDaysInput = Input.getAsInt(scanner, "Dias de locação: ", false);
-                    if (rentalDaysInput <= 0) {
+                    Result<Integer> rentalDaysInput = Input.getAsInt(scanner, "Dias de locação: ", false);
+                    if (rentalDaysInput.getValue() <= 0) {
                         Output.error("O número de dias de locação deve ser maior que zero!");
                         break;
                     }
 
-                    rentalDays = rentalDaysInput;
+                    rentalDays = rentalDaysInput.getValue();
 
                     startDate = LocalDateTime.now();
                     estimatedEndDate = startDate.plusDays(rentalDays);
@@ -224,8 +225,8 @@ public class RentalCreateScreen extends Screen {
         System.out.println("2 - Tentar novamente");
         System.out.println("3 - Cancelar");
 
-        int option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-        switch (option) {
+        Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        switch (option.getValue()) {
             case 1 -> {
                 if (currentField > 0) {
                     currentField--;

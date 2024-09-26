@@ -8,6 +8,7 @@ import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -33,12 +34,13 @@ public class RentalMenuScreen extends Screen {
 
     @Override
     public void show() {
-        int option;
+        Result<Integer> option;
 
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Locações");
+            ScreenUtils.showHeader("Locações");
+
             System.out.println("1 - Iniciar Locação");
             System.out.println("2 - Finalizar Locação");
             System.out.println("3 - Visualizer Locações Ativas");
@@ -46,7 +48,7 @@ public class RentalMenuScreen extends Screen {
 
             option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
 
-            switch (option) {
+            switch (option.getValue()) {
                 case 1:
                     flowController.goTo(
                             new RentalCreateScreen(flowController, scanner, agencyService, vehicleService, customerService, rentalService));
@@ -66,7 +68,7 @@ public class RentalMenuScreen extends Screen {
                     scanner.nextLine();
                     break;
             }
-        } while (option != 0);
+        } while (option.getValue() != 0);
 
     }
 

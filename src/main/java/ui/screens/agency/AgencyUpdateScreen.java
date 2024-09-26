@@ -6,6 +6,7 @@ import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -36,13 +37,20 @@ public class AgencyUpdateScreen extends Screen {
                 System.out.println("Nome: " + agencyToUpdate.getName());
                 System.out.println("Endereço: " + agencyToUpdate.getAddress());
                 System.out.println("Telefone: " + agencyToUpdate.getPhone());
+
+                // Enviar vazio mantem o valor atual
+                Output.info("'V' para voltar campo, 'C' para cancelar a edição.");
+
             }
+
+
             switch (currentField) {
                 case 0 -> {
                     if (!isSelectionListCalled) {
                         isSelectionListCalled = true;
 
-                        AgencyListScreen agencyListScreen = new AgencyListScreen(flowController, scanner, agencyService, true);
+                        AgencyListScreen agencyListScreen =
+                                new AgencyListScreen(flowController, scanner, agencyService, true);
                         flowController.goTo(agencyListScreen);
 
                         agencyToUpdate = agencyListScreen.getSelectedAgency();
@@ -51,13 +59,13 @@ public class AgencyUpdateScreen extends Screen {
                     }
 
                     if (agencyToUpdate == null) {
-                        Output.error("Você precisa selecionar uma agência válida!");
+                        Output.error("Você precisa selecionar uma agência válida!\n\n");
 
                         System.out.println("1 - Tentar novamente");
                         System.out.println("2 - Cancelar o cadastro");
 
-                        int option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-                        switch (option) {
+                        Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+                        switch (option.getValue()) {
                             case 1:
                                 isSelectionListCalled = false;
                                 break;

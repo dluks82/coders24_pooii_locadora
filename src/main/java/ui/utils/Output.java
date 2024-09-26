@@ -15,7 +15,7 @@ public class Output {
     }
 
     public static void error(String message) {
-        System.out.print(PREFIX + " >> " + Color.RED.apply(message));
+        System.out.println(PREFIX + " >> " + Color.RED.apply(message));
     }
 
     public static void info(String message) {

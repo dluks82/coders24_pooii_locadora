@@ -5,6 +5,7 @@ import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
@@ -23,12 +24,13 @@ public class CustomerMenuScreen extends Screen {
 
     @Override
     public void show() {
-        int option;
+        Result<Integer> option;
 
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Clientes");
+            ScreenUtils.showHeader("Clientes");
+
             System.out.println("1 - Registrar Cliente");
             System.out.println("2 - Listar Clientes");
             System.out.println("3 - Atualizar Cliente");
@@ -36,7 +38,7 @@ public class CustomerMenuScreen extends Screen {
 
             option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
 
-            switch (option) {
+            switch (option.getValue()) {
                 case 1:
                     flowController.goTo(
                             new CustomerCreateScreen(flowController, scanner, customerService));
@@ -58,7 +60,7 @@ public class CustomerMenuScreen extends Screen {
                     break;
             }
 
-        } while (option != 0);
+        } while (option.getValue() != 0);
     }
 
 }
