@@ -7,39 +7,39 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.Period;
 
+import enums.CustomerType;
+import enums.VehicleType;
 import model.agency.Agency;
 import model.customer.Customer;
 import model.vehicle.Vehicle;
 
 public class Rental {
 
-    private String id;
-    private Customer customer;
-    private Vehicle vehicle;
-    private Agency pickUpAgency;
-    private LocalDateTime pickUpDate;
+    private final String id;
+    private final Customer customer;
+    private final Vehicle vehicle;
+    private final Agency pickUpAgency;
+    private final LocalDateTime pickUpDate;
     private Agency returnAgency;
-    private LocalDateTime estimatedReturnDate;
+    private final LocalDateTime estimatedReturnDate;
     private LocalDateTime actualReturnDate;
 
     //constructor
     public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDateTime pickUpDate,
-                  Agency returnAgency, LocalDateTime estimatedReturnDate, LocalDateTime actualReturnDate) {
+                  LocalDateTime estimatedReturnDate) {
         this.id = id;
         this.customer = customer;
         this.vehicle = vehicle;
         this.pickUpAgency = pickUpAgency;
         this.pickUpDate = pickUpDate;
-        this.returnAgency = returnAgency;
         this.estimatedReturnDate = estimatedReturnDate;
-        this.actualReturnDate = actualReturnDate;
-    }   
+    }
 
     //getters and setters
     public String getId() {
         return id;
     }
-    
+
     public Customer getCustomer() {
         return customer;
     }
@@ -47,7 +47,7 @@ public class Rental {
     public LocalDateTime getActualReturnDate() {
         return actualReturnDate;
     }
-    
+
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -57,36 +57,33 @@ public class Rental {
         BigDecimal big = BigDecimal.ZERO;
 
         LocalDate dataSaida = this.pickUpDate.toLocalDate();
-        LocalDate dataEntrega = this.actualReturnDate==null ? this.estimatedReturnDate.toLocalDate() : this.actualReturnDate.toLocalDate();
-        Period periodo = Period.between(dataSaida, dataEntrega);
-        int dias = periodo.getDays();
-        int totalDias = periodo.getYears() * 365 + periodo.getMonths() * 30 + dias; // Aproximação
+        LocalDate dataEntrega =
+                this.actualReturnDate == null
+                        ? this.estimatedReturnDate.toLocalDate() : this.actualReturnDate.toLocalDate();
+        Period period = Period.between(dataSaida, dataEntrega);
+        int dias = period.getDays();
+        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
 
-        if(this.getVehicle().getType().equals("CAR")) {
-            if(this.customer.getType().equals("INDIVIDUAL")) {
+        if (this.getVehicle().getType() == VehicleType.CAR) {
+            if (this.customer.getType() == CustomerType.INDIVIDUAL) {
                 if (totalDias > 3) {
-                    big = BigDecimal.valueOf(150).multiply(BigDecimal.valueOf(totalDias)).multiply(BigDecimal.valueOf(0.95));
-                    return big;
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+                            .multiply(BigDecimal.valueOf(0.95));
                 } else {
-                    big = BigDecimal.valueOf(150).multiply(BigDecimal.valueOf(totalDias));
-                    return big;
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
                 }
             } else {
                 if (totalDias > 5) {
-                    big = BigDecimal.valueOf(150).multiply(BigDecimal.valueOf(totalDias)).multiply(BigDecimal.valueOf(0.90));
-                    return big;
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+                            .multiply(BigDecimal.valueOf(0.90));
                 } else {
-                    big = BigDecimal.valueOf(150).multiply(BigDecimal.valueOf(totalDias));
-                    return big;
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
                 }
             }
-        } else if (this.getVehicle().getType().equals("MOTORCYCLE")) {
-            big = BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(totalDias));
             return big;
-        } else if (this.getVehicle().getType().equals("TRUCK")) {
-            big = BigDecimal.valueOf(200).multiply(BigDecimal.valueOf(totalDias));
-            return big;
-        }        
+        } else {
+            big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+        }
         return big;
     }
 
