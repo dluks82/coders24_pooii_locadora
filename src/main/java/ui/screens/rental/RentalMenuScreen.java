@@ -38,7 +38,8 @@ public class RentalMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Locações");
+            ScreenUtils.showHeader("Locações");
+
             System.out.println("1 - Iniciar Locação");
             System.out.println("2 - Finalizar Locação");
             System.out.println("3 - Visualizer Locações Ativas");

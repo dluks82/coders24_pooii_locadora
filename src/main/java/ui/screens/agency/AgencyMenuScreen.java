@@ -27,7 +27,8 @@ public class AgencyMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Agências");
+            ScreenUtils.showHeader("Agências");
+
             System.out.println("1 - Adicionar Agência");
             System.out.println("2 - Listar Agências");
             System.out.println("3 - Atualizar Agência");

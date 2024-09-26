@@ -15,4 +15,13 @@ public class ScreenUtils {
             }
         }
     }
+
+    public static void showHeader(String title) {
+        clearScreen();
+        System.out.println("=================================================");
+        System.out.println("               CodersRentalApp                   ");
+        System.out.println("=================================================");
+        System.out.println(title);
+        System.out.println("-------------------------------------------------");
+    }
 }

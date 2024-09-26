@@ -28,7 +28,8 @@ public class CustomerMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Clientes");
+            ScreenUtils.showHeader("Clientes");
+
             System.out.println("1 - Registrar Cliente");
             System.out.println("2 - Listar Clientes");
             System.out.println("3 - Atualizar Cliente");

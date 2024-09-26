@@ -42,7 +42,8 @@ public class AgencyCreateScreen extends Screen {
 
             switch (currentField) {
                 case 0 -> {
-                    String inputName = Input.getAsString(scanner, "Nome: ", false, false);
+                    String inputName =
+                            Input.getAsString(scanner, "Nome: ", false, false);
                     if (processInputCommands(inputName)) {
                         break;
                     }
@@ -50,7 +51,8 @@ public class AgencyCreateScreen extends Screen {
                     currentField = 1;
                 }
                 case 1 -> {
-                    String addressInput = Input.getAsString(scanner, "Endereço: ", false, false);
+                    String addressInput =
+                            Input.getAsString(scanner, "Endereço: ", false, false);
                     if (processInputCommands(addressInput)) {
                         break;
                     }
@@ -58,7 +60,8 @@ public class AgencyCreateScreen extends Screen {
                     currentField = 2;
                 }
                 case 2 -> {
-                    String phoneInput = Input.getAsString(scanner, "Telefone: ", false, false);
+                    String phoneInput =
+                            Input.getAsString(scanner, "Telefone: ", false, false);
                     if (processInputCommands(phoneInput)) {
                         break;
                     }
@@ -71,19 +74,27 @@ public class AgencyCreateScreen extends Screen {
     }
 
     private void confirmRegistration() {
-        String input = Input.getAsString(scanner, "Confirma o cadastro? (S/n): ", true, false);
+        String input =
+                Input.getAsString(scanner, "Confirma o cadastro? (S/n): ", true, false);
         input = input.isEmpty() ? "s" : input;
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de cadastro
-            CreateAgencyDTO createAgencyDTO = new CreateAgencyDTO(name, address, phone);
-            agencyService.createAgency(createAgencyDTO);
-
-            System.out.println("Cadastro realizado com sucesso!");
-        } else {
-            System.out.println("Cadastro cancelado.");
+            try {
+                CreateAgencyDTO createAgencyDTO = new CreateAgencyDTO(name, address, phone);
+                agencyService.createAgency(createAgencyDTO);
+            } catch (IllegalArgumentException e) {
+                Output.error(e.getMessage());
+                scanner.nextLine();
+                currentField = 0;
+                return;
+            } catch (Exception e) {
+                Output.error("Erro desconhecido ao cadastrar a agência. Tente novamente!");
+                scanner.nextLine();
+                currentField = 0;
+                return;
+            }
         }
-        scanner.nextLine();
         flowController.goBack();
     }
 

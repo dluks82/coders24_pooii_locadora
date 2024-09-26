@@ -31,7 +31,8 @@ public class VehicleMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Menu de Veículos");
+            ScreenUtils.showHeader("Veículos");
+
             System.out.println("1 - Adicionar Veículo");
             System.out.println("2 - Listar Veículos");
             System.out.println("3 - Atualizar Veículo");

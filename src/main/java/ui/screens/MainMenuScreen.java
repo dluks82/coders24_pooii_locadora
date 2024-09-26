@@ -60,12 +60,16 @@ public class MainMenuScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            System.out.println("Coders Rental App");
+            ScreenUtils.showHeader("Menu Principal");
+
             System.out.println("1 - Agencias");
             System.out.println("2 - Veículos");
             System.out.println("3 - Clientes");
             System.out.println("4 - Locações");
-            System.out.println("0 - Exit");
+            System.out.println("0 - Sair");
+
+            System.out.println("-------------------------------------------------");
+
 
             option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
 

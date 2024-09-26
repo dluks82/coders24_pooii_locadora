@@ -15,26 +15,24 @@ import java.util.stream.Collectors;
 public class AgencyListScreen extends Screen {
     private final Scanner scanner;
     private final AgencyService agencyService;
+
     private final boolean isModal;
 
     private Agency selectedAgency;
+    private boolean agencySelected = false;
 
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
+
     private List<Agency> filteredAgencies;
 
     public AgencyListScreen(
-            FlowController flowController,
-            Scanner scanner,
-            AgencyService agencyService,
-            boolean isModal) {
+            FlowController flowController, Scanner scanner, AgencyService agencyService, boolean isModal) {
         super(flowController);
         this.scanner = scanner;
         this.agencyService = agencyService;
         this.isModal = isModal;
     }
-
-    private boolean agencySelected = false;
 
     @Override
     public void show() {
@@ -44,14 +42,10 @@ public class AgencyListScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            if (isModal) {
-                System.out.println("=== Selecione uma Agência ===");
-            } else {
-                System.out.println("=== Lista de Agências ===");
-            }
 
             listPaginatedAgencies(filteredAgencies, currentPage);
 
+            // TODO: CRIAR UM MENU MAIS INTUITIVO
             Output.info("'F' para filtrar, 'L' para limpar filtro.");
             Output.info("'A' para avançar página, 'V' para voltar página");
             Output.info("'X' para voltar");
@@ -69,20 +63,47 @@ public class AgencyListScreen extends Screen {
     }
 
     private void listPaginatedAgencies(List<Agency> agencies, int page) {
+        if (isModal) {
+            ScreenUtils.showHeader("Selecione uma Agência");
+        } else {
+            ScreenUtils.showHeader("Selecione uma Agência");
+            System.out.println("Lista de Agências");
+        }
+
+        if (agencies.isEmpty()) {
+            System.out.println("\nNenhuma agência encontrada.\n");
+            return;
+        }
+
         int totalPages = (int) Math.ceil((double) agencies.size() / PAGE_SIZE);
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, agencies.size());
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Endereço", "Telefone");
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("%-5s | %-25s | %-25s | %-15s%n", "Nº", "Nome", "Endereço", "Telefone");
+        System.out.println("------------------------------------------------------------" +
+                "-------------------------------------------");
 
         for (int i = start; i < end; i++) {
             Agency agency = agencies.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), agency.getName(), agency.getAddress(), agency.getPhone());
+
+            System.out.printf("%-5d | %-25s | %-25s | %-15s%n",
+                    (i + 1),
+                    limitString(agency.getName(), 25),
+                    limitString(agency.getAddress(), 25),
+                    limitString(agency.getPhone(), 15));
         }
 
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println("\nPágina " + (currentPage + 1) + " de " + totalPages);
+        System.out.println("------------------------------------------------------------" +
+                "-------------------------------------------");
+
+        System.out.println("\nPágina " + (page + 1) + " de " + totalPages);
+    }
+
+    private String limitString(String str, int maxLength) {
+        if (str.length() > maxLength) {
+            return str.substring(0, maxLength - 3) + "...";
+        }
+        return str;
     }
 
     private boolean processInputCommands(String input, List<Agency> agencies) {
@@ -92,26 +113,21 @@ public class AgencyListScreen extends Screen {
                     currentPage--;
                 }
                 break;
-
             case "a":
                 if (currentPage < (int) Math.ceil((double) filteredAgencies.size() / PAGE_SIZE) - 1) {
                     currentPage++;
                 }
                 break;
-
             case "f":
                 searchAgencies(agencies);
                 break;
-
             case "l":
                 filteredAgencies = agencies;
                 currentPage = 0;
                 break;
-
             case "x":
                 back();
                 return true;
-
             default:
                 if (isModal) {
                     try {
@@ -139,7 +155,6 @@ public class AgencyListScreen extends Screen {
         filteredAgencies = agencies.stream()
                 .filter(agency -> agency.getName().toLowerCase().contains(searchQuery))
                 .collect(Collectors.toList());
-
         currentPage = 0;
 
         if (filteredAgencies.isEmpty()) {
