@@ -14,6 +14,8 @@ public class InMemoryRentalRepository implements RentalRepository {
         this.rentals = new ArrayList<>();
     }
 
+
+
     @Override
     public Rental save(Rental entity) {
         rentals.add(entity);
@@ -64,8 +66,12 @@ public class InMemoryRentalRepository implements RentalRepository {
 
     @Override
     public List<Rental> findOpenRentals() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findOpenRentals'");
+        List<Rental> openRentals = new ArrayList<>();
+        for(Rental r : rentals) {
+            if(r.getActualReturnDate()==null)
+                openRentals.add(r);
+        }
+        return openRentals;
     }
     
 }
