@@ -77,7 +77,6 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public List<Rental> findOpenRentals() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findOpenRentals'");
+        return rentalRepository.findOpenRentals();
     }
 }
