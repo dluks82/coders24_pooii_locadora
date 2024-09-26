@@ -11,8 +11,6 @@ public interface CustomerService {
 
     Customer updateCustomer(Customer customer);
 
-    boolean deleteCustomer(Customer customer);
-
     Customer findCustomerById(String id);
 
     List<Customer> findAllCustomers();

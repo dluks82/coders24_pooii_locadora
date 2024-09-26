@@ -87,17 +87,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
-
-    @Override
-    public boolean deleteCustomer(Customer customer) {
-        Customer existCustomer = customerRepository.findByDocument(customer.getDocumentId());
-        if (existCustomer == null) {
-            throw new IllegalArgumentException("Esse cliente não existe");
-        }
-        customerRepository.delete(customer);
-        return true;
-    }
-
     @Override
     public Customer findCustomerById(String id) {
         return customerRepository.findById(id);

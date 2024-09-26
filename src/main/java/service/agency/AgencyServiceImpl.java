@@ -49,19 +49,6 @@ public class AgencyServiceImpl implements AgencyService {
         return agencyRepository.update(agency);
     }
 
-
-    @Override
-    public boolean deleteAgency(Agency agency) {
-        Agency existAgency = agencyRepository.findByName(agency.getName());
-        if(existAgency == null) {
-            throw new IllegalArgumentException("Agencia não existe!");
-        }
-        agencyRepository.delete(agency);
-        return true;
-    }
-
-
-
     @Override
     public Agency findAgencyById(String id) {
         return agencyRepository.findById(id);

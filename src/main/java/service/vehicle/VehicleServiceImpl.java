@@ -66,12 +66,6 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public boolean deleteVehicle(Vehicle vehicle) {
-
-        return false;
-    }
-
-    @Override
     public Vehicle findVehicleById(String id) {
         return vehicleRepository.findById(id);
     }
