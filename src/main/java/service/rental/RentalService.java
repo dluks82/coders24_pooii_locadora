@@ -13,8 +13,6 @@ public interface RentalService {
 
     Rental updateRental(Rental rental);
 
-    boolean deleteRental(Rental rental);
-
     Rental findRentalById(String id);
 
     List<Rental> findAllRentals();

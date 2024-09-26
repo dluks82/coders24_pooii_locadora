@@ -11,8 +11,6 @@ public interface VehicleService {
 
     Vehicle updateVehicle(Vehicle vehicle);
 
-    boolean deleteVehicle(Vehicle vehicle);
-
     Vehicle findVehicleById(String id);
 
     List<Vehicle> findAllVehicles();

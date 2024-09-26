@@ -50,12 +50,6 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public boolean deleteRental(Rental rental) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteRental'");
-    }
-
-    @Override
     public Rental findRentalById(String id) {
         if(id.isEmpty() || id.equals(null)) {
             throw new IllegalArgumentException("ID vazio ou nulo");

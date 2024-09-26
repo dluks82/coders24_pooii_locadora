@@ -11,8 +11,6 @@ public interface AgencyService {
 
     Agency updateAgency(Agency agency);
 
-    boolean deleteAgency(Agency agency);
-
     Agency findAgencyById(String id);
 
     List<Agency> findAllAgencies();
