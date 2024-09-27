@@ -1,5 +1,6 @@
 package ui.screens.vehicle;
 
+import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
 import service.vehicle.VehicleService;
 import ui.core.Screen;
@@ -14,6 +15,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class VehicleMenuScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -32,31 +34,27 @@ public class VehicleMenuScreen extends Screen {
     @Override
     public void show() {
         Result<Integer> option;
-
         do {
             ScreenUtils.clearScreen();
-
             displayMenuOptions();
-
             displayPendingMessages();
 
-            option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+            option = getUserOption();
+
+            if (option.isFailure()) {
+                errorMessage = option.getErrorMessage();
+                continue;
+            }
 
             handleMenuOption(option.getValue());
         } while (option.getValue() != 0);
-
     }
 
     private void handleMenuOption(int option) {
         switch (option) {
-            case 1 -> navigateTo(
-                    new VehicleCreateScreen(flowController, scanner, agencyService, vehicleService)
-            );
-            case 2 -> navigateTo(
-                    new VehicleListScreen(flowController, scanner, vehicleService, false));
-            case 3 -> navigateTo(
-                    new VehicleUpdateScreen(flowController, scanner, vehicleService)
-            );
+            case 1 -> navigateTo(new VehicleCreateScreen(flowController, scanner, agencyService, vehicleService));
+            case 2 -> navigateTo(new VehicleListScreen(flowController, scanner, vehicleService, false));
+            case 3 -> navigateTo(new VehicleUpdateScreen(flowController, scanner, vehicleService));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
         }
@@ -69,16 +67,20 @@ public class VehicleMenuScreen extends Screen {
         }
     }
 
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
     private void displayMenuOptions() {
         ScreenUtils.showHeader("Veículos");
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
         System.out.printf("║   %-43s ║%n", "[ 1 ] - Adicionar");
         System.out.printf("║   %-43s ║%n", "[ 2 ] - Listar");

@@ -1,5 +1,6 @@
 package ui.screens.customer;
 
+import exceptions.DataInputInterruptedException;
 import service.customer.CustomerService;
 import ui.core.Screen;
 import ui.flow.FlowController;
@@ -27,14 +28,16 @@ public class CustomerMenuScreen extends Screen {
     @Override
     public void show() {
         Result<Integer> option;
-
         do {
             ScreenUtils.clearScreen();
-
             displayMenuOptions();
             displayPendingMessages();
 
-            option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+            option = getUserOption();
+            if (option.isFailure()) {
+                errorMessage = option.getErrorMessage();
+                continue;
+            }
 
             handleMenuOption(option.getValue());
 
@@ -43,21 +46,16 @@ public class CustomerMenuScreen extends Screen {
 
     private void handleMenuOption(int option) {
         switch (option) {
-            case 1 -> {
-                navigateTo(new CustomerCreateScreen(flowController, scanner, customerService));
-            }
-            case 2 -> {
-                navigateTo(new CustomerListScreen(flowController, scanner, customerService, false));
-            }
-            case 3 -> {
-                navigateTo(new CustomerUpdateScreen(flowController, scanner, customerService));
-            }
-            case 0 -> {
-                flowController.goBack();
-            }
-            default -> {
-                errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
-            }
+            case 1 -> navigateTo(new CustomerCreateScreen(flowController, scanner, customerService));
+
+            case 2 -> navigateTo(new CustomerListScreen(flowController, scanner, customerService, false));
+
+            case 3 -> navigateTo(new CustomerUpdateScreen(flowController, scanner, customerService));
+
+            case 0 -> flowController.goBack();
+
+            default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
+
         }
     }
 
@@ -65,6 +63,14 @@ public class CustomerMenuScreen extends Screen {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
             errorMessage = "";
+        }
+    }
+
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
         }
     }
 

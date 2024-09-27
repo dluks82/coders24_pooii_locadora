@@ -1,5 +1,6 @@
 package ui.screens.rental;
 
+import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
 import service.customer.CustomerService;
 import service.rental.RentalService;
@@ -17,6 +18,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class RentalMenuScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -25,7 +27,6 @@ public class RentalMenuScreen extends Screen {
     private final RentalService rentalService;
 
     private String errorMessage = "";
-
 
     public RentalMenuScreen(FlowController flowController,
                             Scanner scanner, AgencyService agencyService, CustomerService customerService, VehicleService vehicleService, RentalService rentalService) {
@@ -40,15 +41,16 @@ public class RentalMenuScreen extends Screen {
     @Override
     public void show() {
         Result<Integer> option;
-
         do {
             ScreenUtils.clearScreen();
-
             displayMenuOptions();
-
             displayPendingMessages();
 
-            option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+            option = getUserOption();
+            if (option.isFailure()) {
+                errorMessage = option.getErrorMessage();
+                continue;
+            }
 
             handleMenuOption(option.getValue());
 
@@ -58,12 +60,10 @@ public class RentalMenuScreen extends Screen {
 
     private void handleMenuOption(int option) {
         switch (option) {
-            case 1 -> navigateTo(
-                    new RentalCreateScreen(flowController, scanner, agencyService, vehicleService, customerService, rentalService));
-            case 2 -> navigateTo(
-                    new RentalCloseScreen(flowController, scanner, agencyService, rentalService));
-            case 3 -> navigateTo(
-                    new RentalListScreen(flowController, scanner, rentalService, false));
+            case 1 ->
+                    navigateTo(new RentalCreateScreen(flowController, scanner, agencyService, vehicleService, customerService, rentalService));
+            case 2 -> navigateTo(new RentalCloseScreen(flowController, scanner, agencyService, rentalService));
+            case 3 -> navigateTo(new RentalListScreen(flowController, scanner, rentalService, false));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
         }
@@ -76,16 +76,20 @@ public class RentalMenuScreen extends Screen {
         }
     }
 
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
     private void displayMenuOptions() {
         ScreenUtils.showHeader("Menu Locações");
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
         System.out.printf("║   %-43s ║%n", "[ 1 ] - Nova Locação");
         System.out.printf("║   %-43s ║%n", "[ 2 ] - Encerrar Locação");
@@ -98,5 +102,4 @@ public class RentalMenuScreen extends Screen {
     private void navigateTo(Screen screen) {
         flowController.goTo(screen);
     }
-
 }
