@@ -31,6 +31,8 @@ public class RentalCloseScreen extends Screen {
 
     private int rentalDays;
 
+    private String errorMessage = "";
+
     private int currentField = 0;
 
     private boolean isRentalSelectionListCalled = false;
@@ -57,7 +59,10 @@ public class RentalCloseScreen extends Screen {
                 displayRentalClose();
 
                 Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
+
             }
+
+            displayPendingMessages();
 
             switch (currentField) {
                 case 0 -> {
@@ -121,6 +126,15 @@ public class RentalCloseScreen extends Screen {
         } while (true);
     }
 
+    private void displayPendingMessages() {
+        if (!errorMessage.isEmpty()) {
+            Output.error(errorMessage);
+            // Esperar o usuário pressionar Enter para continuar
+            Input.getAsString(scanner, "Pressione Enter para continuar...", true, false);
+            errorMessage = ""; // Limpa o erro após o usuário confirmar
+        }
+    }
+
     private void displayRentalClose() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -161,11 +175,9 @@ public class RentalCloseScreen extends Screen {
             // Chamar o serviço de encerramento
 
             try {
-                rentalService.closeRental(rentalToClose, returnAgency, returnDate);
+                closeRental();
             } catch (Exception e) {
-                Output.error(e.getMessage());
-                System.out.println("... cancelado.");
-                scanner.nextLine();
+                handleError(e.getMessage());
                 return;
             }
 
@@ -177,6 +189,15 @@ public class RentalCloseScreen extends Screen {
         }
         scanner.nextLine();
         flowController.goBack();
+    }
+
+    private void closeRental() {
+        rentalService.closeRental(rentalToClose, returnAgency, returnDate);
+    }
+
+    private void handleError(String message) {
+        errorMessage = message;
+        currentField = 0;
     }
 
     private boolean processInputCommands(String input) {

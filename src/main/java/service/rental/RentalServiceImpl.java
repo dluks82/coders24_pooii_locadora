@@ -38,7 +38,22 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDate actualReturnDate) {
-        return null;
+        Rental existingRental = rentalRepository.findById(rentalToClose.getId());
+        if (existingRental == null) throw new IllegalArgumentException("Locacao nao existe!");
+
+        if(existingRental.getActualReturnDate() != null) {
+            throw new IllegalArgumentException("Locacao ja foi fechada!");
+        }
+
+        // verificar se a data é maior que a data da locação
+        if (actualReturnDate.isBefore(existingRental.getPickUpDate())) {
+            throw new IllegalArgumentException("Data de devolução não pode ser menor que a data de locação!");
+        }
+
+        existingRental.setReturnAgency(returnAgency);
+        existingRental.setActualReturnDate(actualReturnDate);
+
+        return rentalRepository.update(existingRental);
     }
 
 
