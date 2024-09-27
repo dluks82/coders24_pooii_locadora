@@ -12,16 +12,16 @@ public abstract class Vehicle {
     private final String brand;
     private boolean available;
     private final Agency agency;
-    private VehicleType type;
+    private final VehicleType type;
 
-    public Vehicle(String id, String plate, String model, String brand, Agency agency) {
+    public Vehicle(String id, String plate, String model, String brand, Agency agency, VehicleType type) {
         this.id = id;
         this.plate = plate;
         this.model = model;
         this.brand = brand;
         this.available = true;
         this.agency = agency;
-
+        this.type = type;
     }
 
     public Boolean isAvailable() {
