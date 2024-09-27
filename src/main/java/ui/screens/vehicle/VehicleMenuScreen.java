@@ -3,11 +3,9 @@ package ui.screens.vehicle;
 import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
-import ui.screens.rental.RentalCreateScreen;
-import ui.screens.rental.RentalListScreen;
 import ui.utils.Input;
 import ui.utils.Output;
 import ui.utils.Result;
@@ -16,7 +14,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class VehicleMenuScreen extends Screen {
-    private static final int MAX_LINE_LENGTH = 47;
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -81,14 +79,14 @@ public class VehicleMenuScreen extends Screen {
     private void displayMenuOptions() {
         Header.show("Menu de Veículos", null);
 
-        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
-        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", "[ 1 ] - Adicionar");
-        System.out.printf("║   %-43s ║%n", "[ 2 ] - Listar");
-        System.out.printf("║   %-43s ║%n", "[ 3 ] - Editar");
-        System.out.printf("║   %-43s ║%n", "[ 0 ] - Voltar");
+        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Adicionar");
+        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Listar");
+        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Editar");
+        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

@@ -5,7 +5,7 @@ import enums.VehicleType;
 import model.agency.Agency;
 import service.agency.AgencyService;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -17,6 +17,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class VehicleCreateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -60,6 +61,13 @@ public class VehicleCreateScreen extends Screen {
                         System.out.println(type.ordinal() + " - " + type.getDescription());
                     }
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
+
+                    if (inputType.isFailure()) {
+                        Output.error(inputType.getErrorMessage());
+                        scanner.nextLine();
+                        break;
+                    }
+
                     if (inputType.getValue() < 0 || inputType.getValue() >= VehicleType.values().length) {
                         Output.error("Tipo de veículo inválido!");
                         scanner.nextLine();
@@ -149,19 +157,16 @@ public class VehicleCreateScreen extends Screen {
         String brandInput = "Marca: ";
         String agencyInput = "Agência: ";
 
-        int maxLineLength = 47; // Ajuste conforme necessário
-
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", typePrompt + typeName);
-        System.out.printf("║   %-43s ║%n", plateInput + (plate.isEmpty() ? "" : plate));
-        System.out.printf("║   %-43s ║%n", modelInput + (model.isEmpty() ? "" : model));
-        System.out.printf("║   %-43s ║%n", brandInput + (brand.isEmpty() ? "" : brand));
-        System.out.printf("║   %-43s ║%n", agencyInput + agencyName);
+        System.out.printf("║    %-65s    ║%n", typePrompt + typeName);
+        System.out.printf("║    %-65s    ║%n", plateInput + (plate.isEmpty() ? "" : plate));
+        System.out.printf("║    %-65s    ║%n", modelInput + (model.isEmpty() ? "" : model));
+        System.out.printf("║    %-65s    ║%n", brandInput + (brand.isEmpty() ? "" : brand));
+        System.out.printf("║    %-65s    ║%n", agencyInput + agencyName);
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

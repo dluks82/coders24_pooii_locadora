@@ -5,7 +5,7 @@ import model.vehicle.Motorcycle;
 import model.vehicle.Truck;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -16,6 +16,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class VehicleUpdateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final VehicleService vehicleService;
     private Vehicle vehicleToUpdate;
@@ -117,17 +118,14 @@ public class VehicleUpdateScreen extends Screen {
         String brandPrompt = "Marca:";
         String platePrompt = "Placa:";
 
-        int maxLineLength = 47; // Ajuste conforme necessário
-
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", modelPrompt + (model.isEmpty() ? "" : " " + model));
-        System.out.printf("║   %-43s ║%n", brandPrompt + (brand.isEmpty() ? "" : " " + brand));
-        System.out.printf("║   %-43s ║%n", platePrompt + (plate.isEmpty() ? "" : " " + plate));
+        System.out.printf("║    %-65s    ║%n", modelPrompt + (model.isEmpty() ? "" : " " + model));
+        System.out.printf("║    %-65s    ║%n", brandPrompt + (brand.isEmpty() ? "" : " " + brand));
+        System.out.printf("║    %-65s    ║%n", platePrompt + (plate.isEmpty() ? "" : " " + plate));
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
@@ -138,8 +136,6 @@ public class VehicleUpdateScreen extends Screen {
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de atualização
-            System.out.println("Veículo a ser atualizado:");
-            System.out.println(vehicleToUpdate);
             switch (vehicleToUpdate.getType()) {
                 case CAR -> {
                     Vehicle updatedVehicle = new Car(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgency());

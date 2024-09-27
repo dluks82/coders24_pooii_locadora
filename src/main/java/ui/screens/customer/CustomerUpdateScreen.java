@@ -3,7 +3,7 @@ package ui.screens.customer;
 import enums.CustomerType;
 import model.customer.Customer;
 import service.customer.CustomerService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -14,6 +14,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class CustomerUpdateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final CustomerService customerService;
     private Customer customerToUpdate;
@@ -113,18 +114,16 @@ public class CustomerUpdateScreen extends Screen {
         String namePrompt = "Nome: ";
         String phonePrompt = "Telefone: ";
 
-        int maxLineLength = 47; // Ajuste conforme necessário
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", typeName);
-        System.out.printf("║   %-43s ║%n", namePrompt + name);
-        System.out.printf("║   %-43s ║%n", phonePrompt + phone);
-        System.out.printf("║   %-43s ║%n", documentPrompt + document);
+        System.out.printf("║    %-65s    ║%n", typeName);
+        System.out.printf("║    %-65s    ║%n", namePrompt + name);
+        System.out.printf("║    %-65s    ║%n", phonePrompt + phone);
+        System.out.printf("║    %-65s    ║%n", documentPrompt + document);
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

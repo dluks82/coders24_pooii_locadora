@@ -2,7 +2,7 @@ package ui.screens.agency;
 
 import model.agency.Agency;
 import service.agency.AgencyService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;

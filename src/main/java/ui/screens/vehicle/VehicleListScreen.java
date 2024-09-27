@@ -1,9 +1,8 @@
 package ui.screens.vehicle;
 
-import model.agency.Agency;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;

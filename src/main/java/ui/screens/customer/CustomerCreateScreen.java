@@ -3,7 +3,7 @@ package ui.screens.customer;
 import dto.CreateCustomerDTO;
 import enums.CustomerType;
 import service.customer.CustomerService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -14,6 +14,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class CustomerCreateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final CustomerService customerService;
@@ -52,6 +53,12 @@ public class CustomerCreateScreen extends Screen {
                         System.out.println(type.ordinal() + " - " + type.getDescription());
                     }
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
+                    if (inputType.isFailure()) {
+                        Output.error(inputType.getErrorMessage());
+                        scanner.nextLine();
+                        break;
+                    }
+
                     if (inputType.getValue() < 0 || inputType.getValue() >= CustomerType.values().length) {
                         Output.error("Tipo de cliente inválido!");
                         scanner.nextLine();
@@ -102,18 +109,15 @@ public class CustomerCreateScreen extends Screen {
         String namePrompt = "Nome: ";
         String phonePrompt = "Telefone: ";
 
-        int maxLineLength = 47; // Ajuste conforme necessário
-
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", typePrompt + typeName);
-        System.out.printf("║   %-43s ║%n", documentPrompt + (documentId.isEmpty() ? "" : documentId));
-        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : name));
-        System.out.printf("║   %-43s ║%n", phonePrompt + (phoneNumber.isEmpty() ? "" : phoneNumber));
+        System.out.printf("║    %-65s    ║%n", typePrompt + typeName);
+        System.out.printf("║    %-65s    ║%n", documentPrompt + (documentId.isEmpty() ? "" : documentId));
+        System.out.printf("║    %-65s    ║%n", namePrompt + (name.isEmpty() ? "" : name));
+        System.out.printf("║    %-65s    ║%n", phonePrompt + (phoneNumber.isEmpty() ? "" : phoneNumber));
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

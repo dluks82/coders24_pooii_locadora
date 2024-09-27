@@ -8,7 +8,7 @@ import service.agency.AgencyService;
 import service.customer.CustomerService;
 import service.rental.RentalService;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class RentalCreateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -133,23 +134,22 @@ public class RentalCreateScreen extends Screen {
                     currentField = 3;
                 }
                 case 3 -> {
+                    startDate = LocalDate.now();
+
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     estimatedEndDate = null;
 
                     while (estimatedEndDate == null) {
-                        String returnDateInput = Input.getAsString(scanner, "Data de retorno (dd/MM/yyyy): ", false, false);
-                        try {
-                            estimatedEndDate = LocalDate.parse(returnDateInput, formatter);
-                        } catch (Exception e) {
-                            Output.error("Data inválida! Tente novamente.");
+                        Result<LocalDate> estimatedReturnResult = Input.getAsDate(scanner, "Data de retorno (dd/MM/yyyy): ", false);
+                        if (estimatedReturnResult.isFailure()) {
+                            // TODO: errorMessage
+                            Output.error(estimatedReturnResult.getErrorMessage());
+                            continue;
                         }
+                        estimatedEndDate = estimatedReturnResult.getValue();
                     }
 
-                    startDate = LocalDate.now();
-
                     rentalDays = (int) (estimatedEndDate.toEpochDay() - startDate.toEpochDay());
-
-                    estimatedEndDate = startDate.plusDays(rentalDays);
 
                     Output.info(String.format("Data de início: %s", startDate));
                     Output.info(String.format("Data estimada de término: %s", estimatedEndDate));
@@ -164,36 +164,34 @@ public class RentalCreateScreen extends Screen {
     }
 
     private void displayRentalRegistration() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         String agencyPrompt = "Agência: ";
-        String agencyValue = selectedAgency != null ? selectedAgency.getName() : "";
+        String agencyValue = (selectedAgency != null ? selectedAgency.getName() : "");
         String vehiclePrompt = "Veículo: ";
-        String vehicleValue = selectedVehicle != null ? selectedVehicle.getModel() : "";
+        String vehicleValue = (selectedVehicle != null ? selectedVehicle.getModel() : "");
         String customerPrompt = "Cliente: ";
-        String customerValue = selectedCustomer != null ? selectedCustomer.getName() : "";
+        String customerValue = (selectedCustomer != null ? selectedCustomer.getName() : "");
         String startDatePrompt = "Data de início: ";
-        String startDateValue = startDate != null ? startDate.toString() : "";
+        String startDateValue = (startDate != null ? startDate.format(formatter) : "");
         String estimatedEndDatePrompt = "Data estimada de término: ";
-        String estimatedEndDateValue = estimatedEndDate != null ? estimatedEndDate.toString() : "";
+        String estimatedEndDateValue = (estimatedEndDate != null ? estimatedEndDate.format(formatter) : "");
         String rentalCostPrompt = "Custo estimado da locação: ";
         String rentalCostValue = (selectedVehicle != null && estimatedEndDate != null)
-                ? "R$ " + selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays))
+                ? "R$ " + (selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays)))
                 : "Não definido";
 
-        int maxLineLength = 47; // Ajuste conforme necessário
-
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", agencyPrompt + agencyValue);
-        System.out.printf("║   %-43s ║%n", vehiclePrompt + vehicleValue);
-        System.out.printf("║   %-43s ║%n", customerPrompt + customerValue);
-        System.out.printf("║   %-43s ║%n", startDatePrompt + startDateValue);
-        System.out.printf("║   %-43s ║%n", estimatedEndDatePrompt + estimatedEndDateValue);
-        System.out.printf("║   %-43s ║%n", rentalCostPrompt + rentalCostValue);
+        System.out.printf("║    %-65s    ║%n", agencyPrompt + agencyValue);
+        System.out.printf("║    %-65s    ║%n", vehiclePrompt + vehicleValue);
+        System.out.printf("║    %-65s    ║%n", customerPrompt + customerValue);
+        System.out.printf("║    %-65s    ║%n", startDatePrompt + startDateValue);
+        System.out.printf("║    %-65s    ║%n", estimatedEndDatePrompt + estimatedEndDateValue);
+        System.out.printf("║    %-65s    ║%n", rentalCostPrompt + rentalCostValue);
 
         System.out.println(emptyLine);
         System.out.println(bottomLine);

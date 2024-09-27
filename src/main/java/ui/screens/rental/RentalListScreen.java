@@ -1,9 +1,8 @@
 package ui.screens.rental;
 
-import model.agency.Agency;
 import model.rental.Rental;
 import service.rental.RentalService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -12,7 +11,6 @@ import ui.utils.ScreenUtils;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class RentalListScreen extends Screen {
     private static final int MAX_LINE_LENGTH = 65;

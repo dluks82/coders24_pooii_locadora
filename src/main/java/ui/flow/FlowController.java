@@ -31,16 +31,4 @@ public class FlowController {
             previousScreen.show();
         }
     }
-
-    public Screen getCurrentScreen() {
-        return screenStack.peek();
-    }
-
-    public void resetFlow() {
-        screenStack.clear();
-    }
-
-    public boolean hasPreviousScreen() {
-        return screenStack.size() > 1;
-    }
 }
