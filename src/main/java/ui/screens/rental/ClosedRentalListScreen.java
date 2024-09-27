@@ -2,30 +2,30 @@ package ui.screens.rental;
 
 import model.rental.Rental;
 import service.rental.RentalService;
-import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
+import ui.utils.Header;
 import ui.utils.Input;
 import ui.utils.Output;
 import ui.utils.ScreenUtils;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-public class RentalListScreen extends Screen {
+public class ClosedRentalListScreen extends Screen {
     private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final RentalService rentalService;
     private final boolean isModal;
 
     private Rental selectedRental;
-    private String searchQuery = "";
 
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
     private List<Rental> filteredRentals;
 
-    public RentalListScreen(FlowController flowController, Scanner scanner, RentalService rentalService, boolean isModal) {
+    public ClosedRentalListScreen(FlowController flowController, Scanner scanner, RentalService rentalService, boolean isModal) {
         super(flowController);
         this.scanner = scanner;
         this.rentalService = rentalService;
@@ -36,7 +36,7 @@ public class RentalListScreen extends Screen {
 
     @Override
     public void show() {
-        List<Rental> rentals = rentalService.findOpenRentals();
+        List<Rental> rentals = rentalService.findClosedRentals();
         this.filteredRentals = rentals;
 
         do {
@@ -59,6 +59,7 @@ public class RentalListScreen extends Screen {
     }
 
     private void listPaginatedRentals(List<Rental> rentals, int page) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         int totalPages = (int) Math.ceil((double) rentals.size() / PAGE_SIZE);
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, rentals.size());
@@ -69,12 +70,8 @@ public class RentalListScreen extends Screen {
             Header.show("Lista de Locações", null);
         }
 
-        if (!searchQuery.isEmpty()) {
-            System.out.println("║  Filtro: " + searchQuery);
-        }
-
         if (rentals.isEmpty()) {
-            Output.info("Nenhuma locação aberta encontrada.\n");
+            Output.info("Nenhuma locação fechada encontrada.\n");
             return;
         }
 
@@ -82,16 +79,16 @@ public class RentalListScreen extends Screen {
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Cliente", "Data Início", "Data Estimada");
-        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
+        System.out.printf("║ %-3s │ %-33s │ %-13s │ %-13s ║%n", "Nº", "Cliente", "Data Início", "Data Término");
+        System.out.println("╟─────┼───────────────────────────────────┼───────────────┼───────────────╢");
 
         for (int i = start; i < end; i++) {
             Rental rental = rentals.get(i);
-            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
+            System.out.printf("║ %-3d │ %-33s │ %-13s │ %-13s ║%n",
                     (i + 1),
                     limitString(rental.getCustomer().getName(), 23),
-                    limitString(rental.getPickUpDate().toString(), 23),
-                    limitString(rental.getEstimatedReturnDate().toString(), 13));
+                    limitString(rental.getPickUpDate().format(formatter), 23),
+                    limitString(rental.getActualReturnDate().format(formatter), 13));
         }
 
         System.out.println(emptyLine);
@@ -99,7 +96,6 @@ public class RentalListScreen extends Screen {
 
         System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
 
-        Output.info("'F' para filtrar, 'L' para limpar filtro.");
         Output.info("'A' para avançar página, 'V' para voltar página");
 
     }
@@ -125,15 +121,6 @@ public class RentalListScreen extends Screen {
                 }
                 break;
 
-            case "f":
-                searchRentals(rentals);
-                break;
-
-            case "l":
-                filteredRentals = rentals;
-                currentPage = 0;
-                break;
-
             case "x":
                 back();
                 return true;
@@ -154,29 +141,6 @@ public class RentalListScreen extends Screen {
                 break;
         }
         return false;
-    }
-
-    private void searchRentals(List<Rental> rentals) {
-        System.out.println("Digite o modelo que deseja buscar: ");
-        String searchQuery = scanner.nextLine().trim().toLowerCase();
-
-        filteredRentals = rentals; // TODO: BUSCAR ABERTOS
-
-//        filteredRentals = rentals.stream()
-//                .filter(vehicle -> vehicle.getModel().toLowerCase().contains(searchQuery))
-//                .collect(Collectors.toList());
-
-        currentPage = 0;
-
-        if (filteredRentals.isEmpty()) {
-            System.out.println("Nenhum veículo encontrado com o modelo: " + searchQuery);
-            filteredRentals = rentals;
-        } else {
-            System.out.println(filteredRentals.size() + " veículo(s) encontrado(s).");
-        }
-
-        System.out.println("Pressione Enter para continuar.");
-        scanner.nextLine();
     }
 
     private void selectRental(Rental rental) {

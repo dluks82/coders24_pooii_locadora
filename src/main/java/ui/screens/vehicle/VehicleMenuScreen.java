@@ -54,7 +54,7 @@ public class VehicleMenuScreen extends Screen {
     private void handleMenuOption(int option) {
         switch (option) {
             case 1 -> navigateTo(new VehicleCreateScreen(flowController, scanner, agencyService, vehicleService));
-            case 2 -> navigateTo(new VehicleListScreen(flowController, scanner, vehicleService, false));
+            case 2 -> navigateTo(new VehicleListScreen(flowController, scanner, vehicleService, false, null));
             case 3 -> navigateTo(new VehicleUpdateScreen(flowController, scanner, vehicleService));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";

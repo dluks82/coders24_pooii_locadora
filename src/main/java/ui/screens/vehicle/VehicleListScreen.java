@@ -1,5 +1,6 @@
 package ui.screens.vehicle;
 
+import model.agency.Agency;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
 import ui.utils.Header;
@@ -18,6 +19,7 @@ public class VehicleListScreen extends Screen {
     private final Scanner scanner;
     private final VehicleService vehicleService;
     private final boolean isModal;
+    private final String agencyIdToFilter;
 
     private Vehicle selectedVehicle;
     private String searchQuery = "";
@@ -26,18 +28,24 @@ public class VehicleListScreen extends Screen {
     private static final int PAGE_SIZE = 2;
     private List<Vehicle> filteredVehicles;
 
-    public VehicleListScreen(FlowController flowController, Scanner scanner, VehicleService vehicleService, boolean isModal) {
+    public VehicleListScreen(FlowController flowController, Scanner scanner, VehicleService vehicleService, boolean isModal, String agencyIdToFilter) {
         super(flowController);
         this.scanner = scanner;
         this.vehicleService = vehicleService;
         this.isModal = isModal;
+        this.agencyIdToFilter = agencyIdToFilter;
     }
 
     private boolean vehicleSelected = false;
 
     @Override
     public void show() {
-        List<Vehicle> vehicles = vehicleService.findAllVehicles();
+        List<Vehicle> vehicles;
+        if (agencyIdToFilter != null) {
+            vehicles = vehicleService.findVehicleByAgencyId(agencyIdToFilter);
+        } else {
+            vehicles = vehicleService.findAllVehicles();
+        }
         this.filteredVehicles = vehicles;
 
         do {

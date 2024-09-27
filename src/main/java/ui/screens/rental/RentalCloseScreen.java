@@ -69,10 +69,10 @@ public class RentalCloseScreen extends Screen {
                     if (!isRentalSelectionListCalled) {
                         isRentalSelectionListCalled = true;
 
-                        RentalListScreen rentalListScreen = new RentalListScreen(flowController, scanner, rentalService, true);
-                        flowController.goTo(rentalListScreen);
+                        OpenRentalListScreen openRentalListScreen = new OpenRentalListScreen(flowController, scanner, rentalService, true);
+                        flowController.goTo(openRentalListScreen);
 
-                        rentalToClose = rentalListScreen.getSelectedRental();
+                        rentalToClose = openRentalListScreen.getSelectedRental();
 
                         flowController.goBack();
                     }
@@ -155,7 +155,7 @@ public class RentalCloseScreen extends Screen {
                 "Valor da locação: " + rentalToClose.getVehicle().calculateRentalPrice(rentalDays).toString()
         };
 
-        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);

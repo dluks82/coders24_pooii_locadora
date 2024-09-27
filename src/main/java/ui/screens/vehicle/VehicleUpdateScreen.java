@@ -53,7 +53,7 @@ public class VehicleUpdateScreen extends Screen {
                     if (!isSelectionListCalled) {
                         isSelectionListCalled = true;
 
-                        VehicleListScreen vehicleListScreen = new VehicleListScreen(flowController, scanner, vehicleService, true);
+                        VehicleListScreen vehicleListScreen = new VehicleListScreen(flowController, scanner, vehicleService, true, null);
                         flowController.goTo(vehicleListScreen);
 
                         vehicleToUpdate = vehicleListScreen.getSelectedVehicle();
