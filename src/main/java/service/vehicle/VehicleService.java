@@ -19,8 +19,6 @@ public interface VehicleService {
 
     List<Vehicle> findVehicleByModel(String model);
 
-    List<Vehicle> findVehicleByBrand(String brand);
-
     List<Vehicle> findVehicleByAgencyId(String agencyId);
 
 }
