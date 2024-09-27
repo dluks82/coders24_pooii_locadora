@@ -113,19 +113,19 @@ public class VehicleUpdateScreen extends Screen {
     }
 
     private void displayVehicleUpdateForm() {
-
-        String modelPrompt = "Modelo:";
-        String brandPrompt = "Marca:";
-        String platePrompt = "Placa:";
+        String[] fields = {
+                "Modelo: " + (model.isEmpty() ? "" : model),
+                "Marca: " + (brand.isEmpty() ? "" : brand),
+                "Placa: " + (plate.isEmpty() ? "" : plate)
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", modelPrompt + (model.isEmpty() ? "" : " " + model));
-        System.out.printf("║    %-65s    ║%n", brandPrompt + (brand.isEmpty() ? "" : " " + brand));
-        System.out.printf("║    %-65s    ║%n", platePrompt + (plate.isEmpty() ? "" : " " + plate));
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

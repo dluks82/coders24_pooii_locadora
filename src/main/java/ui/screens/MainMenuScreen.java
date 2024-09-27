@@ -95,16 +95,21 @@ public class MainMenuScreen extends Screen {
 
     private void displayMenuOptions() {
         Header.show("Menu Principal", null);
+        String[] menuOptions = {
+                "[ 1 ] - Agências",
+                "[ 2 ] - Veículos",
+                "[ 3 ] - Clientes",
+                "[ 4 ] - Locações",
+                "[ 0 ] - Sair"
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Agencias");
-        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Veículos");
-        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Clientes");
-        System.out.printf("║    %-65s    ║%n", "[ 4 ] - Locações");
-        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Sair");
+        for (String option : menuOptions) {
+            System.out.printf("║    %-65s    ║%n", option);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
