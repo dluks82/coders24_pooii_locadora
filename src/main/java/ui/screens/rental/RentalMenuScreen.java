@@ -60,8 +60,9 @@ public class RentalMenuScreen extends Screen {
         switch (option) {
             case 1 -> navigateTo(
                     new RentalCreateScreen(flowController, scanner, agencyService, vehicleService, customerService, rentalService));
-            case 2 -> System.out.println("Opção 2");
-            case 3 -> flowController.goTo(
+            case 2 -> navigateTo(
+                    new RentalCloseScreen(flowController, scanner, agencyService, rentalService));
+            case 3 -> navigateTo(
                     new RentalListScreen(flowController, scanner, rentalService, false));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";

@@ -1,16 +1,16 @@
 package dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import model.agency.Agency;
 import model.customer.Customer;
 import model.vehicle.Vehicle;
 
-public record CreateRentalDTO (
+public record CreateRentalDTO(
         Customer customer,
         Vehicle vehicle,
         Agency pickUpAgency,
-        LocalDateTime pickUpDate,
-        LocalDateTime estimatedReturnDate
-)
-{ }
+        LocalDate pickUpDate,
+        LocalDate estimatedReturnDate
+) {
+}

@@ -134,7 +134,16 @@ public class CustomerUpdateScreen extends Screen {
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de atualização
-            customerService.updateCustomer(customerToUpdate);
+
+            try {
+                customerService.updateCustomer(customerToUpdate);
+            } catch (Exception e) {
+                Output.error(e.getMessage());
+                System.out.println("... cancelado.");
+                scanner.nextLine();
+                return;
+            }
+
 
             Output.info("Edição realizada com sucesso!");
         } else {

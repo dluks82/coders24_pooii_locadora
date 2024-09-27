@@ -19,14 +19,14 @@ public class Rental {
     private final Customer customer;
     private final Vehicle vehicle;
     private final Agency pickUpAgency;
-    private final LocalDateTime pickUpDate;
+    private final LocalDate pickUpDate;
     private Agency returnAgency;
-    private final LocalDateTime estimatedReturnDate;
-    private LocalDateTime actualReturnDate;
+    private final LocalDate estimatedReturnDate;
+    private LocalDate actualReturnDate;
 
     //constructor
-    public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDateTime pickUpDate,
-                  LocalDateTime estimatedReturnDate) {
+    public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDate pickUpDate,
+                  LocalDate estimatedReturnDate) {
         this.id = id;
         this.customer = customer;
         this.vehicle = vehicle;
@@ -44,7 +44,7 @@ public class Rental {
         return customer;
     }
 
-    public LocalDateTime getActualReturnDate() {
+    public LocalDate getActualReturnDate() {
         return actualReturnDate;
     }
 
@@ -56,7 +56,7 @@ public class Rental {
         return pickUpAgency;
     }
 
-    public LocalDateTime getPickUpDate() {
+    public LocalDate getPickUpDate() {
         return pickUpDate;
     }
 
@@ -64,11 +64,11 @@ public class Rental {
         return returnAgency;
     }
 
-    public LocalDateTime getEstimatedReturnDate() {
+    public LocalDate getEstimatedReturnDate() {
         return estimatedReturnDate;
     }
 
-    public void setActualReturnDate(LocalDateTime actualReturnDate) {
+    public void setActualReturnDate(LocalDate actualReturnDate) {
         this.actualReturnDate = actualReturnDate;
     }
 
@@ -77,39 +77,39 @@ public class Rental {
     }
 
     // class methods
-    public BigDecimal calculateTotalCost() {
-        BigDecimal big = BigDecimal.ZERO;
-
-        LocalDate dataSaida = this.pickUpDate.toLocalDate();
-        LocalDate dataEntrega =
-                this.actualReturnDate == null
-                        ? this.estimatedReturnDate.toLocalDate() : this.actualReturnDate.toLocalDate();
-        Period period = Period.between(dataSaida, dataEntrega);
-        int dias = period.getDays();
-        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
-
-        if (this.getVehicle().getType() == VehicleType.CAR) {
-            if (this.customer.getType() == CustomerType.INDIVIDUAL) {
-                if (totalDias > 3) {
-                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
-                            .multiply(BigDecimal.valueOf(0.95));
-                } else {
-                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-                }
-            } else {
-                if (totalDias > 5) {
-                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
-                            .multiply(BigDecimal.valueOf(0.90));
-                } else {
-                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-                }
-            }
-            return big;
-        } else {
-            big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-        }
-        return big;
-    }
+//    public BigDecimal calculateTotalCost() {
+//        BigDecimal big = BigDecimal.ZERO;
+//
+//        LocalDate dataSaida = this.pickUpDate.toLocalDate();
+//        LocalDate dataEntrega =
+//                this.actualReturnDate == null
+//                        ? this.estimatedReturnDate.toLocalDate() : this.actualReturnDate.toLocalDate();
+//        Period period = Period.between(dataSaida, dataEntrega);
+//        int dias = period.getDays();
+//        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
+//
+//        if (this.getVehicle().getType() == VehicleType.CAR) {
+//            if (this.customer.getType() == CustomerType.INDIVIDUAL) {
+//                if (totalDias > 3) {
+//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+//                            .multiply(BigDecimal.valueOf(0.95));
+//                } else {
+//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+//                }
+//            } else {
+//                if (totalDias > 5) {
+//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+//                            .multiply(BigDecimal.valueOf(0.90));
+//                } else {
+//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+//                }
+//            }
+//            return big;
+//        } else {
+//            big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+//        }
+//        return big;
+//    }
 
     public String generatePickupReceipt() {
 
@@ -126,7 +126,7 @@ public class Rental {
                 "Nome: " + pickUpAgency.getName() + "\n" +
                 "Endereço: " + pickUpAgency.getAddress() + "\n" +
                 "Telefone: " + pickUpAgency.getPhone() + "\n" +
-                "Data de Retirada: " + pickUpDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                "Data de Retirada: " + pickUpDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +
                 "=======================================\n";
     }
 
@@ -146,10 +146,10 @@ public class Rental {
                 "Endereço: " + returnAgency.getAddress() + "\n" +
                 "Telefone: " + returnAgency.getPhone() + "\n" +
                 "Data Estimada de Devolução: "
-                + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +
                 "Data Real de Devolução: "
                 + (actualReturnDate != null
-                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A") + "\n" +
+                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A") + "\n" +
                 "==========================================\n";
     }
 }

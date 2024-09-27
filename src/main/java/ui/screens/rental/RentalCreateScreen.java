@@ -19,7 +19,8 @@ import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class RentalCreateScreen extends Screen {
@@ -34,8 +35,8 @@ public class RentalCreateScreen extends Screen {
     private Customer selectedCustomer;
     private Vehicle selectedVehicle;
 
-    private LocalDateTime startDate;
-    private LocalDateTime estimatedEndDate;
+    private LocalDate startDate;
+    private LocalDate estimatedEndDate;
 
     private int rentalDays;
 
@@ -131,15 +132,22 @@ public class RentalCreateScreen extends Screen {
                     currentField = 3;
                 }
                 case 3 -> {
-                    Result<Integer> rentalDaysInput = Input.getAsInt(scanner, "Dias de locação: ", false);
-                    if (rentalDaysInput.getValue() <= 0) {
-                        Output.error("O número de dias de locação deve ser maior que zero!");
-                        break;
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    estimatedEndDate = null;
+
+                    while (estimatedEndDate == null) {
+                        String returnDateInput = Input.getAsString(scanner, "Data de retorno (dd/MM/yyyy): ", false, false);
+                        try {
+                            estimatedEndDate = LocalDate.parse(returnDateInput, formatter);
+                        } catch (Exception e) {
+                            Output.error("Data inválida! Tente novamente.");
+                        }
                     }
 
-                    rentalDays = rentalDaysInput.getValue();
+                    startDate = LocalDate.now();
 
-                    startDate = LocalDateTime.now();
+                    rentalDays = (int) (estimatedEndDate.toEpochDay() - startDate.toEpochDay());
+
                     estimatedEndDate = startDate.plusDays(rentalDays);
 
                     Output.info(String.format("Data de início: %s", startDate));
@@ -201,7 +209,14 @@ public class RentalCreateScreen extends Screen {
                     selectedCustomer, selectedVehicle, selectedAgency, startDate, estimatedEndDate
             );
 
-            rentalService.createRental(createRentalDTO);
+            try {
+                rentalService.createRental(createRentalDTO);
+            } catch (Exception e) {
+                Output.error(e.getMessage());
+                System.out.println("... cancelado.");
+                scanner.nextLine();
+                return;
+            }
 
             System.out.println("Locação realizada com sucesso!");
         } else {

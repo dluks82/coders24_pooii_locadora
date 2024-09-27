@@ -111,7 +111,7 @@ public class CustomerCreateScreen extends Screen {
         System.out.printf("║   %-43s ║%n", typePrompt + typeName);
         System.out.printf("║   %-43s ║%n", documentPrompt + (documentId.isEmpty() ? "" : documentId));
         System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : name));
-        System.out.printf("║   %-43s ║%n", phonePrompt + (name.isEmpty() ? "" : name));
+        System.out.printf("║   %-43s ║%n", phonePrompt + (phoneNumber.isEmpty() ? "" : phoneNumber));
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
@@ -126,7 +126,14 @@ public class CustomerCreateScreen extends Screen {
                     type, name, phoneNumber, documentId
             );
 
-            customerService.createCustomer(createCustomerDTO);
+            try {
+                customerService.createCustomer(createCustomerDTO);
+            } catch (Exception e) {
+                Output.error(e.getMessage());
+                System.out.println("Cadastro cancelado.");
+                scanner.nextLine();
+                return;
+            }
 
             System.out.println("Cadastro realizado com sucesso!");
         } else {
