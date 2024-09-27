@@ -10,7 +10,7 @@ import repository.rental.RentalRepository;
 
 public class RentalServiceImpl implements RentalService {
 
-    private RentalRepository rentalRepository;
+    private final RentalRepository rentalRepository;
 
     public RentalServiceImpl(RentalRepository rentalRepository) {
         this.rentalRepository = rentalRepository;
@@ -29,15 +29,10 @@ public class RentalServiceImpl implements RentalService {
             , rentalDTO.vehicle()
             , rentalDTO.pickUpAgency()
             , rentalDTO.pickUpDate()
-            , null
             , rentalDTO.estimatedReturnDate()
-            , null
         );
-        if (newRental != null) {
-            rentalRepository.save(newRental);
-            return newRental;
-        }
-        return null;
+        rentalRepository.save(newRental);
+        return newRental;
     }
 
     @Override
@@ -51,7 +46,7 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public Rental findRentalById(String id) {
-        if(id.isEmpty() || id.equals(null)) {
+        if(id.isEmpty()) {
             throw new IllegalArgumentException("ID vazio ou nulo");
         }
         return rentalRepository.findById(id);
