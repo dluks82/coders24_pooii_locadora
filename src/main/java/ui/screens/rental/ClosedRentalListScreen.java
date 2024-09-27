@@ -67,7 +67,7 @@ public class ClosedRentalListScreen extends Screen {
         if (isModal) {
             Header.show("Selecione uma locação para continuar...", null);
         } else {
-            Header.show("Lista de Locações", null);
+            Header.show("Lista De Locações Encerradas", null);
         }
 
         if (rentals.isEmpty()) {

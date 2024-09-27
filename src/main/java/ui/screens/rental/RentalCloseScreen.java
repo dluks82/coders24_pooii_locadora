@@ -183,7 +183,8 @@ public class RentalCloseScreen extends Screen {
 
             System.out.println("Locação encerrada com sucesso!");
 
-            // GERAR o RECIBO
+            showReceipt(rentalToClose);
+            scanner.nextLine();
         } else {
             System.out.println("Cancelada.");
         }
@@ -193,6 +194,10 @@ public class RentalCloseScreen extends Screen {
 
     private void closeRental() {
         rentalService.closeRental(rentalToClose, returnAgency, returnDate);
+    }
+
+    private void showReceipt(Rental rental) {
+        System.out.println(rental.generateReturnReceipt());
     }
 
     private void handleError(String message) {

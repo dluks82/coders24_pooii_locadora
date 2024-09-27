@@ -3,7 +3,6 @@ package model.rental;
 import java.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -77,39 +76,37 @@ public class Rental {
     }
 
     // class methods
-//    public BigDecimal calculateTotalCost() {
-//        BigDecimal big = BigDecimal.ZERO;
-//
-//        LocalDate dataSaida = this.pickUpDate.toLocalDate();
-//        LocalDate dataEntrega =
-//                this.actualReturnDate == null
-//                        ? this.estimatedReturnDate.toLocalDate() : this.actualReturnDate.toLocalDate();
-//        Period period = Period.between(dataSaida, dataEntrega);
-//        int dias = period.getDays();
-//        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
-//
-//        if (this.getVehicle().getType() == VehicleType.CAR) {
-//            if (this.customer.getType() == CustomerType.INDIVIDUAL) {
-//                if (totalDias > 3) {
-//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
-//                            .multiply(BigDecimal.valueOf(0.95));
-//                } else {
-//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-//                }
-//            } else {
-//                if (totalDias > 5) {
-//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
-//                            .multiply(BigDecimal.valueOf(0.90));
-//                } else {
-//                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-//                }
-//            }
-//            return big;
-//        } else {
-//            big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
-//        }
-//        return big;
-//    }
+    public BigDecimal calculateTotalCost() {
+        BigDecimal big;
+        LocalDate dataEntrega =
+                this.actualReturnDate == null
+                        ? this.estimatedReturnDate: this.actualReturnDate;
+        Period period = Period.between(this.pickUpDate, dataEntrega);
+        int dias = period.getDays();
+        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
+
+        if (this.getVehicle().getType() == VehicleType.CAR) {
+            if (this.customer.getType() == CustomerType.INDIVIDUAL) {
+                if (totalDias > 3) {
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+                            .multiply(BigDecimal.valueOf(0.95));
+                } else {
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+                }
+            } else {
+                if (totalDias > 5) {
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias))
+                            .multiply(BigDecimal.valueOf(0.90));
+                } else {
+                    big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+                }
+            }
+            return big;
+        } else {
+            big = this.getVehicle().getDailyRate().multiply(BigDecimal.valueOf(totalDias));
+        }
+        return big;
+    }
 
     public String generatePickupReceipt() {
 
@@ -149,7 +146,9 @@ public class Rental {
                 + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +
                 "Data Real de Devolução: "
                 + (actualReturnDate != null
-                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A") + "\n" +
+                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A") + "\n\n" +
+                "=== VALOR DO ALUGUEL ===\n" +
+                "Valor Total: R$ " + calculateTotalCost() + "\n" +
                 "==========================================\n";
     }
 }

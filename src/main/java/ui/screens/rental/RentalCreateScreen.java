@@ -3,6 +3,7 @@ package ui.screens.rental;
 import dto.CreateRentalDTO;
 import model.agency.Agency;
 import model.customer.Customer;
+import model.rental.Rental;
 import model.vehicle.Vehicle;
 import service.agency.AgencyService;
 import service.customer.CustomerService;
@@ -200,7 +201,13 @@ public class RentalCreateScreen extends Screen {
             );
 
             try {
-                rentalService.createRental(createRentalDTO);
+                Rental createdRental = rentalService.createRental(createRentalDTO);
+
+                Output.info("Locação realizada com sucesso!");
+
+                showReceipt(createdRental);
+                scanner.nextLine();
+
             } catch (Exception e) {
                 Output.error(e.getMessage());
                 System.out.println("... cancelado.");
@@ -208,12 +215,16 @@ public class RentalCreateScreen extends Screen {
                 return;
             }
 
-            System.out.println("Locação realizada com sucesso!");
+
         } else {
             System.out.println("Cancelada.");
         }
         scanner.nextLine();
         flowController.goBack();
+    }
+
+    private void showReceipt(Rental rental) {
+        System.out.println(rental.generatePickupReceipt());
     }
 
     private boolean processInputCommands(String input) {

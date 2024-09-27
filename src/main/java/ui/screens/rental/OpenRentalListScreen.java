@@ -67,7 +67,7 @@ public class OpenRentalListScreen extends Screen {
         if (isModal) {
             Header.show("Selecione uma locação para continuar...", null);
         } else {
-            Header.show("Lista de Locações", null);
+            Header.show("Lista De Locações Abertas", null);
         }
 
         if (rentals.isEmpty()) {
