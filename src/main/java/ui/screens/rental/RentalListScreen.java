@@ -36,7 +36,7 @@ public class RentalListScreen extends Screen {
 
     @Override
     public void show() {
-        List<Rental> rentals = rentalService.findAllRentals();
+        List<Rental> rentals = rentalService.findOpenRentals();
         this.filteredRentals = rentals;
 
         do {
