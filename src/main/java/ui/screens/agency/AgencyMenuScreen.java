@@ -12,13 +12,13 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class AgencyMenuScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47; // Ajuste conforme necessário
     private final Scanner scanner;
     private final AgencyService agencyService;
 
     private String errorMessage = "";
 
-    public AgencyMenuScreen(FlowController flowController,
-                            Scanner scanner, AgencyService agencyService) {
+    public AgencyMenuScreen(FlowController flowController, Scanner scanner, AgencyService agencyService) {
         super(flowController);
         this.scanner = scanner;
         this.agencyService = agencyService;
@@ -31,36 +31,24 @@ public class AgencyMenuScreen extends Screen {
             ScreenUtils.clearScreen();
             displayMenuOptions();
             displayPendingMessages();
-            try {
-                option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-            } catch (DataInputInterruptedException e) {
-                errorMessage = e.getMessage();
-                continue;
-            }
 
+            option = getUserOption();
             if (option.isFailure()) {
                 errorMessage = option.getErrorMessage();
                 continue;
             }
-
             handleMenuOption(option.getValue());
 
-            if (option.getValue() == 0)
-                break;
-
+            if (option.getValue() == 0) break;
         } while (true);
     }
 
     private void displayMenuOptions() {
         ScreenUtils.showHeader("Menu Agências");
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
         System.out.printf("║   %-43s ║%n", "[ 1 ] - Adicionar");
         System.out.printf("║   %-43s ║%n", "[ 2 ] - Listar");
@@ -77,6 +65,14 @@ public class AgencyMenuScreen extends Screen {
         }
     }
 
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
     private void handleMenuOption(int option) {
         switch (option) {
             case 1 -> navigateTo(new AgencyCreateScreen(flowController, scanner, agencyService));
@@ -90,5 +86,4 @@ public class AgencyMenuScreen extends Screen {
     private void navigateTo(Screen screen) {
         flowController.goTo(screen);
     }
-
 }

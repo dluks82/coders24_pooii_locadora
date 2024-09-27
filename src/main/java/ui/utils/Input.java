@@ -38,18 +38,29 @@ public class Input {
         try {
             String value = scanner.nextLine();
 
-            if (value.equalsIgnoreCase("cancel"))
-                throw new DataInputInterruptedException();
+            if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
 
             int parsedValue = Integer.parseInt(value);
 
-            if (parsedValue >= 0 || canBeNegative) {
-                return Result.success(parsedValue);
-            }
+            if (parsedValue >= 0 || canBeNegative) return Result.success(parsedValue);
+
             return Result.fail("Não pode ser negativo!");
         } catch (NumberFormatException e) {
             return Result.fail("Valor inválido! Por favor tente novamente...");
         }
+    }
+
+    public static Result<String> getAsString2(Scanner scanner, String promptMessage, boolean canBeEmpty, boolean hidden) {
+        Output.prompt(promptMessage);
+        if (hidden) System.out.print(Color.WHITE.getCode() + Color.BG_WHITE.getCode());
+        String value = scanner.nextLine().trim();
+        if (hidden) System.out.print(Color.RESET.getCode());
+
+        if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
+
+        if (!value.isEmpty() || canBeEmpty) return Result.success(value);
+
+        return Result.fail("A entrada não pode estar vazia.");
     }
 
     public static double getAsDouble(Scanner scanner, String promptMessage, boolean canBeNegative) {
@@ -134,6 +145,7 @@ public class Input {
             System.out.println(emptyLine);
         }
     }
+
 
     public static String getAsCPF(Scanner scanner, String promptMessage, boolean canBeEmpty) {
         while (true) {
