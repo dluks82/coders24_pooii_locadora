@@ -21,29 +21,19 @@ public class InMemoryCustomerRepositoryImpl implements CustomerRepository {
         return customer;
     }
 
-    //Update DocumentId
     @Override
     public Customer update(Customer customer) {
         Customer customerUpdate = findByDocument(customer.getDocumentId());
-        if(customerUpdate != null){
+        if (customerUpdate != null) {
             customers.set(customers.indexOf(customerUpdate), customer);
         }
-      return customerUpdate;
+        return customerUpdate;
     }
-
-
-
-    @Override
-    public boolean delete(Customer customer) {
-        customers.remove(customer);
-        return true;
-    }
-
 
     @Override
     public Customer findById(String id) {
-        for(Customer customer : customers){
-            if(customer.getId().equals(id)){
+        for (Customer customer : customers) {
+            if (customer.getId().equals(id)) {
                 return customer;
             }
         }
@@ -74,8 +64,8 @@ public class InMemoryCustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer findByDocument(String document) {
-        for(Customer customer : customers){
-            if(customer.getDocumentId().equals(document)){
+        for (Customer customer : customers) {
+            if (customer.getDocumentId().equals(document)) {
                 return customer;
             }
         }

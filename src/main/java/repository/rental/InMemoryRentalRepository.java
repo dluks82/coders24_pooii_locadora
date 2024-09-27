@@ -19,7 +19,6 @@ public class InMemoryRentalRepository implements RentalRepository {
     @Override
     public Rental save(Rental entity) {
         rentals.add(entity);
-
         return entity;
     }
 
@@ -32,12 +31,6 @@ public class InMemoryRentalRepository implements RentalRepository {
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean delete(Rental entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
     @Override
