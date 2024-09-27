@@ -11,5 +11,4 @@ public interface AgencyRepository extends Repository<Agency> {
 
     Agency findByName(String name);
 
-    List<Agency> findByAddress(String address);
 }

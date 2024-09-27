@@ -43,11 +43,7 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
 
     @Override
     public List<Agency> findAll() {
-        List<Agency> temp = new ArrayList<>();
-        for (Agency agency : agencies) {
-            temp.add(agency);
-        }
-        return temp;
+        return agencies;
     }
 
     @Override
@@ -69,16 +65,5 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
             }
         }
         return null;
-    }
-
-    @Override
-    public List<Agency> findByAddress(String address) {
-        List<Agency> temp = new ArrayList<>();
-        for (Agency agency : agencies) {
-            if (agency.getAddress().contains(address)) {
-                temp.add(agency);
-            }
-        }
-        return temp;
     }
 }
