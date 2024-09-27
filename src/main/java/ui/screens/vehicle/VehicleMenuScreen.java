@@ -79,14 +79,20 @@ public class VehicleMenuScreen extends Screen {
     private void displayMenuOptions() {
         Header.show("Menu de Veículos", null);
 
+        String[] options = {
+            "[ 1 ] - Adicionar",
+            "[ 2 ] - Listar",
+            "[ 3 ] - Editar",
+            "[ 0 ] - Voltar"
+        };
+
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Adicionar");
-        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Listar");
-        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Editar");
-        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
+        for (String option : options) {
+            System.out.printf("║    %-65s    ║%n", option);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

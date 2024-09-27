@@ -111,19 +111,21 @@ public class CustomerUpdateScreen extends Screen {
 
         String documentPrompt = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
 
-        String namePrompt = "Nome: ";
-        String phonePrompt = "Telefone: ";
+        String[] fields = {
+                "Tipo: " + typeName,
+                documentPrompt + (document.isEmpty() ? "" : document),
+                "Nome: " + (name.isEmpty() ? "" : name),
+                "Telefone: " + (phone.isEmpty() ? "" : phone)
+        };
 
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", typeName);
-        System.out.printf("║    %-65s    ║%n", namePrompt + name);
-        System.out.printf("║    %-65s    ║%n", phonePrompt + phone);
-        System.out.printf("║    %-65s    ║%n", documentPrompt + document);
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

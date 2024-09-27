@@ -85,18 +85,23 @@ public class RentalMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-//        ScreenUtils.showHeader("Menu Locações");
         Header.show("Menu Locações", null);
+
+        String[] fields = {
+                "[ 1 ] - Nova Locação",
+                "[ 2 ] - Encerrar Locação",
+                "[ 3 ] - Visualizar Locações Ativas",
+                "[ 4 ] - Visualizar Locações Encerradas",
+                "[ 0 ] - Voltar"
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Nova Locação");
-        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Encerrar Locação");
-        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Visualizar Locações Ativas");
-        System.out.printf("║    %-65s    ║%n", "[ 4 ] - Visualizar Locações Encerradas");
-        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

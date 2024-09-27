@@ -49,17 +49,23 @@ public class VehicleCreateScreen extends Screen {
 
             Header.show("Preencha os campos abaixo para cadastrar um veículo.", null);
 
-            displayVehicleRegistration();
-
-            Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
+            if (type != null) {
+                displayVehicleRegistration();
+                Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
+            }
 
             switch (currentField) {
                 case 0 -> {
-                    System.out.println("Selecione o tipo de veículo:");
-                    for (VehicleType type : VehicleType.values()) {
+                    String emptyLine = "║  " + " ".repeat(25) + "  ║";
+                    String bottomLine = "╚══" + "═".repeat(25) + "══╝";
 
-                        System.out.println(type.ordinal() + " - " + type.getDescription());
+                    System.out.println(emptyLine);
+                    for (VehicleType type : VehicleType.values()) {
+                        System.out.printf("║  [ %d ] - %-15s    ║%n", type.ordinal(), type.getDescription());
                     }
+                    System.out.println(emptyLine);
+                    System.out.println(bottomLine);
+
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
 
                     if (inputType.isFailure()) {
@@ -111,9 +117,6 @@ public class VehicleCreateScreen extends Screen {
 
                         selectedAgency = agencyListScreen.getSelectedAgency();
 
-                        // TODO: pensar no shared data com o flowController
-//                        selectedAgency = flowController.getSharedData("selectedAgency");
-
                         flowController.goBack();
                     }
 
@@ -151,22 +154,21 @@ public class VehicleCreateScreen extends Screen {
         String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
         String agencyName = selectedAgency != null ? selectedAgency.getName().isEmpty() ? "" : selectedAgency.getName() : "";
 
-        String typePrompt = "Tipo: ";
-        String plateInput = "Placa: ";
-        String modelInput = "Modelo: ";
-        String brandInput = "Marca: ";
-        String agencyInput = "Agência: ";
+        String[] fields = {
+                "Tipo: " + typeName,
+                "Placa: " + (plate.isEmpty() ? "" : plate),
+                "Modelo: " + (model.isEmpty() ? "" : model),
+                "Marca: " + (brand.isEmpty() ? "" : brand),
+                "Agência: " + agencyName
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", typePrompt + typeName);
-        System.out.printf("║    %-65s    ║%n", plateInput + (plate.isEmpty() ? "" : plate));
-        System.out.printf("║    %-65s    ║%n", modelInput + (model.isEmpty() ? "" : model));
-        System.out.printf("║    %-65s    ║%n", brandInput + (brand.isEmpty() ? "" : brand));
-        System.out.printf("║    %-65s    ║%n", agencyInput + agencyName);
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

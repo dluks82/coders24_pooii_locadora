@@ -38,7 +38,6 @@ public class CustomerCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Cadastro de Cliente");
             Header.show("Editar Agência", null);
 
             if (type != null) {
@@ -48,10 +47,16 @@ public class CustomerCreateScreen extends Screen {
 
             switch (currentField) {
                 case 0 -> {
-                    System.out.println("Selecione o tipo de cliente:");
+                    String emptyLine = "║  " + " ".repeat(25) + "  ║";
+                    String bottomLine = "╚══" + "═".repeat(25) + "══╝";
+
+                    System.out.println(emptyLine);
                     for (CustomerType type : CustomerType.values()) {
-                        System.out.println(type.ordinal() + " - " + type.getDescription());
+                        System.out.printf("║  [ %d ] - %-15s    ║%n", type.ordinal(), type.getDescription());
                     }
+                    System.out.println(emptyLine);
+                    System.out.println(bottomLine);
+
                     Result<Integer> inputType = Input.getAsInt(scanner, "Tipo: ", false);
                     if (inputType.isFailure()) {
                         Output.error(inputType.getErrorMessage());
@@ -102,22 +107,22 @@ public class CustomerCreateScreen extends Screen {
 
     private void displayCustomerRegistration() {
         String typeName = type != null ? type.name().isEmpty() ? "" : type.getDescription() : "";
-
         String documentPrompt = type == CustomerType.INDIVIDUAL ? "CPF: " : type == CustomerType.LEGALENTITY ? "CNPJ: " : "Documento: ";
 
-        String typePrompt = "Tipo: ";
-        String namePrompt = "Nome: ";
-        String phonePrompt = "Telefone: ";
+        String[] fields = {
+                "Tipo: " + typeName,
+                documentPrompt + (documentId.isEmpty() ? "" : documentId),
+                "Nome: " + (name.isEmpty() ? "" : name),
+                "Telefone: " + (phoneNumber.isEmpty() ? "" : phoneNumber)
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", typePrompt + typeName);
-        System.out.printf("║    %-65s    ║%n", documentPrompt + (documentId.isEmpty() ? "" : documentId));
-        System.out.printf("║    %-65s    ║%n", namePrompt + (name.isEmpty() ? "" : name));
-        System.out.printf("║    %-65s    ║%n", phonePrompt + (phoneNumber.isEmpty() ? "" : phoneNumber));
+        for(String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

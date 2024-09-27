@@ -166,33 +166,24 @@ public class RentalCreateScreen extends Screen {
     private void displayRentalRegistration() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        String agencyPrompt = "Agência: ";
-        String agencyValue = (selectedAgency != null ? selectedAgency.getName() : "");
-        String vehiclePrompt = "Veículo: ";
-        String vehicleValue = (selectedVehicle != null ? selectedVehicle.getModel() : "");
-        String customerPrompt = "Cliente: ";
-        String customerValue = (selectedCustomer != null ? selectedCustomer.getName() : "");
-        String startDatePrompt = "Data de início: ";
-        String startDateValue = (startDate != null ? startDate.format(formatter) : "");
-        String estimatedEndDatePrompt = "Data estimada de término: ";
-        String estimatedEndDateValue = (estimatedEndDate != null ? estimatedEndDate.format(formatter) : "");
-        String rentalCostPrompt = "Custo estimado da locação: ";
-        String rentalCostValue = (selectedVehicle != null && estimatedEndDate != null)
-                ? "R$ " + (selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays)))
-                : "Não definido";
+        String[] fields = {
+                "Agência: " + (selectedAgency != null ? selectedAgency.getName() : ""),
+                "Veículo: " + (selectedVehicle != null ? selectedVehicle.getModel() : ""),
+                "Cliente: " + (selectedCustomer != null ? selectedCustomer.getName() : ""),
+                "Data de início: " + (startDate != null ? startDate.format(formatter) : ""),
+                "Data estimada de término: " + (estimatedEndDate != null ? estimatedEndDate.format(formatter) : ""),
+                "Custo estimado da locação: " + (selectedVehicle != null && estimatedEndDate != null
+                        ? "R$ " + (selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays)))
+                        : "Não definido")
+        };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║    %-65s    ║%n", agencyPrompt + agencyValue);
-        System.out.printf("║    %-65s    ║%n", vehiclePrompt + vehicleValue);
-        System.out.printf("║    %-65s    ║%n", customerPrompt + customerValue);
-        System.out.printf("║    %-65s    ║%n", startDatePrompt + startDateValue);
-        System.out.printf("║    %-65s    ║%n", estimatedEndDatePrompt + estimatedEndDateValue);
-        System.out.printf("║    %-65s    ║%n", rentalCostPrompt + rentalCostValue);
-
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
