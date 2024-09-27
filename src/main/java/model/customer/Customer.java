@@ -6,21 +6,19 @@ public abstract class Customer {
 
     protected String id;
     protected String name;
-    protected String NumberPhone;
+    protected String phoneNumber;
     protected String documentId;
     protected CustomerType type;
 
-
-    public Customer(String id, String name, String numberPhone, String documentId, CustomerType type) {
+    public Customer(String id, String name, String phoneNumber, String documentId, CustomerType type) {
         this.id = id;
         this.name = name;
-        this.NumberPhone = numberPhone;
+        this.phoneNumber = phoneNumber;
         setDocumentId(documentId);
         this.type = type;
     }
 
     public abstract void setDocumentId(String documentId);
-
 
     public String getId() {
         return id;
@@ -30,8 +28,8 @@ public abstract class Customer {
         return name;
     }
 
-    public String getNumberPhone() {
-        return NumberPhone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getDocumentId() {
@@ -40,28 +38,12 @@ public abstract class Customer {
 
     public CustomerType getType() { return type; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setNumberPhone(String numberPhone) {
-        NumberPhone = numberPhone;
-    }
-
-    public void setType(CustomerType type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
         return "Customer{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", NumberPhone='" + NumberPhone + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", documentId='" + documentId + '\'' +
                 ", type=" + type +
                 '}';
