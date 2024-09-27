@@ -197,7 +197,7 @@ public class RentalCloseScreen extends Screen {
     }
 
     private void showReceipt(Rental rental) {
-        System.out.println(rental.generatePickupReceipt());
+        System.out.println(rental.generateReturnReceipt());
     }
 
     private void handleError(String message) {
