@@ -154,7 +154,14 @@ public class VehicleUpdateScreen extends Screen {
                 }
             }
 
-            vehicleService.updateVehicle(vehicleToUpdate);
+            try {
+                vehicleService.updateVehicle(vehicleToUpdate);
+            } catch (Exception e) {
+                Output.error(e.getMessage());
+                System.out.println("... cancelado.");
+                scanner.nextLine();
+                return;
+            }
 
             Output.info("Edição realizada com sucesso!");
         } else {

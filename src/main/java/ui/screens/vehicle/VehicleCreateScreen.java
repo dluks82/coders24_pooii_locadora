@@ -143,10 +143,10 @@ public class VehicleCreateScreen extends Screen {
         String agencyName = selectedAgency != null ? selectedAgency.getName().isEmpty() ? "" : selectedAgency.getName() : "";
 
         String typePrompt = "Tipo: ";
-        String plateInput = "Tipo: ";
-        String modelInput = "Tipo: ";
-        String brandInput = "Tipo: ";
-        String agencyInput = "Nome: ";
+        String plateInput = "Placa: ";
+        String modelInput = "Modelo: ";
+        String brandInput = "Marca: ";
+        String agencyInput = "Agência: ";
 
         int maxLineLength = 47; // Ajuste conforme necessário
 
@@ -174,7 +174,15 @@ public class VehicleCreateScreen extends Screen {
             CreateVehicleDTO createVehicleDTO = new CreateVehicleDTO(
                     type, plate, model, brand, selectedAgency
             );
-            vehicleService.createVehicle(createVehicleDTO);
+
+            try {
+                vehicleService.createVehicle(createVehicleDTO);
+            } catch (Exception e) {
+                Output.error(e.getMessage());
+                System.out.println("... cancelado.");
+                scanner.nextLine();
+                return;
+            }
 
             System.out.println("Cadastro realizado com sucesso!");
         } else {

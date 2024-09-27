@@ -1,9 +1,11 @@
 package service.rental;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import dto.CreateRentalDTO;
+import model.agency.Agency;
 import model.customer.Customer;
 import model.rental.Rental;
 import repository.rental.RentalRepository;
@@ -20,33 +22,37 @@ public class RentalServiceImpl implements RentalService {
     public Rental createRental(CreateRentalDTO rentalDTO) {
         String rentalId = UUID.randomUUID().toString();
         Rental newRental = null;
-        /*
-        LÓGICA DE CUSTOMER ALUGAR SOMENTE 1 CARRO NÃO APLICADA
-        */
-        newRental = new Rental(
-              rentalId
-            , rentalDTO.customer()
-            , rentalDTO.vehicle()
-            , rentalDTO.pickUpAgency()
-            , rentalDTO.pickUpDate()
-            , rentalDTO.estimatedReturnDate()
-        );
+
+        // verificar se o cliente já tem uma locação em aberto
+        List<Rental> openRentals = rentalRepository.findOpenRentals();
+        for (Rental rental : openRentals) {
+            if (rental.getCustomer().getId().equals(rentalDTO.customer().getId())) {
+                throw new IllegalArgumentException("Cliente já possui uma locação em aberto!");
+            }
+        }
+
+        newRental = new Rental(rentalId, rentalDTO.customer(), rentalDTO.vehicle(), rentalDTO.pickUpAgency(), rentalDTO.pickUpDate(), rentalDTO.estimatedReturnDate());
         rentalRepository.save(newRental);
         return newRental;
     }
 
     @Override
+    public Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDate actualReturnDate) {
+        return null;
+    }
+
+
+    @Override
     public Rental updateRental(Rental rental) {
         Rental existingRental = rentalRepository.findById(rental.getId());
-        if(existingRental==null)
-            throw new IllegalArgumentException("Locacao nao existe!");
+        if (existingRental == null) throw new IllegalArgumentException("Locacao nao existe!");
         rentalRepository.update(rental);
         return rental;
     }
 
     @Override
     public Rental findRentalById(String id) {
-        if(id.isEmpty()) {
+        if (id.isEmpty()) {
             throw new IllegalArgumentException("ID vazio ou nulo");
         }
         return rentalRepository.findById(id);
@@ -59,8 +65,7 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public List<Rental> findRentalByCustomer(Customer customer) {
-        if(customer == null)
-            throw new IllegalArgumentException("Custumer is null");
+        if (customer == null) throw new IllegalArgumentException("Custumer is null");
         return rentalRepository.findByCustomer(customer);
     }
 
