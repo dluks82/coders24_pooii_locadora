@@ -96,7 +96,7 @@ public class RentalCreateScreen extends Screen {
                     if (!isVehicleSelectionListCalled) {
                         isVehicleSelectionListCalled = true;
 
-                        VehicleListScreen vehicleListScreen = new VehicleListScreen(flowController, scanner, vehicleService, true);
+                        VehicleListScreen vehicleListScreen = new VehicleListScreen(flowController, scanner, vehicleService, true, selectedAgency.getId());
                         flowController.goTo(vehicleListScreen);
 
                         selectedVehicle = vehicleListScreen.getSelectedVehicle();

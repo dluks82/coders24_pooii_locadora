@@ -41,7 +41,7 @@ public class RentalServiceImpl implements RentalService {
         Rental existingRental = rentalRepository.findById(rentalToClose.getId());
         if (existingRental == null) throw new IllegalArgumentException("Locacao nao existe!");
 
-        if(existingRental.getActualReturnDate() != null) {
+        if (existingRental.getActualReturnDate() != null) {
             throw new IllegalArgumentException("Locacao ja foi fechada!");
         }
 
@@ -87,5 +87,10 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public List<Rental> findOpenRentals() {
         return rentalRepository.findOpenRentals();
+    }
+
+    @Override
+    public List<Rental> findClosedRentals() {
+        return rentalRepository.findClosedRentals();
     }
 }

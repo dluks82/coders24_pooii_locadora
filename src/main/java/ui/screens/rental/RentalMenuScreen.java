@@ -62,7 +62,8 @@ public class RentalMenuScreen extends Screen {
             case 1 ->
                     navigateTo(new RentalCreateScreen(flowController, scanner, agencyService, vehicleService, customerService, rentalService));
             case 2 -> navigateTo(new RentalCloseScreen(flowController, scanner, agencyService, rentalService));
-            case 3 -> navigateTo(new RentalListScreen(flowController, scanner, rentalService, false));
+            case 3 -> navigateTo(new OpenRentalListScreen(flowController, scanner, rentalService, false));
+            case 4 -> navigateTo(new ClosedRentalListScreen(flowController, scanner, rentalService, false));
             case 0 -> flowController.goBack();
             default -> errorMessage = "Opção inválida! Por favor, informe uma opção do menu...";
         }
@@ -94,6 +95,7 @@ public class RentalMenuScreen extends Screen {
         System.out.printf("║    %-65s    ║%n", "[ 1 ] - Nova Locação");
         System.out.printf("║    %-65s    ║%n", "[ 2 ] - Encerrar Locação");
         System.out.printf("║    %-65s    ║%n", "[ 3 ] - Visualizar Locações Ativas");
+        System.out.printf("║    %-65s    ║%n", "[ 4 ] - Visualizar Locações Encerradas");
         System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
         System.out.println(emptyLine);
         System.out.println(bottomLine);

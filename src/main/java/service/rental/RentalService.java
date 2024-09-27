@@ -25,4 +25,6 @@ public interface RentalService {
 
     List<Rental> findOpenRentals();
 
+    List<Rental> findClosedRentals();
+
 }

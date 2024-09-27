@@ -12,4 +12,6 @@ public interface RentalRepository extends Repository<Rental> {
 
     List<Rental> findOpenRentals();
 
+    List<Rental> findClosedRentals();
+
 }
