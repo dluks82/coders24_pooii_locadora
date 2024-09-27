@@ -17,6 +17,4 @@ public interface AgencyService {
 
     List<Agency> findAgencyByName(String name);
 
-    List<Agency> findAgencyByAddress(String address);
-
 }

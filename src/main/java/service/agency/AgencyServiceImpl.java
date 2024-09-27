@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class AgencyServiceImpl implements AgencyService {
 
-    private AgencyRepository agencyRepository;
+    private final AgencyRepository agencyRepository;
     public AgencyServiceImpl(AgencyRepository agencyRepository) {
            this.agencyRepository = agencyRepository;
     }
@@ -33,11 +33,7 @@ public class AgencyServiceImpl implements AgencyService {
             throw new IllegalArgumentException("Agency already exists");
         }
 
-        if(newAgency != null) {
-         return  agencyRepository.save(newAgency);
-
-        }
-        return null;
+        return agencyRepository.save(newAgency);
     }
 
     @Override
@@ -64,8 +60,4 @@ public class AgencyServiceImpl implements AgencyService {
         return agencyRepository.searchByName(name);
     }
 
-    @Override
-    public List<Agency> findAgencyByAddress(String address) {
-        return agencyRepository.findByAddress(address);
-    }
 }
