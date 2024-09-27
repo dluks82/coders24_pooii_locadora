@@ -78,7 +78,7 @@ public class CustomerListScreen extends Screen {
 
         for (int i = start; i < end; i++) {
             Customer customer = customers.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), customer.getName(), customer.getDocumentId(), customer.getNumberPhone());
+            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), customer.getName(), customer.getDocumentId(), customer.getPhoneNumber());
         }
 
         System.out.println("--------------------------------------------------------------------------");

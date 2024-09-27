@@ -8,12 +8,10 @@ public class Individual extends Customer {
         super(id, name, numberPhone, documentId, type);
     }
 
-
     @Override
     public void setDocumentId(String documentId) {
-        if(documentId != null && !documentId.isEmpty() && documentId.length() == 11){
+        if(documentId != null && documentId.length() == 11){
             this.documentId = documentId;
         }
-
     }
 }
