@@ -1,10 +1,10 @@
 package model.agency;
 
 public class Agency {
-    private String id;
-    private String name;
-    private String address;
-    private String phone;
+    private final String id;
+    private final String name;
+    private final String address;
+    private final String phone;
 
     public Agency(String id, String name, String address, String phone) {
         this.id = id;
@@ -27,22 +27,6 @@ public class Agency {
 
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override
