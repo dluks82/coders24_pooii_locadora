@@ -141,15 +141,15 @@ public class VehicleUpdateScreen extends Screen {
             System.out.println(vehicleToUpdate);
             switch (vehicleToUpdate.getType()) {
                 case CAR -> {
-                    Vehicle updatedVehicle = new Car(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    Vehicle updatedVehicle = new Car(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgency());
                     vehicleService.updateVehicle(updatedVehicle);
                 }
                 case MOTORCYCLE -> {
-                    Vehicle updatedVehicle = new Motorcycle(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    Vehicle updatedVehicle = new Motorcycle(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgency());
                     vehicleService.updateVehicle(updatedVehicle);
                 }
                 case TRUCK -> {
-                    Vehicle updatedVehicle = new Truck(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgencyId());
+                    Vehicle updatedVehicle = new Truck(vehicleToUpdate.getId(), model, brand, plate, vehicleToUpdate.getAgency());
                     vehicleService.updateVehicle(updatedVehicle);
                 }
             }
