@@ -115,7 +115,7 @@ public class Rental {
 
         return "========== RECIBO DE ALUGUEL ==========\n" +
                 "Cliente: " + customer.getName() + "\n" +
-                "Telefone: " + customer.getNumberPhone() + "\n" +
+                "Telefone: " + customer.getPhoneNumber() + "\n" +
                 "Documento: " + customer.getDocumentId() + "\n" +
                 "Tipo de Cliente: " + customer.getType() + "\n\n" +
                 "=== DETALHES DO VEÍCULO ===\n" +
@@ -134,7 +134,7 @@ public class Rental {
 
         return "========== RECIBO DE DEVOLUÇÃO ==========\n" +
                 "Cliente: " + customer.getName() + "\n" +
-                "Telefone: " + customer.getNumberPhone() + "\n" +
+                "Telefone: " + customer.getPhoneNumber() + "\n" +
                 "Documento: " + customer.getDocumentId() + "\n" +
                 "Tipo de Cliente: " + customer.getType() + "\n\n" +
                 "=== DETALHES DO VEÍCULO ===\n" +

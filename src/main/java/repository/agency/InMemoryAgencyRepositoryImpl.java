@@ -25,22 +25,16 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
     @Override
     public Agency update(Agency agency) {
         Agency agencyUpdate = findById(agency.getId());
-        if(agencyUpdate != null) {
+        if (agencyUpdate != null) {
             agencies.set(agencies.indexOf(agencyUpdate), agency);
         }
         return agencyUpdate;
     }
 
     @Override
-    public boolean delete(Agency agency) {
-        agencies.remove(agency);
-        return true;
-    }
-
-    @Override
     public Agency findById(String id) {
-        for(Agency agency : agencies) {
-            if(agency.getId().equals(id)) {
+        for (Agency agency : agencies) {
+            if (agency.getId().equals(id)) {
                 return agency;
             }
         }
@@ -50,7 +44,7 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
     @Override
     public List<Agency> findAll() {
         List<Agency> temp = new ArrayList<>();
-        for(Agency agency : agencies) {
+        for (Agency agency : agencies) {
             temp.add(agency);
         }
         return temp;
@@ -60,7 +54,7 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
     public List<Agency> searchByName(String name) {
         List<Agency> temp = new ArrayList<>();
         for (Agency agency : agencies) {
-            if(agency.getName().contains(name)) {
+            if (agency.getName().contains(name)) {
                 temp.add(agency);
             }
         }
@@ -68,9 +62,9 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
     }
 
     @Override
-    public Agency findByName(String name){
-        for(Agency agency : agencies) {
-            if(agency.getName().equals(name)) {
+    public Agency findByName(String name) {
+        for (Agency agency : agencies) {
+            if (agency.getName().equals(name)) {
                 return agency;
             }
         }
@@ -81,7 +75,7 @@ public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
     public List<Agency> findByAddress(String address) {
         List<Agency> temp = new ArrayList<>();
         for (Agency agency : agencies) {
-            if(agency.getAddress().contains(address)) {
+            if (agency.getAddress().contains(address)) {
                 temp.add(agency);
             }
         }

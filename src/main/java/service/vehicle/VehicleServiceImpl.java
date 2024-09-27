@@ -9,6 +9,7 @@ import repository.vehicle.VehicleRepository;
 import enums.VehicleType;
 
 import java.util.List;
+import java.util.UUID;
 
 public class VehicleServiceImpl implements VehicleService {
 
@@ -27,21 +28,24 @@ public class VehicleServiceImpl implements VehicleService {
 
         Vehicle newVehicle = null;
 
+//        String newVehicleId = vehicleRepository.generateId();
+        String newVehicleId = UUID.randomUUID().toString();
+
         if (vehicleDTO.type()== VehicleType.CAR) {
-            newVehicle = new Car(vehicleDTO.id(),
+            newVehicle = new Car(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
                     vehicleDTO.agency()
             );
         }else if (vehicleDTO.type() == VehicleType.TRUCK) {
-            newVehicle = new Truck(vehicleDTO.id(),
+            newVehicle = new Truck(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
                     vehicleDTO.agency());
         }else if (vehicleDTO.type() == VehicleType.MOTORCYCLE) {
-            newVehicle = new Motorcycle(vehicleDTO.id(),
+            newVehicle = new Motorcycle(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),

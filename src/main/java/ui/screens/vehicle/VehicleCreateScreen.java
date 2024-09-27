@@ -1,7 +1,6 @@
 package ui.screens.vehicle;
 
 import dto.CreateVehicleDTO;
-import enums.CustomerType;
 import enums.VehicleType;
 import model.agency.Agency;
 import service.agency.AgencyService;
@@ -24,7 +23,6 @@ public class VehicleCreateScreen extends Screen {
 
     private Agency selectedAgency;
 
-    private String id = "";
     private String plate = "";
     private String model = "";
     private String brand = "";
@@ -174,7 +172,7 @@ public class VehicleCreateScreen extends Screen {
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de cadastro
             CreateVehicleDTO createVehicleDTO = new CreateVehicleDTO(
-                    type, id, plate, model, brand, selectedAgency.getId()
+                    type, plate, model, brand, selectedAgency
             );
             vehicleService.createVehicle(createVehicleDTO);
 

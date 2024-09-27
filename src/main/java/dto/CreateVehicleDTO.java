@@ -5,7 +5,6 @@ import model.agency.Agency;
 
 public record CreateVehicleDTO(
         VehicleType type,
-        String id,
         String plate,
         String model,
         String brand,
