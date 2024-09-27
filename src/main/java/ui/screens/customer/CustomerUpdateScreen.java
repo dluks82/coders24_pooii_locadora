@@ -54,7 +54,7 @@ public class CustomerUpdateScreen extends Screen {
                         customerToUpdate = customerListScreen.getSelectedCustomer();
                         if (customerToUpdate != null) {
                             name = customerToUpdate.getName();
-                            phone = customerToUpdate.getNumberPhone();
+                            phone = customerToUpdate.getPhoneNumber();
                             document = customerToUpdate.getDocumentId();
                         }
 

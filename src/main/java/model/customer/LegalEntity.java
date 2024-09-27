@@ -10,7 +10,7 @@ public class LegalEntity extends Customer {
 
     @Override
     public void setDocumentId(String documentId) {
-        if(documentId != null && !documentId.isEmpty() && documentId.length() == 14){
+        if(documentId != null && documentId.length() == 14){
             this.documentId = documentId;
         }
     }
