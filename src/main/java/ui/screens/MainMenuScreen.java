@@ -88,7 +88,8 @@ public class MainMenuScreen extends Screen {
 
             handleMenuOption(option.getValue());
 
-        } while (option.getValue() != 0);
+            if (option.getValue() == 0) break;
+        } while (true);
     }
 
     private void displayMenuOptions() {
