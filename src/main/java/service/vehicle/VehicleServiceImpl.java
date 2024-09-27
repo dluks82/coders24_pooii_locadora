@@ -12,7 +12,7 @@ import java.util.List;
 
 public class VehicleServiceImpl implements VehicleService {
 
-    private VehicleRepository vehicleRepository;
+    private final VehicleRepository vehicleRepository;
 
     public VehicleServiceImpl(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
@@ -32,20 +32,20 @@ public class VehicleServiceImpl implements VehicleService {
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
-                    vehicleDTO.agencyId()
+                    vehicleDTO.agency()
             );
         }else if (vehicleDTO.type() == VehicleType.TRUCK) {
             newVehicle = new Truck(vehicleDTO.id(),
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
-                    vehicleDTO.agencyId());
+                    vehicleDTO.agency());
         }else if (vehicleDTO.type() == VehicleType.MOTORCYCLE) {
             newVehicle = new Motorcycle(vehicleDTO.id(),
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
-                    vehicleDTO.agencyId());
+                    vehicleDTO.agency());
         }
 
         if (newVehicle != null) {
@@ -83,14 +83,6 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<Vehicle> findVehicleByModel(String model) {
         return vehicleRepository.findByModel(model);
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByBrand(String brand) {
-        if(brand == null || brand.length() < 3){
-            throw new IllegalArgumentException("O nome deve ter ao menos 3 caracteres.");
-        }
-        return vehicleRepository.findByBrand(brand);
     }
 
     @Override

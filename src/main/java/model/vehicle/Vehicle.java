@@ -52,7 +52,7 @@ public abstract class Vehicle {
         return brand;
     }
 
-    public Agency getAgencyId() {
+    public Agency getAgency() {
         return agency;
     }
 

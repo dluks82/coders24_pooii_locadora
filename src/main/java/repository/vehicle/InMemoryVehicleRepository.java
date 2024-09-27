@@ -32,11 +32,6 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     }
 
     @Override
-    public boolean delete(Vehicle entity) {
-        return false;
-    }
-
-    @Override
     public Vehicle findById(String id) {
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getId().equals(id)) {
@@ -73,26 +68,13 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     }
 
     @Override
-    public List<Vehicle> findByBrand(String brand) {
-        List<Vehicle> vehiclesFoundByBrand = new ArrayList<>();
-        for (Vehicle vehicle : vehicles) {
-            if(vehicle.getBrand().toLowerCase().contains(brand.toLowerCase())) {
-                vehiclesFoundByBrand.add(vehicle);
-            }
-        }
-        return vehiclesFoundByBrand;
-    }
-
-    @Override
     public List<Vehicle> findByAgencyId(String agencyId) {
-
         List<Vehicle> vehiclesFound = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.getAgencyId().equalsIgnoreCase(agencyId)) {
+            if (vehicle.getAgency().getId().equalsIgnoreCase(agencyId)) {
                 vehiclesFound.add(vehicle);
             }
         }
         return vehiclesFound;
     }
-
 }
