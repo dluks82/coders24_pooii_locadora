@@ -5,6 +5,7 @@ import enums.VehicleType;
 import model.agency.Agency;
 import service.agency.AgencyService;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -45,7 +46,7 @@ public class VehicleCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Cadastro de Veículo");
+            Header.show("Preencha os campos abaixo para cadastrar um veículo.", null);
 
             displayVehicleRegistration();
 

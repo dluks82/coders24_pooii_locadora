@@ -2,6 +2,7 @@ package ui.screens.agency;
 
 import model.agency.Agency;
 import service.agency.AgencyService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class AgencyListScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final AgencyService agencyService;
 
@@ -47,8 +49,6 @@ public class AgencyListScreen extends Screen {
 
             listPaginatedAgencies(filteredAgencies, currentPage);
 
-            // TODO: CRIAR UM MENU MAIS INTUITIVO
-
             Output.info("'X' para voltar");
 
             String promptMessage = isModal ? "Selecione uma agência pelo número ou utilize os comandos acima: "
@@ -67,19 +67,21 @@ public class AgencyListScreen extends Screen {
     private void displayPendingMessages() {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
-            errorMessage = "";
+            // Esperar o usuário pressionar Enter para continuar
+            Input.getAsString(scanner, "Pressione Enter para continuar...", true, false);
+            errorMessage = ""; // Limpa o erro após o usuário confirmar
         }
     }
 
     private void listPaginatedAgencies(List<Agency> agencies, int page) {
         if (isModal) {
-            ScreenUtils.showHeader("Selecione uma Agência");
+            Header.show("Selecione uma agência para continuar...", null);
         } else {
-            ScreenUtils.showHeader("Lista de Agências");
+            Header.show("Lista de Agências", null);
         }
 
         if (!searchQuery.isEmpty()) {
-            System.out.println("Filtro: " + searchQuery);
+            System.out.println("║  Filtro: " + searchQuery);
         }
 
         if (agencies.isEmpty()) {
@@ -91,22 +93,24 @@ public class AgencyListScreen extends Screen {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, agencies.size());
 
-        System.out.printf("%-5s | %-25s | %-25s | %-15s%n", "Nº", "Nome", "Endereço", "Telefone");
-        System.out.println("------------------------------------------------------------" +
-                "-------------------------------------------");
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
+
+        System.out.println(emptyLine);
+        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Nome", "Endereço", "Telefone");
+        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
 
         for (int i = start; i < end; i++) {
             Agency agency = agencies.get(i);
-
-            System.out.printf("%-5d | %-25s | %-25s | %-15s%n",
+            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
                     (i + 1),
-                    limitString(agency.getName(), 25),
-                    limitString(agency.getAddress(), 25),
-                    limitString(agency.getPhone(), 15));
+                    limitString(agency.getName(), 23),
+                    limitString(agency.getAddress(), 23),
+                    limitString(agency.getPhone(), 13));
         }
 
-        System.out.print("------------------------------------------------------------" +
-                "-------------------------------------------");
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
 
         System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
 

@@ -5,6 +5,7 @@ import model.vehicle.Motorcycle;
 import model.vehicle.Truck;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -39,7 +40,7 @@ public class VehicleUpdateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
-            ScreenUtils.showHeader("Editar Veículo");
+            Header.show("Preencha os campos abaixo para editar o veículo.", null);
 
             if (vehicleToUpdate != null) {
                 displayVehicleUpdateForm();

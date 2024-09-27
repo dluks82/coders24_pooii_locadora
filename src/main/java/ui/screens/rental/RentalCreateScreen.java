@@ -8,6 +8,7 @@ import service.agency.AgencyService;
 import service.customer.CustomerService;
 import service.rental.RentalService;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -63,7 +64,7 @@ public class RentalCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Cadastro de Locação");
+            Header.show("Preencha os campos abaixo para cadastrar a locação.", null);
 
             displayRentalRegistration();
 

@@ -2,6 +2,7 @@ package ui.screens.customer;
 
 import exceptions.DataInputInterruptedException;
 import service.customer.CustomerService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -76,7 +77,7 @@ public class CustomerMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-        ScreenUtils.showHeader("Menu Clientes");
+        Header.show("Menu Clientes", null);
 
         int maxLineLength = 47; // Ajuste conforme necessário
 

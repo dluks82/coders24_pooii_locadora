@@ -24,4 +24,5 @@ public class ScreenUtils {
         System.out.println(title);
         System.out.println("-------------------------------------------------");
     }
+
 }

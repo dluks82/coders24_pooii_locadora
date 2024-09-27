@@ -1,7 +1,9 @@
 package ui.screens.rental;
 
+import model.agency.Agency;
 import model.rental.Rental;
 import service.rental.RentalService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -13,11 +15,13 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class RentalListScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final RentalService rentalService;
     private final boolean isModal;
 
     private Rental selectedRental;
+    private String searchQuery = "";
 
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
@@ -42,8 +46,6 @@ public class RentalListScreen extends Screen {
 
             listPaginatedRentals(filteredRentals, currentPage);
 
-            Output.info("'F' para filtrar, 'L' para limpar filtro.");
-            Output.info("'A' para avançar página, 'V' para voltar página");
             Output.info("'X' para voltar");
 
             String promptMessage = isModal ? "Selecione um veículo pelo número ou utilize os comandos acima: "
@@ -64,21 +66,51 @@ public class RentalListScreen extends Screen {
         int end = Math.min(start + PAGE_SIZE, rentals.size());
 
         if (isModal) {
-            ScreenUtils.showHeader("Selecione uma Locação");
+            Header.show("Selecione uma locação para continuar...", null);
         } else {
-            ScreenUtils.showHeader("Lista de Locações");
+            Header.show("Lista de Locações", null);
         }
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Cliente", "Data Início", "Data Estimada");
-        System.out.println("--------------------------------------------------------------------------");
+        if (!searchQuery.isEmpty()) {
+            System.out.println("║  Filtro: " + searchQuery);
+        }
+
+        if (rentals.isEmpty()) {
+            Output.info("Nenhuma locação aberta encontrada.\n");
+            return;
+        }
+
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
+
+        System.out.println(emptyLine);
+        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Cliente", "Data Início", "Data Estimada");
+        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
 
         for (int i = start; i < end; i++) {
             Rental rental = rentals.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), rental.getCustomer().getName(), "VERIFICARRR", "VERIFICARRR faltam Getters");
+            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
+                    (i + 1),
+                    limitString(rental.getCustomer().getName(), 23),
+                    limitString(rental.getPickUpDate().toString(), 23),
+                    limitString(rental.getEstimatedReturnDate().toString(), 13));
         }
 
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println("\nPágina " + (currentPage + 1) + " de " + totalPages);
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
+
+        System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
+
+        Output.info("'F' para filtrar, 'L' para limpar filtro.");
+        Output.info("'A' para avançar página, 'V' para voltar página");
+
+    }
+
+    private String limitString(String str, int maxLength) {
+        if (str.length() > maxLength) {
+            return str.substring(0, maxLength - 3) + "...";
+        }
+        return str;
     }
 
     private boolean processInputCommands(String input, List<Rental> rentals) {
