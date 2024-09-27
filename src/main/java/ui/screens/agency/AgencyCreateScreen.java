@@ -1,21 +1,24 @@
 package ui.screens.agency;
 
 import dto.CreateAgencyDTO;
+import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
 import ui.utils.Output;
+import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class AgencyCreateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47;
     private final Scanner scanner;
+    private final AgencyService agencyService;
 
     private String errorMessage = "";
-
-    private final AgencyService agencyService;
 
     private String name = "";
     private String address = "";
@@ -23,8 +26,7 @@ public class AgencyCreateScreen extends Screen {
 
     private int currentField = 0;
 
-    public AgencyCreateScreen(FlowController flowController,
-                              Scanner scanner, AgencyService agencyService) {
+    public AgencyCreateScreen(FlowController flowController, Scanner scanner, AgencyService agencyService) {
         super(flowController);
         this.scanner = scanner;
         this.agencyService = agencyService;
@@ -35,35 +37,27 @@ public class AgencyCreateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
             ScreenUtils.showHeader("Cadastro de Agência");
-
             displayAgencyRegistration();
-
             Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
-
             displayPendingMessages();
-
             handleCurrentField();
-
-
         } while (true);
     }
 
     private void displayAgencyRegistration() {
-        String namePrompt = "Nome:";
-        String addressPrompt = "Endereço:";
-        String phonePrompt = "Telefone:";
+        String[] fields = {
+                String.format("Nome: %s", name.isEmpty() ? "" : name),
+                String.format("Endereço: %s", address.isEmpty() ? "" : address),
+                String.format("Telefone: %s", phone.isEmpty() ? "" : phone)
+        };
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : " " + name));
-        System.out.printf("║   %-43s ║%n", addressPrompt + (address.isEmpty() ? "" : " " + address));
-        System.out.printf("║   %-43s ║%n", phonePrompt + (phone.isEmpty() ? "" : " " + phone));
+        for (String field : fields) {
+            System.out.printf("║   %-43s ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
@@ -77,34 +71,26 @@ public class AgencyCreateScreen extends Screen {
 
     private void handleCurrentField() {
         switch (currentField) {
-            case 0 -> {
-                String inputName =
-                        Input.getAsString(scanner, "Nome: ", false, false);
-                if (processInputCommands(inputName)) {
-                    break;
-                }
-                name = inputName;
-                currentField = 1;
-            }
-            case 1 -> {
-                String addressInput =
-                        Input.getAsString(scanner, "Endereço: ", false, false);
-                if (processInputCommands(addressInput)) {
-                    break;
-                }
-                address = addressInput;
-                currentField = 2;
-            }
-            case 2 -> {
-                String phoneInput =
-                        Input.getAsString(scanner, "Telefone: ", false, false);
-                if (processInputCommands(phoneInput)) {
-                    break;
-                }
-                phone = phoneInput;
-                currentField = 3;
-            }
+            case 0 -> handleStringField("Nome: ", value -> name = value, 1);
+            case 1 -> handleStringField("Endereço: ", value -> address = value, 2);
+            case 2 -> handleStringField("Telefone: ", value -> phone = value, 3);
             case 3 -> confirmRegistration();
+        }
+    }
+
+    private void handleStringField(String prompt, Consumer<String> setter, int nextField) {
+        try {
+            Result<String> input = Input.getAsString2(scanner, prompt, false, false);
+            if (input.isFailure()) {
+                handleError(input.getErrorMessage());
+                return;
+            }
+            if (processInputCommands(input.getValue())) return;
+            setter.accept(input.getValue());
+            currentField = nextField;
+        } catch (DataInputInterruptedException e) {
+            cancelRegistration();
+            return;
         }
     }
 
@@ -116,26 +102,31 @@ public class AgencyCreateScreen extends Screen {
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de cadastro
             try {
-                CreateAgencyDTO createAgencyDTO = new CreateAgencyDTO(name, address, phone);
-                agencyService.createAgency(createAgencyDTO);
+                registerAgency();
             } catch (IllegalArgumentException e) {
-                errorMessage = e.getMessage();
-                currentField = 0;
+                handleError(e.getMessage());
                 return;
             } catch (Exception e) {
-                errorMessage = "Erro desconhecido ao cadastrar a agência. Tente novamente!";
-                currentField = 0;
+                handleError("Erro desconhecido ao cadastrar a agência. Tente novamente!");
                 return;
             }
         }
         flowController.goBack();
     }
 
+    private void registerAgency() {
+        CreateAgencyDTO createAgencyDTO = new CreateAgencyDTO(name, address, phone);
+        agencyService.createAgency(createAgencyDTO);
+    }
+
+    private void handleError(String message) {
+        errorMessage = message;
+        currentField = 0;
+    }
+
     private boolean processInputCommands(String input) {
         if (input.equalsIgnoreCase("v")) {
-            if (currentField > 0) {
-                currentField--;
-            }
+            if (currentField > 0) currentField--;
             return true;
         } else if (input.equalsIgnoreCase("c")) {
             cancelRegistration();
@@ -147,5 +138,4 @@ public class AgencyCreateScreen extends Screen {
     private void cancelRegistration() {
         flowController.goBack();
     }
-
 }

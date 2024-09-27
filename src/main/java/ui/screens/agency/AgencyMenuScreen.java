@@ -39,8 +39,7 @@ public class AgencyMenuScreen extends Screen {
             }
             handleMenuOption(option.getValue());
 
-            if (option.getValue() == 0) break;
-        } while (true);
+        } while (option.getValue() != 0);
     }
 
     private void displayMenuOptions() {

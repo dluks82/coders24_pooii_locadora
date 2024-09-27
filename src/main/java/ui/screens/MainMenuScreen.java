@@ -31,6 +31,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class MainMenuScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47;
     private final Scanner scanner;
 
     private String errorMessage = "";
@@ -79,35 +80,23 @@ public class MainMenuScreen extends Screen {
             displayMenuOptions();
             displayPendingMessages();
 
-            try {
-                option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
-            } catch (DataInputInterruptedException e) {
-                errorMessage = e.getMessage();
-                continue;
-            }
-
+            option = getUserOption();
             if (option.isFailure()) {
                 errorMessage = option.getErrorMessage();
                 continue;
             }
+
             handleMenuOption(option.getValue());
 
-            if (option.getValue() == 0)
-                break;
-
-        } while (true);
+        } while (option.getValue() != 0);
     }
 
     private void displayMenuOptions() {
         ScreenUtils.showHeader("Menu Principal");
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
         System.out.printf("║   %-43s ║%n", "[ 1 ] - Agencias");
         System.out.printf("║   %-43s ║%n", "[ 2 ] - Veículos");
@@ -122,6 +111,14 @@ public class MainMenuScreen extends Screen {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
             errorMessage = "";
+        }
+    }
+
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
         }
     }
 
