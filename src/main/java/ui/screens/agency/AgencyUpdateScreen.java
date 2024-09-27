@@ -1,7 +1,9 @@
 package ui.screens.agency;
 
+import exceptions.DataInputInterruptedException;
 import model.agency.Agency;
 import service.agency.AgencyService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -12,6 +14,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class AgencyUpdateScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 47;
     private final Scanner scanner;
     private final AgencyService agencyService;
     private Agency agencyToUpdate;
@@ -36,7 +39,7 @@ public class AgencyUpdateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
-            ScreenUtils.showHeader("Editar Agência");
+            Header.show("Editar Agência", null);
 
             if (agencyToUpdate != null) {
                 displayAgencyUpdateForm();
@@ -69,16 +72,18 @@ public class AgencyUpdateScreen extends Screen {
                         Output.error("Você precisa selecionar uma agência válida!\n\n");
 
                         System.out.println("1 - Tentar novamente");
-                        System.out.println("2 - Cancelar o cadastro");
+                        System.out.println("2 - Cancelar...");
 
-                        Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
+                        Result<Integer> option = getUserOption();
+
+                        if (option.isFailure()) {
+                            errorMessage = option.getErrorMessage();
+                            continue;
+                        }
+
                         switch (option.getValue()) {
-                            case 1:
-                                isSelectionListCalled = false;
-                                break;
-                            case 2:
-                                cancelUpdate();
-                                break;
+                            case 1 -> isSelectionListCalled = false;
+                            case 2 -> cancelUpdate();
                         }
                         break;
                     }
@@ -111,29 +116,37 @@ public class AgencyUpdateScreen extends Screen {
         } while (true);
     }
 
+    private Result<Integer> getUserOption() {
+        try {
+            return Input.getAsInt(scanner, "Escolha uma opção: ", false);
+        } catch (DataInputInterruptedException e) {
+            return Result.fail(e.getMessage());
+        }
+    }
+
     private void displayPendingMessages() {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
-            errorMessage = "";
+            // Esperar o usuário pressionar Enter para continuar
+            Input.getAsString(scanner, "Pressione Enter para continuar...", true, false);
+            errorMessage = ""; // Limpa o erro após o usuário confirmar
         }
     }
 
     private void displayAgencyUpdateForm() {
-        String namePrompt = "Nome:";
-        String addressPrompt = "Endereço:";
-        String phonePrompt = "Telefone:";
+        String[] fields = {
+                String.format("Nome: %s", name.isEmpty() ? "" : name),
+                String.format("Endereço: %s", address.isEmpty() ? "" : address),
+                String.format("Telefone: %s", phone.isEmpty() ? "" : phone)
+        };
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
-
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", namePrompt + (name.isEmpty() ? "" : " " + name));
-        System.out.printf("║   %-43s ║%n", addressPrompt + (address.isEmpty() ? "" : " " + address));
-        System.out.printf("║   %-43s ║%n", phonePrompt + (phone.isEmpty() ? "" : " " + phone));
+        for (String field : fields) {
+            System.out.printf("║   %-43s ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }
@@ -144,20 +157,38 @@ public class AgencyUpdateScreen extends Screen {
 
         if (input.equalsIgnoreCase("s")) {
             // Chamar o serviço de atualização
-            Agency updatedAgency = new Agency(
-                    agencyToUpdate.getId(),
-                    name.isEmpty() ? agencyToUpdate.getName() : name,
-                    address.isEmpty() ? agencyToUpdate.getAddress() : address,
-                    phone.isEmpty() ? agencyToUpdate.getPhone() : phone
-            );
-            agencyService.updateAgency(updatedAgency);
-
+            try {
+                updateAgency();
+            } catch (IllegalArgumentException e) {
+                handleError(e.getMessage());
+                return;
+            } catch (Exception e) {
+                handleError("Erro desconhecido ao atualizar a agência. Tente novamente!");
+                return;
+            }
             Output.info("Edição realizada com sucesso!");
+            scanner.nextLine();
         } else {
             Output.info("Edição cancelada.");
+            scanner.nextLine();
         }
         scanner.nextLine();
         flowController.goBack();
+    }
+
+    private void updateAgency() {
+        Agency updatedAgency = new Agency(
+                agencyToUpdate.getId(),
+                name.isEmpty() ? agencyToUpdate.getName() : name,
+                address.isEmpty() ? agencyToUpdate.getAddress() : address,
+                phone.isEmpty() ? agencyToUpdate.getPhone() : phone
+        );
+        agencyService.updateAgency(updatedAgency);
+    }
+
+    private void handleError(String message) {
+        errorMessage = message;
+        currentField = 0;
     }
 
     private boolean processInputCommands(String input) {

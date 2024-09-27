@@ -2,6 +2,7 @@ package ui.screens.customer;
 
 import model.customer.Customer;
 import service.customer.CustomerService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -13,11 +14,14 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CustomerListScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final CustomerService customerService;
     private final boolean isModal;
 
     private Customer selectedCustomer;
+
+    private String searchQuery = "";
 
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
@@ -46,8 +50,6 @@ public class CustomerListScreen extends Screen {
 
             listPaginatedCustomers(filteredCustomers, currentPage);
 
-            Output.info("'F' para filtrar, 'L' para limpar filtro.");
-            Output.info("'A' para avançar página, 'V' para voltar página");
             Output.info("'X' para voltar");
 
             String promptMessage = isModal ? "Selecione um cliente pelo número ou utilize os comandos acima: "
@@ -63,26 +65,55 @@ public class CustomerListScreen extends Screen {
     }
 
     private void listPaginatedCustomers(List<Customer> customers, int page) {
+        if (isModal) {
+            Header.show("Selecione um cliente para continuar...", null);
+        } else {
+            Header.show("Lista de Clientes", null);
+        }
+
+        if (!searchQuery.isEmpty()) {
+            System.out.println("║  Filtro: " + searchQuery);
+        }
+
+        if (customers.isEmpty()) {
+            Output.info("Nenhum cliente encontrado.\n");
+            return;
+        }
+
         int totalPages = (int) Math.ceil((double) customers.size() / PAGE_SIZE);
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, customers.size());
 
-        if (isModal) {
-            ScreenUtils.showHeader("Selecione um Cliente");
-        } else {
-            ScreenUtils.showHeader("Lista de Clientes");
-        }
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Nome", "Documento", "Telefone");
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.println(emptyLine);
+        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Nome", "Documento", "Telefone");
+        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
 
         for (int i = start; i < end; i++) {
             Customer customer = customers.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), customer.getName(), customer.getDocumentId(), customer.getPhoneNumber());
+            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
+                    (i + 1),
+                    limitString(customer.getName(), 23),
+                    limitString(customer.getDocumentId(), 23),
+                    limitString(customer.getPhoneNumber(), 13));
         }
 
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println("\nPágina " + (currentPage + 1) + " de " + totalPages);
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
+
+        System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
+
+        Output.info("'F' para filtrar, 'L' para limpar filtro.");
+        Output.info("'A' para avançar página, 'V' para voltar página");
+    }
+
+    private String limitString(String str, int maxLength) {
+        if (str.length() > maxLength) {
+            return str.substring(0, maxLength - 3) + "...";
+        }
+        return str;
     }
 
     private boolean processInputCommands(String input, List<Customer> customers) {
@@ -92,26 +123,27 @@ public class CustomerListScreen extends Screen {
                     currentPage--;
                 }
                 break;
-
             case "a":
                 if (currentPage < (int) Math.ceil((double) filteredCustomers.size() / PAGE_SIZE) - 1) {
                     currentPage++;
                 }
                 break;
-
             case "f":
+                if (filteredCustomers.isEmpty())
+                    break;
+
                 searchCustomers(customers);
                 break;
-
             case "l":
-                filteredCustomers = customers;
-                currentPage = 0;
+                if (!searchQuery.isEmpty()) {
+                    searchQuery = "";
+                    filteredCustomers = customers;
+                    currentPage = 0;
+                }
                 break;
-
             case "x":
                 back();
                 return true;
-
             default:
                 if (isModal) {
                     try {
@@ -133,8 +165,7 @@ public class CustomerListScreen extends Screen {
     }
 
     private void searchCustomers(List<Customer> customers) {
-        System.out.println("Digite o nome do cliente que deseja buscar: ");
-        String searchQuery = scanner.nextLine().trim().toLowerCase();
+        searchQuery = Input.getAsString(scanner, "Filtrar por nome de cliente: ", true, false);
 
         filteredCustomers = customers.stream()
                 .filter(agency -> agency.getName().toLowerCase().contains(searchQuery))
@@ -144,9 +175,8 @@ public class CustomerListScreen extends Screen {
 
         if (filteredCustomers.isEmpty()) {
             System.out.println("Nenhum cliente encontrado com o nome: " + searchQuery);
+            searchQuery = "";
             filteredCustomers = customers;
-        } else {
-            System.out.println(filteredCustomers.size() + " cliente(s) encontrado(s).");
         }
 
         System.out.println("Pressione Enter para continuar.");

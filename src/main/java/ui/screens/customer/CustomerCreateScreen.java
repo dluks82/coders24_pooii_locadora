@@ -3,6 +3,7 @@ package ui.screens.customer;
 import dto.CreateCustomerDTO;
 import enums.CustomerType;
 import service.customer.CustomerService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -37,6 +38,7 @@ public class CustomerCreateScreen extends Screen {
             ScreenUtils.clearScreen();
 
             ScreenUtils.showHeader("Cadastro de Cliente");
+            Header.show("Editar Agência", null);
 
             if (type != null) {
                 displayCustomerRegistration();

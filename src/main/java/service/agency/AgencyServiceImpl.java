@@ -30,7 +30,7 @@ public class AgencyServiceImpl implements AgencyService {
                     agencyDTO.address(),
                     agencyDTO.phone());
         }else{
-            throw new IllegalArgumentException("Agency already exists");
+            throw new IllegalArgumentException(String.format("Agência '%s' já existe", agencyDTO.name()));
         }
 
         return agencyRepository.save(newAgency);
@@ -38,10 +38,16 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     public Agency updateAgency(Agency agency) {
-        Agency existAgency = agencyRepository.findByName(agency.getName());
+        Agency existAgency = agencyRepository.findById(agency.getId());
         if(existAgency == null) {
             throw new IllegalArgumentException("Agencia não Existe");
         }
+
+        Agency agencyName = agencyRepository.findByName(agency.getName());
+        if(agencyName != null && !agencyName.getId().equals(agency.getId())) {
+            throw new IllegalArgumentException(String.format("Agência '%s' já existe", agency.getName()));
+        }
+
         return agencyRepository.update(agency);
     }
 

@@ -3,6 +3,7 @@ package ui.screens.agency;
 import dto.CreateAgencyDTO;
 import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -36,7 +37,8 @@ public class AgencyCreateScreen extends Screen {
     public void show() {
         do {
             ScreenUtils.clearScreen();
-            ScreenUtils.showHeader("Cadastro de Agência");
+            Header.show("Cadastro de Agência", null);
+
             displayAgencyRegistration();
             Output.info("'V' para voltar campo, 'C' para cancelar o cadastro.");
             displayPendingMessages();
@@ -65,7 +67,9 @@ public class AgencyCreateScreen extends Screen {
     private void displayPendingMessages() {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
-            errorMessage = "";
+            // Esperar o usuário pressionar Enter para continuar
+            Input.getAsString(scanner, "Pressione Enter para continuar...", true, false);
+            errorMessage = ""; // Limpa o erro após o usuário confirmar
         }
     }
 

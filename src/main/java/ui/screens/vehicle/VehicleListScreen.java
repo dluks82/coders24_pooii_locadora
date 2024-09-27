@@ -1,7 +1,9 @@
 package ui.screens.vehicle;
 
+import model.agency.Agency;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -13,11 +15,13 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class VehicleListScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final VehicleService vehicleService;
     private final boolean isModal;
 
     private Vehicle selectedVehicle;
+    private String searchQuery = "";
 
     private int currentPage = 0;
     private static final int PAGE_SIZE = 2;
@@ -42,8 +46,6 @@ public class VehicleListScreen extends Screen {
 
             listPaginatedAgencies(filteredVehicles, currentPage);
 
-            Output.info("'F' para filtrar, 'L' para limpar filtro.");
-            Output.info("'A' para avançar página, 'V' para voltar página");
             Output.info("'X' para voltar");
 
             String promptMessage = isModal ? "Selecione um veículo pelo número ou utilize os comandos acima: "
@@ -64,21 +66,52 @@ public class VehicleListScreen extends Screen {
         int end = Math.min(start + PAGE_SIZE, vehicles.size());
 
         if (isModal) {
-            ScreenUtils.showHeader("Selecione um Veículo");
+            Header.show("Selecione um veículo para continuar...", null);
         } else {
-            ScreenUtils.showHeader("Lista de Veículos");
+            Header.show("Lista de Veículos", null);
         }
 
-        System.out.printf("%-5s %-30s %-30s %-20s%n", "Nº", "Placa", "Modelo", "Diária");
-        System.out.println("--------------------------------------------------------------------------");
+
+        if (!searchQuery.isEmpty()) {
+            System.out.println("║  Filtro: " + searchQuery);
+        }
+
+        if (vehicles.isEmpty()) {
+            Output.info("Nenhuma veículo encontrado.\n");
+            return;
+        }
+
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
+
+        System.out.println(emptyLine);
+        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Placa", "Modelo", "Diária");
+        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
 
         for (int i = start; i < end; i++) {
             Vehicle vehicle = vehicles.get(i);
-            System.out.printf("%-5d %-30s %-30s %-20s%n", (i + 1), vehicle.getPlate(), vehicle.getModel(), vehicle.getDailyRate());
+            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
+                    (i + 1),
+                    limitString(vehicle.getPlate(), 23),
+                    limitString(vehicle.getModel(), 23),
+                    limitString(vehicle.getDailyRate().toString(), 13));
         }
 
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println("\nPágina " + (currentPage + 1) + " de " + totalPages);
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
+
+        System.out.println("\nPágina " + (page + 1) + " de " + totalPages + "\n");
+
+        Output.info("'F' para filtrar, 'L' para limpar filtro.");
+        Output.info("'A' para avançar página, 'V' para voltar página");
+
+    }
+
+    private String limitString(String str, int maxLength) {
+        if (str.length() > maxLength) {
+            return str.substring(0, maxLength - 3) + "...";
+        }
+        return str;
     }
 
     private boolean processInputCommands(String input, List<Vehicle> vehicles) {

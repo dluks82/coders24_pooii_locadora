@@ -4,6 +4,7 @@ import model.agency.Agency;
 import model.rental.Rental;
 import service.agency.AgencyService;
 import service.rental.RentalService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -46,7 +47,7 @@ public class RentalCloseScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Encerrar Locação");
+            Header.show("Preencha os campos abaixo para encerrar a locação.", null);
 
             if (rentalToClose != null) {
 

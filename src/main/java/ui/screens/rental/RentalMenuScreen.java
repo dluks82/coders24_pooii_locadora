@@ -5,6 +5,7 @@ import service.agency.AgencyService;
 import service.customer.CustomerService;
 import service.rental.RentalService;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.customer.CustomerCreateScreen;
@@ -86,7 +87,8 @@ public class RentalMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-        ScreenUtils.showHeader("Menu Locações");
+//        ScreenUtils.showHeader("Menu Locações");
+        Header.show("Menu Locações", null);
 
         String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
         String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";

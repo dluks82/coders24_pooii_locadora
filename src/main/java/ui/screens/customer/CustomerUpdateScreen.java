@@ -3,6 +3,7 @@ package ui.screens.customer;
 import enums.CustomerType;
 import model.customer.Customer;
 import service.customer.CustomerService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -37,7 +38,7 @@ public class CustomerUpdateScreen extends Screen {
         do {
             ScreenUtils.clearScreen();
 
-            ScreenUtils.showHeader("Editar Cliente");
+            Header.show("Preencha os campos abaixo para editar o cliente.", null);
 
             if (customerToUpdate != null) {
                 displayCustomerUpdateForm();

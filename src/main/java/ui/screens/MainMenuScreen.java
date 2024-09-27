@@ -17,6 +17,7 @@ import service.rental.RentalService;
 import service.rental.RentalServiceImpl;
 import service.vehicle.VehicleService;
 import service.vehicle.VehicleServiceImpl;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyMenuScreen;
@@ -93,7 +94,7 @@ public class MainMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-        ScreenUtils.showHeader("Menu Principal");
+        Header.show("Menu Principal", null);
 
         String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
         String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";

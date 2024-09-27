@@ -2,6 +2,7 @@ package ui.screens.agency;
 
 import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -44,7 +45,7 @@ public class AgencyMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-        ScreenUtils.showHeader("Menu Agências");
+        Header.show("Menu Agências", null);
 
         String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
         String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
@@ -61,7 +62,9 @@ public class AgencyMenuScreen extends Screen {
     private void displayPendingMessages() {
         if (!errorMessage.isEmpty()) {
             Output.error(errorMessage);
-            errorMessage = "";
+            // Esperar o usuário pressionar Enter para continuar
+            Input.getAsString(scanner, "Pressione Enter para continuar...", true, false);
+            errorMessage = ""; // Limpa o erro após o usuário confirmar
         }
     }
 

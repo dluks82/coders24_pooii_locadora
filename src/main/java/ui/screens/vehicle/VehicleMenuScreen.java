@@ -3,6 +3,7 @@ package ui.screens.vehicle;
 import exceptions.DataInputInterruptedException;
 import service.agency.AgencyService;
 import service.vehicle.VehicleService;
+import ui.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.rental.RentalCreateScreen;
@@ -78,7 +79,7 @@ public class VehicleMenuScreen extends Screen {
     }
 
     private void displayMenuOptions() {
-        ScreenUtils.showHeader("Veículos");
+        Header.show("Menu de Veículos", null);
 
         String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
         String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
