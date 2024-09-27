@@ -2,7 +2,7 @@ package ui.screens.customer;
 
 import model.customer.Customer;
 import service.customer.CustomerService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;

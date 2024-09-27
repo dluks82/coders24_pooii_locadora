@@ -3,6 +3,7 @@ package ui.core;
 import ui.flow.FlowController;
 
 public abstract class Screen {
+
     protected final FlowController flowController;
 
     public Screen(FlowController flowController) {

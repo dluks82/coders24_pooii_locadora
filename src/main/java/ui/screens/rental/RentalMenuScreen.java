@@ -5,12 +5,9 @@ import service.agency.AgencyService;
 import service.customer.CustomerService;
 import service.rental.RentalService;
 import service.vehicle.VehicleService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
-import ui.screens.customer.CustomerCreateScreen;
-import ui.screens.customer.CustomerListScreen;
-import ui.screens.customer.CustomerUpdateScreen;
 import ui.utils.Input;
 import ui.utils.Output;
 import ui.utils.Result;
@@ -19,7 +16,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class RentalMenuScreen extends Screen {
-    private static final int MAX_LINE_LENGTH = 47;
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -90,14 +87,14 @@ public class RentalMenuScreen extends Screen {
 //        ScreenUtils.showHeader("Menu Locações");
         Header.show("Menu Locações", null);
 
-        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
-        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", "[ 1 ] - Nova Locação");
-        System.out.printf("║   %-43s ║%n", "[ 2 ] - Encerrar Locação");
-        System.out.printf("║   %-43s ║%n", "[ 3 ] - Visualizar Locações Ativas");
-        System.out.printf("║   %-43s ║%n", "[ 0 ] - Voltar");
+        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Nova Locação");
+        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Encerrar Locação");
+        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Visualizar Locações Ativas");
+        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

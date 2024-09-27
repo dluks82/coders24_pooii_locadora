@@ -5,33 +5,14 @@ import exceptions.DataInputInterruptedException;
 import utils.Validator;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Input {
 
     static String emptyLine = "";
-
-//    public static int getAsInt(Scanner scanner, String promptMessage, boolean canBeNegative) {
-//        while (true) {
-//            Output.prompt(promptMessage);
-//            try {
-//                String value = scanner.nextLine();
-//
-//                if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
-//
-//                int parsedValue = Integer.parseInt(value);
-//
-//                if (parsedValue >= 0 || canBeNegative) {
-//                    return parsedValue;
-//                }
-//                Output.error("Não pode ser negativo!");
-//                System.out.println(emptyLine);
-//            } catch (NumberFormatException e) {
-//                Output.error("Valor inválido! Por favor tente novamente...");
-//                System.out.println(emptyLine);
-//            }
-//        }
-//    }
 
     public static Result<Integer> getAsInt(Scanner scanner, String promptMessage, boolean canBeNegative) {
         Output.prompt(promptMessage);
@@ -46,21 +27,47 @@ public class Input {
 
             return Result.fail("Não pode ser negativo!");
         } catch (NumberFormatException e) {
-            return Result.fail("Valor inválido! Por favor tente novamente...");
+            return Result.fail("Valor não é válido!");
+        } catch (Exception e) {
+            return Result.fail("Erro desconhecido ao processar a entrada.");
         }
     }
 
     public static Result<String> getAsString2(Scanner scanner, String promptMessage, boolean canBeEmpty, boolean hidden) {
         Output.prompt(promptMessage);
-        if (hidden) System.out.print(Color.WHITE.getCode() + Color.BG_WHITE.getCode());
-        String value = scanner.nextLine().trim();
-        if (hidden) System.out.print(Color.RESET.getCode());
+        try {
+            if (hidden) System.out.print(Color.WHITE.getCode() + Color.BG_WHITE.getCode());
+            String value = scanner.nextLine().trim();
+            if (hidden) System.out.print(Color.RESET.getCode());
 
-        if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
+            if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
 
-        if (!value.isEmpty() || canBeEmpty) return Result.success(value);
+            if (!value.isEmpty() || canBeEmpty) return Result.success(value);
 
-        return Result.fail("A entrada não pode estar vazia.");
+            return Result.fail("A entrada não pode estar vazia.");
+        } catch (Exception e) {
+            return Result.fail("Erro desconhecido ao processar a entrada.");
+        }
+    }
+
+    public static Result<LocalDate> getAsDate(Scanner scanner, String promptMessage, boolean canBeEmpty) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Output.prompt(promptMessage);
+        try {
+            String value = scanner.nextLine().trim();
+
+            if (canBeEmpty && value.isEmpty()) return Result.success(null);
+
+            if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
+
+            LocalDate date = LocalDate.parse(value, formatter);
+
+            return Result.success(date);
+        } catch (DateTimeParseException e) {
+            return Result.fail("Data inválida! Por favor, insira uma data no formato dd/MM/aaaa.");
+        } catch (Exception e) {
+            return Result.fail("Erro desconhecido ao processar a data.");
+        }
     }
 
     public static double getAsDouble(Scanner scanner, String promptMessage, boolean canBeNegative) {

@@ -4,7 +4,7 @@ import model.agency.Agency;
 import model.rental.Rental;
 import service.agency.AgencyService;
 import service.rental.RentalService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyListScreen;
@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class RentalCloseScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final AgencyService agencyService;
@@ -27,6 +28,8 @@ public class RentalCloseScreen extends Screen {
     private Agency returnAgency;
 
     private LocalDate returnDate;
+
+    private int rentalDays;
 
     private int currentField = 0;
 
@@ -119,35 +122,33 @@ public class RentalCloseScreen extends Screen {
     }
 
     private void displayRentalClose() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        String agencyPrompt = "Agência de Retirada: ";
-        String agencyValue = rentalToClose.getPickUpAgency().getName();
-        String vehiclePrompt = "Veículo: ";
-        String vehicleValue = rentalToClose.getVehicle().getModel();
-        String customerPrompt = "Cliente: ";
-        String customerValue = rentalToClose.getCustomer().getName();
-        String startDatePrompt = "Data de início: ";
-        String startDateValue = rentalToClose.getPickUpDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String estimatedEndDatePrompt = "Data estimada de término: ";
-        String estimatedEndDateValue = rentalToClose.getEstimatedReturnDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String rentalCostPrompt = "Valor da locação: ";
-        String rentalCostValue = rentalToClose.getVehicle().calculateRentalPrice(5).toString();
+        rentalDays = (int) (
+                rentalToClose.getActualReturnDate() != null ?
+                        returnDate.toEpochDay() - rentalToClose.getPickUpDate().toEpochDay() :
+                        rentalToClose.getEstimatedReturnDate().toEpochDay() - rentalToClose.getPickUpDate().toEpochDay()
+        );
 
-        int maxLineLength = 47; // Ajuste conforme necessário
+        String[] fields = {
+                "Agência de Retirada: " + rentalToClose.getPickUpAgency().getName(),
+                "Veículo: " + rentalToClose.getVehicle().getModel(),
+                "Cliente: " + rentalToClose.getCustomer().getName(),
+                "Data de início: " + rentalToClose.getPickUpDate().format(formatter),
+                "Data estimada de término: " + rentalToClose.getEstimatedReturnDate().format(formatter),
+                "Agência de Retorno: " + (returnAgency != null ? returnAgency.getName() : ""),
+                "Data de Retorno: " + (returnDate != null ? returnDate.format(formatter) : ""),
+                "Valor da locação: " + rentalToClose.getVehicle().calculateRentalPrice(rentalDays).toString()
+        };
 
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
-//        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", agencyPrompt + agencyValue);
-        System.out.printf("║   %-43s ║%n", vehiclePrompt + vehicleValue);
-        System.out.printf("║   %-43s ║%n", customerPrompt + customerValue);
-        System.out.printf("║   %-43s ║%n", startDatePrompt + startDateValue);
-        System.out.printf("║   %-43s ║%n", estimatedEndDatePrompt + estimatedEndDateValue);
-        System.out.printf("║   %-43s ║%n", rentalCostPrompt + rentalCostValue);
 
+        for (String field : fields) {
+            System.out.printf("║    %-65s    ║%n", field);
+        }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

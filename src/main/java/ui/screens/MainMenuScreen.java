@@ -17,7 +17,7 @@ import service.rental.RentalService;
 import service.rental.RentalServiceImpl;
 import service.vehicle.VehicleService;
 import service.vehicle.VehicleServiceImpl;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.screens.agency.AgencyMenuScreen;
@@ -32,7 +32,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class MainMenuScreen extends Screen {
-    private static final int MAX_LINE_LENGTH = 47;
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private String errorMessage = "";
@@ -96,15 +96,15 @@ public class MainMenuScreen extends Screen {
     private void displayMenuOptions() {
         Header.show("Menu Principal", null);
 
-        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
-        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", "[ 1 ] - Agencias");
-        System.out.printf("║   %-43s ║%n", "[ 2 ] - Veículos");
-        System.out.printf("║   %-43s ║%n", "[ 3 ] - Clientes");
-        System.out.printf("║   %-43s ║%n", "[ 4 ] - Locações");
-        System.out.printf("║   %-43s ║%n", "[ 0 ] - Sair");
+        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Agencias");
+        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Veículos");
+        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Clientes");
+        System.out.printf("║    %-65s    ║%n", "[ 4 ] - Locações");
+        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Sair");
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

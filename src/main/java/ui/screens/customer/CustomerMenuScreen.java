@@ -2,7 +2,7 @@ package ui.screens.customer;
 
 import exceptions.DataInputInterruptedException;
 import service.customer.CustomerService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -13,6 +13,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class CustomerMenuScreen extends Screen {
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
 
     private final CustomerService customerService;
@@ -79,18 +80,15 @@ public class CustomerMenuScreen extends Screen {
     private void displayMenuOptions() {
         Header.show("Menu Clientes", null);
 
-        int maxLineLength = 47; // Ajuste conforme necessário
-
-//        String topLine = "╔" + "═".repeat(maxLineLength) + "╗";
-        String emptyLine = "║" + " ".repeat(maxLineLength) + "║";
-        String bottomLine = "╚" + "═".repeat(maxLineLength) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
 //        System.out.println(topLine);
         System.out.println(emptyLine);
-        System.out.printf("║   %-43s ║%n", "[ 1 ] - Adicionar");
-        System.out.printf("║   %-43s ║%n", "[ 2 ] - Listar");
-        System.out.printf("║   %-43s ║%n", "[ 3 ] - Editar");
-        System.out.printf("║   %-43s ║%n", "[ 0 ] - Voltar");
+        System.out.printf("║    %-65s    ║%n", "[ 1 ] - Adicionar");
+        System.out.printf("║    %-65s    ║%n", "[ 2 ] - Listar");
+        System.out.printf("║    %-65s    ║%n", "[ 3 ] - Editar");
+        System.out.printf("║    %-65s    ║%n", "[ 0 ] - Voltar");
         System.out.println(emptyLine);
         System.out.println(bottomLine);
     }

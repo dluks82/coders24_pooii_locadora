@@ -3,7 +3,7 @@ package ui.screens.agency;
 import exceptions.DataInputInterruptedException;
 import model.agency.Agency;
 import service.agency.AgencyService;
-import ui.Header;
+import ui.utils.Header;
 import ui.core.Screen;
 import ui.flow.FlowController;
 import ui.utils.Input;
@@ -14,7 +14,7 @@ import ui.utils.ScreenUtils;
 import java.util.Scanner;
 
 public class AgencyUpdateScreen extends Screen {
-    private static final int MAX_LINE_LENGTH = 47;
+    private static final int MAX_LINE_LENGTH = 65;
     private final Scanner scanner;
     private final AgencyService agencyService;
     private Agency agencyToUpdate;
@@ -140,12 +140,12 @@ public class AgencyUpdateScreen extends Screen {
                 String.format("Telefone: %s", phone.isEmpty() ? "" : phone)
         };
 
-        String emptyLine = "║" + " ".repeat(MAX_LINE_LENGTH) + "║";
-        String bottomLine = "╚" + "═".repeat(MAX_LINE_LENGTH) + "╝";
+        String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";
+        String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
         for (String field : fields) {
-            System.out.printf("║   %-43s ║%n", field);
+            System.out.printf("║    %-65s    ║%n", field);
         }
         System.out.println(emptyLine);
         System.out.println(bottomLine);
