@@ -1,6 +1,7 @@
 package dto;
 
 import enums.VehicleType;
+import model.agency.Agency;
 
 public record CreateVehicleDTO(
         VehicleType type,
@@ -8,6 +9,6 @@ public record CreateVehicleDTO(
         String plate,
         String model,
         String brand,
-        String agencyId
+        Agency agency
 ) {
 }
