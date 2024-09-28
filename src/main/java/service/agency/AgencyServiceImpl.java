@@ -10,8 +10,9 @@ import java.util.UUID;
 public class AgencyServiceImpl implements AgencyService {
 
     private final AgencyRepository agencyRepository;
+
     public AgencyServiceImpl(AgencyRepository agencyRepository) {
-           this.agencyRepository = agencyRepository;
+        this.agencyRepository = agencyRepository;
     }
 
 
@@ -23,13 +24,13 @@ public class AgencyServiceImpl implements AgencyService {
 
         String agencyId = UUID.randomUUID().toString();
 
-        if(existAgency == null) {
-                newAgency = new Agency(
+        if (existAgency == null) {
+            newAgency = new Agency(
                     agencyId,
                     agencyDTO.name(),
                     agencyDTO.address(),
                     agencyDTO.phone());
-        }else{
+        } else {
             throw new IllegalArgumentException(String.format("Agência '%s' já existe", agencyDTO.name()));
         }
 
@@ -39,12 +40,12 @@ public class AgencyServiceImpl implements AgencyService {
     @Override
     public Agency updateAgency(Agency agency) {
         Agency existAgency = agencyRepository.findById(agency.getId());
-        if(existAgency == null) {
+        if (existAgency == null) {
             throw new IllegalArgumentException("Agencia não Existe");
         }
 
         Agency agencyName = agencyRepository.findByName(agency.getName());
-        if(agencyName != null && !agencyName.getId().equals(agency.getId())) {
+        if (agencyName != null && !agencyName.getId().equals(agency.getId())) {
             throw new IllegalArgumentException(String.format("Agência '%s' já existe", agency.getName()));
         }
 
