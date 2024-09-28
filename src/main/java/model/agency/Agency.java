@@ -1,6 +1,10 @@
 package model.agency;
 
-public class Agency {
+import java.io.Serializable;
+
+public class Agency implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String id;
     private final String name;
     private final String address;

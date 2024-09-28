@@ -1,5 +1,6 @@
 package model.rental;
 
+import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
@@ -12,7 +13,8 @@ import model.agency.Agency;
 import model.customer.Customer;
 import model.vehicle.Vehicle;
 
-public class Rental {
+public class Rental implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final String id;
     private final Customer customer;
@@ -80,7 +82,7 @@ public class Rental {
         BigDecimal big;
         LocalDate dataEntrega =
                 this.actualReturnDate == null
-                        ? this.estimatedReturnDate: this.actualReturnDate;
+                        ? this.estimatedReturnDate : this.actualReturnDate;
         Period period = Period.between(this.pickUpDate, dataEntrega);
         int dias = period.getDays();
         int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
