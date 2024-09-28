@@ -2,11 +2,15 @@ package ui.screens;
 
 import exceptions.DataInputInterruptedException;
 import repository.agency.AgencyRepository;
+import repository.agency.InFileAgencyRepositoryImpl;
 import repository.agency.InMemoryAgencyRepositoryImpl;
 import repository.customer.CustomerRepository;
+import repository.customer.InFileCustomerRepositoryImpl;
 import repository.customer.InMemoryCustomerRepositoryImpl;
+import repository.rental.InFileRentalRepository;
 import repository.rental.InMemoryRentalRepository;
 import repository.rental.RentalRepository;
+import repository.vehicle.InFileVehicleRepository;
 import repository.vehicle.InMemoryVehicleRepository;
 import repository.vehicle.VehicleRepository;
 import service.agency.AgencyService;
@@ -53,22 +57,22 @@ public class MainMenuScreen extends Screen {
     }
 
     private AgencyService createAgencyService() {
-        AgencyRepository agencyRepository = new InMemoryAgencyRepositoryImpl();
+        AgencyRepository agencyRepository = new InFileAgencyRepositoryImpl();
         return new AgencyServiceImpl(agencyRepository);
     }
 
     private VehicleService createVehicleService() {
-        VehicleRepository vehicleRepository = new InMemoryVehicleRepository();
+        VehicleRepository vehicleRepository = new InFileVehicleRepository();
         return new VehicleServiceImpl(vehicleRepository);
     }
 
     private CustomerService createCustomerService() {
-        CustomerRepository customerRepository = new InMemoryCustomerRepositoryImpl();
+        CustomerRepository customerRepository = new InFileCustomerRepositoryImpl();
         return new CustomerServiceImpl(customerRepository);
     }
 
     private RentalService createRentalService() {
-        RentalRepository rentalRepository = new InMemoryRentalRepository();
+        RentalRepository rentalRepository = new InFileRentalRepository();
         return new RentalServiceImpl(rentalRepository);
     }
 
