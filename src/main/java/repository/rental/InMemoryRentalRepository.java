@@ -24,8 +24,8 @@ public class InMemoryRentalRepository implements RentalRepository {
 
     @Override
     public Rental update(Rental entity) {
-        for(int i=0; i<rentals.size(); i++) {
-            if(rentals.get(i).getId().equals(entity.getId())) {
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getId().equals(entity.getId())) {
                 rentals.set(i, entity);
                 return entity;
             }
@@ -35,8 +35,8 @@ public class InMemoryRentalRepository implements RentalRepository {
 
     @Override
     public Rental findById(String id) {
-        for(Rental r : rentals) {
-            if(r.getId().equals(id))
+        for (Rental r : rentals) {
+            if (r.getId().equals(id))
                 return r;
         }
         return null;
@@ -50,8 +50,8 @@ public class InMemoryRentalRepository implements RentalRepository {
     @Override
     public List<Rental> findByCustomer(Customer customer) {
         ArrayList<Rental> rentalsFound = new ArrayList<>();
-        for(Rental r : rentals) {
-            if(r.getCustomer() == customer)
+        for (Rental r : rentals) {
+            if (r.getCustomer() == customer)
                 rentalsFound.add(r);
         }
         return rentalsFound;
@@ -60,11 +60,21 @@ public class InMemoryRentalRepository implements RentalRepository {
     @Override
     public List<Rental> findOpenRentals() {
         List<Rental> openRentals = new ArrayList<>();
-        for(Rental r : rentals) {
-            if(r.getActualReturnDate()==null)
+        for (Rental r : rentals) {
+            if (r.getActualReturnDate() == null)
                 openRentals.add(r);
         }
         return openRentals;
     }
-    
+
+    @Override
+    public List<Rental> findClosedRentals() {
+        List<Rental> closedRentals = new ArrayList<>();
+        for (Rental r : rentals) {
+            if (r.getActualReturnDate() != null)
+                closedRentals.add(r);
+        }
+        return closedRentals;
+    }
+
 }
