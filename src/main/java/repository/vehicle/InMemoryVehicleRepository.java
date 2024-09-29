@@ -22,8 +22,8 @@ public class InMemoryVehicleRepository implements VehicleRepository {
 
     @Override
     public Vehicle update(Vehicle entity) {
-        for(int i=0; i<vehicles.size(); i++){
-            if(Objects.equals(vehicles.get(i).getId(), entity.getId())){
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (Objects.equals(vehicles.get(i).getId(), entity.getId())) {
                 vehicles.set(i, entity);
                 return entity;
             }
@@ -49,7 +49,7 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     @Override
     public Vehicle findByPlate(String plate) {
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getPlate().equalsIgnoreCase(plate)) {
+            if (vehicle.getPlate().equalsIgnoreCase(plate)) {
                 return vehicle;
             }
         }
@@ -60,7 +60,7 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     public List<Vehicle> findByModel(String model) {
         List<Vehicle> vehiclesFoundByModel = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getModel().toLowerCase().contains(model.toLowerCase())) {
+            if (vehicle.getModel().toLowerCase().contains(model.toLowerCase())) {
                 vehiclesFoundByModel.add(vehicle);
             }
         }
@@ -76,5 +76,16 @@ public class InMemoryVehicleRepository implements VehicleRepository {
             }
         }
         return vehiclesFound;
+    }
+
+    @Override
+    public List<Vehicle> findAvailableVehiclesByAgencyId(String agencyId) {
+        List<Vehicle> availableVehicles = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getAgency().getId().equalsIgnoreCase(agencyId) && vehicle.isAvailable()) {
+                availableVehicles.add(vehicle);
+            }
+        }
+        return availableVehicles;
     }
 }
