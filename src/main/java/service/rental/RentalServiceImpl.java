@@ -32,6 +32,8 @@ public class RentalServiceImpl implements RentalService {
         }
 
         newRental = new Rental(rentalId, rentalDTO.customer(), rentalDTO.vehicle(), rentalDTO.pickUpAgency(), rentalDTO.pickUpDate(), rentalDTO.estimatedReturnDate());
+        newRental.getVehicle().setAvailable(false);
+        //TODO: acho que precisamos salvar os dados de veículo para garantir integridade
         rentalRepository.save(newRental);
         return newRental;
     }
@@ -53,6 +55,8 @@ public class RentalServiceImpl implements RentalService {
         existingRental.setReturnAgency(returnAgency);
         existingRental.setActualReturnDate(actualReturnDate);
 
+        existingRental.getVehicle().setAvailable(true);
+        //TODO: acho que precisamos salvar os dados de veículo para garantir integridade
         return rentalRepository.update(existingRental);
     }
 

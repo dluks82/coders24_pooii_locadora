@@ -12,4 +12,5 @@ public interface VehicleRepository extends Repository<Vehicle> {
     List<Vehicle> findByModel(String model);
 
     List<Vehicle> findByAgencyId(String agencyId);
-}
+
+    List<Vehicle> findAvailableVehiclesByAgencyId(String agencyId);}
