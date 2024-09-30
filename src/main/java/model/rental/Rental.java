@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
 
 import enums.CustomerType;
 import enums.VehicleType;

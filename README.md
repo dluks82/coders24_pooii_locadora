@@ -101,6 +101,20 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
     mvn exec:java -Dexec.mainClass="CodersRentalApp"
     ```
 
+## Diagramas de Classe
+
+#### Geral
+![Geral](UML/geral.jpg)
+
+#### Agência
+![Agency](UML/agency.jpg)
+
+#### Customer
+![Customer](UML/customer.jpg)
+
+### Vehicle
+![Vehicle](UML/vehicle.jpg)
+
 ## Licença
 
 Este projeto está licenciado sob a [**Licença MIT**](LICENSE).
