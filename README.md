@@ -107,13 +107,13 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
 ![Geral](UML/geral.jpg)
 
 #### Agência
-![Agency](UML/agency.jpg)
+![Agency](UML/Agency.jpg)
 
 #### Customer
-![Customer](UML/customer.jpg)
+![Customer](UML/Customer.jpg)
 
 ### Vehicle
-![Vehicle](UML/vehicle.jpg)
+![Vehicle](UML/Vehicle.jpg)
 
 ## Licença
 
