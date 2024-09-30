@@ -13,13 +13,14 @@ public class InFileVehicleRepository implements VehicleRepository {
 
     public InFileVehicleRepository() {
 
-       loadData();
+        loadData();
     }
 
-    private void saveData(){
+    private void saveData() {
         DataPersistence.save(vehicles, "vehicle-DB");
     }
-    private void loadData(){
+
+    private void loadData() {
         vehicles = DataPersistence.load("vehicle-DB");
     }
 
@@ -33,8 +34,8 @@ public class InFileVehicleRepository implements VehicleRepository {
 
     @Override
     public Vehicle update(Vehicle entity) {
-        for(int i=0; i<vehicles.size(); i++){
-            if(Objects.equals(vehicles.get(i).getId(), entity.getId())){
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (Objects.equals(vehicles.get(i).getId(), entity.getId())) {
                 vehicles.set(i, entity);
                 saveData();
                 return entity;
@@ -61,7 +62,7 @@ public class InFileVehicleRepository implements VehicleRepository {
     @Override
     public Vehicle findByPlate(String plate) {
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getPlate().equalsIgnoreCase(plate)) {
+            if (vehicle.getPlate().equalsIgnoreCase(plate)) {
                 return vehicle;
             }
         }
@@ -72,7 +73,7 @@ public class InFileVehicleRepository implements VehicleRepository {
     public List<Vehicle> findByModel(String model) {
         List<Vehicle> vehiclesFoundByModel = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getModel().toLowerCase().contains(model.toLowerCase())) {
+            if (vehicle.getModel().toLowerCase().contains(model.toLowerCase())) {
                 vehiclesFoundByModel.add(vehicle);
             }
         }
@@ -88,5 +89,16 @@ public class InFileVehicleRepository implements VehicleRepository {
             }
         }
         return vehiclesFound;
+    }
+
+    @Override
+    public List<Vehicle> findAvailableVehiclesByAgencyId(String agencyId) {
+        List<Vehicle> availableVehicles = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getAgency().getId().equalsIgnoreCase(agencyId) && vehicle.isAvailable()) {
+                availableVehicles.add(vehicle);
+            }
+        }
+        return availableVehicles;
     }
 }

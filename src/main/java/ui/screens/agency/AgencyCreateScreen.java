@@ -84,7 +84,7 @@ public class AgencyCreateScreen extends Screen {
 
     private void handleStringField(String prompt, Consumer<String> setter, int nextField) {
         try {
-            Result<String> input = Input.getAsString2(scanner, prompt, false, false);
+            Result<String> input = Input.getAsString2(scanner, prompt, false);
             if (input.isFailure()) {
                 handleError(input.getErrorMessage());
                 return;
