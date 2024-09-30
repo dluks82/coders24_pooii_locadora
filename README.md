@@ -1,4 +1,4 @@
-### Coder24 - Locadora de Veículos (em desenvolvimento)
+# Coders24 - Locadora de Veículos (CodersRental)
 
 ## Descrição
 
