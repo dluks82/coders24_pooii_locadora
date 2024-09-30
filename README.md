@@ -1,4 +1,4 @@
-### Coder24 - Locadora de Veículos (em desenvolvimento)
+# Coders24 - Locadora de Veículos (CodersRental)
 
 ## Descrição
 
@@ -100,6 +100,20 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
     ```sh
     mvn exec:java -Dexec.mainClass="CodersRentalApp"
     ```
+
+## Diagramas de Classe
+
+#### Geral
+![Geral](UML/geral.jpg)
+
+#### Agência
+![Agency](UML/agency.jpg)
+
+#### Customer
+![Customer](UML/customer.jpg)
+
+### Vehicle
+![Vehicle](UML/vehicle.jpg)
 
 ## Licença
 
