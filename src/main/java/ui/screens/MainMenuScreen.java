@@ -1,18 +1,10 @@
 package ui.screens;
 
 import exceptions.DataInputInterruptedException;
-import repository.agency.AgencyRepository;
 import repository.agency.InFileAgencyRepositoryImpl;
-import repository.agency.InMemoryAgencyRepositoryImpl;
-import repository.customer.CustomerRepository;
 import repository.customer.InFileCustomerRepositoryImpl;
-import repository.customer.InMemoryCustomerRepositoryImpl;
 import repository.rental.InFileRentalRepository;
-import repository.rental.InMemoryRentalRepository;
-import repository.rental.RentalRepository;
 import repository.vehicle.InFileVehicleRepository;
-import repository.vehicle.InMemoryVehicleRepository;
-import repository.vehicle.VehicleRepository;
 import service.agency.AgencyService;
 import service.agency.AgencyServiceImpl;
 import service.customer.CustomerService;
@@ -57,23 +49,19 @@ public class MainMenuScreen extends Screen {
     }
 
     private AgencyService createAgencyService() {
-        AgencyRepository agencyRepository = new InFileAgencyRepositoryImpl();
-        return new AgencyServiceImpl(agencyRepository);
+        return new AgencyServiceImpl(InFileAgencyRepositoryImpl.getInstance());
     }
 
     private VehicleService createVehicleService() {
-        VehicleRepository vehicleRepository = new InFileVehicleRepository();
-        return new VehicleServiceImpl(vehicleRepository);
+        return new VehicleServiceImpl(InFileVehicleRepository.getInstance());
     }
 
     private CustomerService createCustomerService() {
-        CustomerRepository customerRepository = new InFileCustomerRepositoryImpl();
-        return new CustomerServiceImpl(customerRepository);
+        return new CustomerServiceImpl(InFileCustomerRepositoryImpl.getInstance());
     }
 
     private RentalService createRentalService() {
-        RentalRepository rentalRepository = new InFileRentalRepository();
-        return new RentalServiceImpl(rentalRepository);
+        return new RentalServiceImpl(InFileRentalRepository.getInstance(), InFileVehicleRepository.getInstance());
     }
 
     @Override

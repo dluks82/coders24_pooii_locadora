@@ -7,11 +7,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class InMemoryVehicleRepository implements VehicleRepository {
+    private static VehicleRepository instance;
+    private final List<Vehicle> vehicles;
 
-    private List<Vehicle> vehicles;
-
-    public InMemoryVehicleRepository() {
+    private InMemoryVehicleRepository() {
         this.vehicles = new ArrayList<>();
+    }
+
+    public static VehicleRepository getInstance() {
+        if (instance == null) {
+            instance = new InMemoryVehicleRepository();
+        }
+        return instance;
+    }
+
+    @Override
+    public void saveData() {
+        // Do nothing
     }
 
     @Override

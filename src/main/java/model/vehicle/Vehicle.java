@@ -14,7 +14,7 @@ public abstract class Vehicle implements Serializable {
     private final String model;
     private final String brand;
     private boolean available;
-    private final Agency agency;
+    private Agency agency;
     private final VehicleType type;
 
     public Vehicle(String id, String plate, String model, String brand, Agency agency, VehicleType type) {
@@ -65,5 +65,9 @@ public abstract class Vehicle implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
     }
 }

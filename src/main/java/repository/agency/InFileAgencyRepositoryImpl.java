@@ -3,26 +3,31 @@ package repository.agency;
 import data.DataPersistence;
 import model.agency.Agency;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InFileAgencyRepositoryImpl implements AgencyRepository {
+    private static AgencyRepository instance;
     private List<Agency> agencies;
 
-
-    public InFileAgencyRepositoryImpl() {
+    private InFileAgencyRepositoryImpl() {
         loadData();
     }
 
-    private void saveData(){
+    public static  AgencyRepository getInstance() {
+        if (instance == null) {
+            instance = new InFileAgencyRepositoryImpl();
+        }
+        return instance;
+    }
+
+    public void saveData() {
         DataPersistence.save(agencies, "agency-DB");
     }
 
-    private void loadData(){
+    private void loadData() {
         agencies = DataPersistence.load("agency-DB");
     }
-
 
     @Override
     public Agency save(Agency agency) {

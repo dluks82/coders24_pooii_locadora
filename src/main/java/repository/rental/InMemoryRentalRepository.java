@@ -7,14 +7,23 @@ import model.customer.Customer;
 import model.rental.Rental;
 
 public class InMemoryRentalRepository implements RentalRepository {
-
+    private static RentalRepository instance;
     private List<Rental> rentals;
 
-    public InMemoryRentalRepository() {
+    private InMemoryRentalRepository() {
         this.rentals = new ArrayList<>();
     }
 
+    public static RentalRepository getInstance() {
+        if (instance == null) {
+            instance = new InMemoryRentalRepository();
+        }
+        return instance;
+    }
 
+    @Override
+    public void saveData() {
+    }
 
     @Override
     public Rental save(Rental entity) {

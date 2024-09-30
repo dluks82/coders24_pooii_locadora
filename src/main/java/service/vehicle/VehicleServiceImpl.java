@@ -28,7 +28,6 @@ public class VehicleServiceImpl implements VehicleService {
 
         Vehicle newVehicle = null;
 
-//        String newVehicleId = vehicleRepository.generateId();
         String newVehicleId = UUID.randomUUID().toString();
 
         if (vehicleDTO.type() == VehicleType.CAR) {

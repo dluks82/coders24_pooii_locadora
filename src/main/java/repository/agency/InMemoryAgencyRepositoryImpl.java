@@ -6,15 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryAgencyRepositoryImpl implements AgencyRepository {
-    private List<Agency> agencies;
-    public InMemoryAgencyRepositoryImpl() {
+    private static AgencyRepository instance;
+    private final List<Agency> agencies;
+
+    private InMemoryAgencyRepositoryImpl() {
         agencies = new ArrayList<Agency>();
     }
 
+    public static AgencyRepository getInstance() {
+        if (instance == null) {
+            instance = new InMemoryAgencyRepositoryImpl();
+        }
+        return instance;
+    }
 
-
-
-
+    @Override
+    public void saveData() {
+    }
 
     @Override
     public Agency save(Agency agency) {

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface AgencyRepository extends Repository<Agency> {
 
+    void saveData();
+
     List<Agency> searchByName(String name);
 
     Agency findByName(String name);

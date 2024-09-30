@@ -8,15 +8,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class InFileVehicleRepository implements VehicleRepository {
-
+    private static VehicleRepository instance;
     private List<Vehicle> vehicles;
 
-    public InFileVehicleRepository() {
-
+    private InFileVehicleRepository() {
         loadData();
     }
 
-    private void saveData() {
+    public static VehicleRepository getInstance() {
+        if (instance == null) {
+            instance = new InFileVehicleRepository();
+        }
+        return instance;
+    }
+
+    public void saveData() {
         DataPersistence.save(vehicles, "vehicle-DB");
     }
 

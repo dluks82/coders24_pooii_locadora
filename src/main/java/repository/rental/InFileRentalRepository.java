@@ -8,15 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InFileRentalRepository implements RentalRepository {
-
+    private static RentalRepository instance;
     private List<Rental> rentals;
 
-    public InFileRentalRepository() {
-
+    private InFileRentalRepository() {
         loadData();
     }
 
-    private void saveData(){
+    public static RentalRepository getInstance() {
+        if (instance == null) {
+            instance = new InFileRentalRepository();
+        }
+        return instance;
+    }
+
+    public void saveData(){
         DataPersistence.save(rentals, "rental-DB");
     }
 
