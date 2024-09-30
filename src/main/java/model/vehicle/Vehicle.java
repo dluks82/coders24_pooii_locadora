@@ -3,9 +3,12 @@ package model.vehicle;
 import enums.VehicleType;
 import model.agency.Agency;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Serializable {
+    private final static long serialVersionUID = 1L;
+
     private final String id;
     private final String plate;
     private final String model;

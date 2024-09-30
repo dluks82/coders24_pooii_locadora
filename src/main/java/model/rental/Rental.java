@@ -1,5 +1,6 @@
 package model.rental;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,7 +15,8 @@ import model.customer.Customer;
 import model.vehicle.Vehicle;
 import utils.DateTimeUtils;
 
-public class Rental {
+public class Rental implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final String id;
     private final Customer customer;
@@ -83,7 +85,6 @@ public class Rental {
         LocalDateTime dataEntrega =
                 this.actualReturnDate == null
                         ? this.estimatedReturnDate : this.actualReturnDate;
-        // calcular os dias
 
         long totalDias = DateTimeUtils.calculateDaysBetween(this.pickUpDate, dataEntrega);
 

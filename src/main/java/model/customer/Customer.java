@@ -2,7 +2,10 @@ package model.customer;
 
 import enums.CustomerType;
 
-public abstract class Customer {
+import java.io.Serializable;
+
+public abstract class Customer implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     protected String id;
     protected String name;
@@ -36,7 +39,9 @@ public abstract class Customer {
         return documentId;
     }
 
-    public CustomerType getType() { return type; }
+    public CustomerType getType() {
+        return type;
+    }
 
     @Override
     public String toString() {
