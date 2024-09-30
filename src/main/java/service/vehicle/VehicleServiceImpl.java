@@ -31,20 +31,20 @@ public class VehicleServiceImpl implements VehicleService {
 //        String newVehicleId = vehicleRepository.generateId();
         String newVehicleId = UUID.randomUUID().toString();
 
-        if (vehicleDTO.type()== VehicleType.CAR) {
+        if (vehicleDTO.type() == VehicleType.CAR) {
             newVehicle = new Car(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
                     vehicleDTO.agency()
             );
-        }else if (vehicleDTO.type() == VehicleType.TRUCK) {
+        } else if (vehicleDTO.type() == VehicleType.TRUCK) {
             newVehicle = new Truck(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
                     vehicleDTO.brand(),
                     vehicleDTO.agency());
-        }else if (vehicleDTO.type() == VehicleType.MOTORCYCLE) {
+        } else if (vehicleDTO.type() == VehicleType.MOTORCYCLE) {
             newVehicle = new Motorcycle(newVehicleId,
                     vehicleDTO.plate(),
                     vehicleDTO.model(),
@@ -63,7 +63,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Vehicle updateVehicle(Vehicle vehicle) {
         Vehicle vehicleFoundByPlate = vehicleRepository.findByPlate(vehicle.getPlate());
-        if(vehicleFoundByPlate != null && !vehicleFoundByPlate.getId().equals(vehicle.getId())) {
+        if (vehicleFoundByPlate != null && !vehicleFoundByPlate.getId().equals(vehicle.getId())) {
             throw new IllegalArgumentException("Placa já existe!");
         }
         return vehicleRepository.update(vehicle);
@@ -81,7 +81,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle findVehicleByPlate(String plate) {
-            return vehicleRepository.findByPlate(plate);
+        return vehicleRepository.findByPlate(plate);
     }
 
     @Override
@@ -92,5 +92,10 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<Vehicle> findVehicleByAgencyId(String agencyId) {
         return vehicleRepository.findByAgencyId(agencyId);
+    }
+
+    @Override
+    public List<Vehicle> findAvailableVehiclesByAgencyId(String agencyId) {
+        return vehicleRepository.findAvailableVehiclesByAgencyId(agencyId);
     }
 }

@@ -1,6 +1,7 @@
 package model.rental;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import enums.VehicleType;
 import model.agency.Agency;
 import model.customer.Customer;
 import model.vehicle.Vehicle;
+import utils.DateTimeUtils;
 
 public class Rental implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -20,14 +22,14 @@ public class Rental implements Serializable {
     private final Customer customer;
     private final Vehicle vehicle;
     private final Agency pickUpAgency;
-    private final LocalDate pickUpDate;
+    private final LocalDateTime pickUpDate;
     private Agency returnAgency;
-    private final LocalDate estimatedReturnDate;
-    private LocalDate actualReturnDate;
+    private final LocalDateTime estimatedReturnDate;
+    private LocalDateTime actualReturnDate;
 
     //constructor
-    public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDate pickUpDate,
-                  LocalDate estimatedReturnDate) {
+    public Rental(String id, Customer customer, Vehicle vehicle, Agency pickUpAgency, LocalDateTime pickUpDate,
+                  LocalDateTime estimatedReturnDate) {
         this.id = id;
         this.customer = customer;
         this.vehicle = vehicle;
@@ -45,7 +47,7 @@ public class Rental implements Serializable {
         return customer;
     }
 
-    public LocalDate getActualReturnDate() {
+    public LocalDateTime getActualReturnDate() {
         return actualReturnDate;
     }
 
@@ -57,7 +59,7 @@ public class Rental implements Serializable {
         return pickUpAgency;
     }
 
-    public LocalDate getPickUpDate() {
+    public LocalDateTime getPickUpDate() {
         return pickUpDate;
     }
 
@@ -65,11 +67,11 @@ public class Rental implements Serializable {
         return returnAgency;
     }
 
-    public LocalDate getEstimatedReturnDate() {
+    public LocalDateTime getEstimatedReturnDate() {
         return estimatedReturnDate;
     }
 
-    public void setActualReturnDate(LocalDate actualReturnDate) {
+    public void setActualReturnDate(LocalDateTime actualReturnDate) {
         this.actualReturnDate = actualReturnDate;
     }
 
@@ -80,12 +82,11 @@ public class Rental implements Serializable {
     // class methods
     public BigDecimal calculateTotalCost() {
         BigDecimal big;
-        LocalDate dataEntrega =
+        LocalDateTime dataEntrega =
                 this.actualReturnDate == null
                         ? this.estimatedReturnDate : this.actualReturnDate;
-        Period period = Period.between(this.pickUpDate, dataEntrega);
-        int dias = period.getDays();
-        int totalDias = period.getYears() * 365 + period.getMonths() * 30 + dias; // Aproximação
+
+        long totalDias = DateTimeUtils.calculateDaysBetween(this.pickUpDate, dataEntrega);
 
         if (this.getVehicle().getType() == VehicleType.CAR) {
             if (this.customer.getType() == CustomerType.INDIVIDUAL) {
@@ -145,10 +146,10 @@ public class Rental implements Serializable {
                 "Endereço: " + returnAgency.getAddress() + "\n" +
                 "Telefone: " + returnAgency.getPhone() + "\n" +
                 "Data Estimada de Devolução: "
-                + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +
+                + estimatedReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
                 "Data Real de Devolução: "
                 + (actualReturnDate != null
-                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A") + "\n\n" +
+                ? actualReturnDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A") + "\n\n" +
                 "=== VALOR DO ALUGUEL ===\n" +
                 "Valor Total: R$ " + calculateTotalCost() + "\n" +
                 "==========================================\n";

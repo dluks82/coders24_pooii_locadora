@@ -1,6 +1,5 @@
 package ui.screens.vehicle;
 
-import model.agency.Agency;
 import model.vehicle.Vehicle;
 import service.vehicle.VehicleService;
 import ui.utils.Header;
@@ -42,7 +41,7 @@ public class VehicleListScreen extends Screen {
     public void show() {
         List<Vehicle> vehicles;
         if (agencyIdToFilter != null) {
-            vehicles = vehicleService.findVehicleByAgencyId(agencyIdToFilter);
+            vehicles = vehicleService.findAvailableVehiclesByAgencyId(agencyIdToFilter);
         } else {
             vehicles = vehicleService.findAllVehicles();
         }
@@ -92,16 +91,18 @@ public class VehicleListScreen extends Screen {
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║ %-3s │ %-23s │ %-23s │ %-13s ║%n", "Nº", "Placa", "Modelo", "Diária");
-        System.out.println("╟─────┼─────────────────────────┼─────────────────────────┼───────────────╢");
+        System.out.printf("║ %-3s │ %-10s │ %-10s │ %-12s │ %-12s │ %-9s ║%n", "Nº", "Tipo", "Placa", "Modelo", "Marca", "Diária");
+        System.out.println("╟─────┼────────────┼────────────┼──────────────┼──────────────┼───────────╢");
 
         for (int i = start; i < end; i++) {
             Vehicle vehicle = vehicles.get(i);
-            System.out.printf("║ %-3d │ %-23s │ %-23s │ %-13s ║%n",
+            System.out.printf("║ %-3d │ %-10s │ %-10s │ %-12s │ %-12s │ %9s ║%n",
                     (i + 1),
-                    limitString(vehicle.getPlate(), 23),
-                    limitString(vehicle.getModel(), 23),
-                    limitString(vehicle.getDailyRate().toString(), 13));
+                    limitString(vehicle.getType().getDescription(), 10),
+                    limitString(vehicle.getPlate(), 10),
+                    limitString(vehicle.getModel(), 12),
+                    limitString(vehicle.getBrand(), 12),
+                    limitString(vehicle.getDailyRate().toString(), 9));
         }
 
         System.out.println(emptyLine);
