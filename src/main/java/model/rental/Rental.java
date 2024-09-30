@@ -112,12 +112,11 @@ public class Rental implements Serializable {
     }
 
     public String generatePickupReceipt() {
-
         return "========== RECIBO DE ALUGUEL ==========\n" +
-                "Cliente: " + customer.getName() + "\n" +
-                "Telefone: " + customer.getPhoneNumber() + "\n" +
+                "Tipo de Cliente: " + customer.getType().getDescription() + "\n" +
                 "Documento: " + customer.getDocumentId() + "\n" +
-                "Tipo de Cliente: " + customer.getType() + "\n\n" +
+                "Cliente: " + customer.getName() + "\n" +
+                "Telefone: " + customer.getPhoneNumber() + "\n\n" +
                 "=== DETALHES DO VEÍCULO ===\n" +
                 "Modelo: " + vehicle.getModel() + "\n" +
                 "Marca: " + vehicle.getBrand() + "\n" +
@@ -131,12 +130,11 @@ public class Rental implements Serializable {
     }
 
     public String generateReturnReceipt() {
-
         return "========== RECIBO DE DEVOLUÇÃO ==========\n" +
-                "Cliente: " + customer.getName() + "\n" +
-                "Telefone: " + customer.getPhoneNumber() + "\n" +
+                "Tipo de Cliente: " + customer.getType().getDescription() + "\n" +
                 "Documento: " + customer.getDocumentId() + "\n" +
-                "Tipo de Cliente: " + customer.getType() + "\n\n" +
+                "Cliente: " + customer.getName() + "\n" +
+                "Telefone: " + customer.getPhoneNumber() + "\n\n" +
                 "=== DETALHES DO VEÍCULO ===\n" +
                 "Modelo: " + vehicle.getModel() + "\n" +
                 "Marca: " + vehicle.getBrand() + "\n" +

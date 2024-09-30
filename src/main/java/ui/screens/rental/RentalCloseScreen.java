@@ -13,7 +13,6 @@ import ui.utils.Output;
 import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -175,10 +174,7 @@ public class RentalCloseScreen extends Screen {
                 return;
             }
 
-            System.out.println("Locação encerrada com sucesso!");
-
             showReceipt(rentalToClose);
-            scanner.nextLine();
         } else {
             System.out.println("Cancelada.");
         }
@@ -217,9 +213,21 @@ public class RentalCloseScreen extends Screen {
     }
 
     private void handleFieldSelectionError() {
-        System.out.println("1 - Voltar para o campo anterior");
-        System.out.println("2 - Tentar novamente");
-        System.out.println("3 - Cancelar");
+        String[] options = {
+                "  [ 1 ] - Voltar para o campo anterior",
+                "  [ 2 ] - Tentar novamente",
+                "  [ 3 ] - Cancelar"
+        };
+
+        String emptyLine = "║  " + " ".repeat(40) + "  ║";
+        String bottomLine = "╚══" + "═".repeat(40) + "══╝";
+
+        System.out.println(emptyLine);
+        for (String option : options) {
+            System.out.printf("║  %-40s  ║%n", option);
+        }
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
 
         Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
         switch (option.getValue()) {

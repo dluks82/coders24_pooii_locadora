@@ -1,6 +1,7 @@
 package ui.screens.rental;
 
 import dto.CreateRentalDTO;
+import enums.CustomerType;
 import model.agency.Agency;
 import model.customer.Customer;
 import model.rental.Rental;
@@ -205,15 +206,13 @@ public class RentalCreateScreen extends Screen {
             try {
                 Rental createdRental = rentalService.createRental(createRentalDTO);
 
-                Output.info("Locação realizada com sucesso!");
-
                 showReceipt(createdRental);
-                scanner.nextLine();
 
             } catch (Exception e) {
                 Output.error(e.getMessage());
                 System.out.println("... cancelado.");
                 scanner.nextLine();
+                cancelRegistration();
                 return;
             }
 
@@ -247,9 +246,21 @@ public class RentalCreateScreen extends Screen {
     }
 
     private void handleFieldSelectionError() {
-        System.out.println("1 - Voltar para o campo anterior");
-        System.out.println("2 - Tentar novamente");
-        System.out.println("3 - Cancelar");
+        String[] options = {
+                "  [ 1 ] - Voltar para o campo anterior",
+                "  [ 2 ] - Tentar novamente",
+                "  [ 3 ] - Cancelar"
+        };
+
+        String emptyLine = "║  " + " ".repeat(40) + "  ║";
+        String bottomLine = "╚══" + "═".repeat(40) + "══╝";
+
+        System.out.println(emptyLine);
+        for (String option : options) {
+            System.out.printf("║  %-40s  ║%n", option);
+        }
+        System.out.println(emptyLine);
+        System.out.println(bottomLine);
 
         Result<Integer> option = Input.getAsInt(scanner, "Escolha uma opção: ", false);
         switch (option.getValue()) {
