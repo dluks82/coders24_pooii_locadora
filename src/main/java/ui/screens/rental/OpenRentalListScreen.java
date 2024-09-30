@@ -59,7 +59,7 @@ public class OpenRentalListScreen extends Screen {
     }
 
     private void listPaginatedRentals(List<Rental> rentals, int page) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         int totalPages = (int) Math.ceil((double) rentals.size() / PAGE_SIZE);
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, rentals.size());
@@ -79,16 +79,16 @@ public class OpenRentalListScreen extends Screen {
         String bottomLine = "╚════" + "═".repeat(MAX_LINE_LENGTH) + "════╝";
 
         System.out.println(emptyLine);
-        System.out.printf("║ %-3s │ %-33s │ %-13s │ %-13s ║%n", "Nº", "Cliente", "Data Início", "Data Estimada");
-        System.out.println("╟─────┼───────────────────────────────────┼───────────────┼───────────────╢");
+        System.out.printf("║ %-3s │ %-27s │ %-16s │ %-16s ║%n", "Nº", "Cliente", "Data Início", "Data Estimada");
+        System.out.println("╟─────┼─────────────────────────────┼──────────────────┼──────────────────╢");
 
         for (int i = start; i < end; i++) {
             Rental rental = rentals.get(i);
-            System.out.printf("║ %-3d │ %-33s │ %-13s │ %-13s ║%n",
+            System.out.printf("║ %-3d │ %-27s │ %-16s │ %-16s ║%n",
                     (i + 1),
-                    limitString(rental.getCustomer().getName(), 23),
-                    limitString(rental.getPickUpDate().format(formatter), 23),
-                    limitString(rental.getEstimatedReturnDate().format(formatter), 13));
+                    limitString(rental.getCustomer().getName(), 27),
+                    limitString(rental.getPickUpDate().format(formatter), 16),
+                    limitString(rental.getEstimatedReturnDate().format(formatter), 16));
         }
 
         System.out.println(emptyLine);

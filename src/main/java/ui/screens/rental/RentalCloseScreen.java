@@ -14,6 +14,7 @@ import ui.utils.Result;
 import ui.utils.ScreenUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -27,9 +28,10 @@ public class RentalCloseScreen extends Screen {
     private Rental rentalToClose;
     private Agency returnAgency;
 
-    private LocalDate returnDate;
+    private LocalDateTime returnDate;
 
-    private int rentalDays;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
 
     private String errorMessage = "";
 
@@ -106,16 +108,16 @@ public class RentalCloseScreen extends Screen {
                     currentField = 2;
                 }
                 case 2 -> {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     returnDate = null;
 
                     while (returnDate == null) {
-                        String returnDateInput = Input.getAsString(scanner, "Data de retorno (dd/MM/yyyy): ", false, false);
-                        try {
-                            returnDate = LocalDate.parse(returnDateInput, formatter);
-                        } catch (Exception e) {
-                            Output.error("Data inválida! Tente novamente.");
+                        Result<LocalDateTime> returnDateInput = Input.getAsDateTime(scanner, "Data de retorno (dd/MM/yyyy HH:mm): ", false);
+                        if (returnDateInput.isFailure()) {
+                            // TODO: errorMessage
+                            Output.error(returnDateInput.getErrorMessage());
+                            continue;
                         }
+                        returnDate = returnDateInput.getValue();
                     }
 
                     currentField = 3;
@@ -136,13 +138,6 @@ public class RentalCloseScreen extends Screen {
     }
 
     private void displayRentalClose() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        rentalDays = (int) (
-                rentalToClose.getActualReturnDate() != null ?
-                        returnDate.toEpochDay() - rentalToClose.getPickUpDate().toEpochDay() :
-                        rentalToClose.getEstimatedReturnDate().toEpochDay() - rentalToClose.getPickUpDate().toEpochDay()
-        );
 
         String[] fields = {
                 "Agência de Retirada: " + rentalToClose.getPickUpAgency().getName(),
@@ -152,7 +147,6 @@ public class RentalCloseScreen extends Screen {
                 "Data estimada de término: " + rentalToClose.getEstimatedReturnDate().format(formatter),
                 "Agência de Retorno: " + (returnAgency != null ? returnAgency.getName() : ""),
                 "Data de Retorno: " + (returnDate != null ? returnDate.format(formatter) : ""),
-                "Valor da locação: " + rentalToClose.getVehicle().calculateRentalPrice(rentalDays).toString()
         };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";

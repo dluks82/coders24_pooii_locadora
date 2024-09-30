@@ -1,6 +1,7 @@
 package service.rental;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDate actualReturnDate) {
+    public Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDateTime actualReturnDate) {
         Rental existingRental = rentalRepository.findById(rentalToClose.getId());
         if (existingRental == null) throw new IllegalArgumentException("Locacao nao existe!");
 
