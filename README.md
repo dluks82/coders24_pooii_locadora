@@ -118,3 +118,11 @@ Se você já tiver o Maven instalado em sua máquina, pode usar os seguintes com
 ## Licença
 
 Este projeto está licenciado sob a [**Licença MIT**](LICENSE).
+
+## Contribuidores
+
+- [**Breno Torquato**]("https://github.com/Br3nOT")
+- [**Diogo Oliveira**]("https://github.com/dluks82")
+- [**Guilherme Meneghini**]("https://github.com/guimeneghini")
+- [**Irving Caetano**]("https://github.com/Irving1409")
+- [**Rômulo Domingos**]("https://github.com/RAODomingos")
