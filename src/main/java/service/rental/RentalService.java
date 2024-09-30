@@ -4,7 +4,7 @@ import model.agency.Agency;
 import model.customer.Customer;
 import model.rental.Rental;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import dto.CreateRentalDTO;
@@ -13,7 +13,7 @@ public interface RentalService {
 
     Rental createRental(CreateRentalDTO rentalDto);
 
-    Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDate actualReturnDate);
+    Rental closeRental(Rental rentalToClose, Agency returnAgency, LocalDateTime actualReturnDate);
 
     Rental updateRental(Rental rental);
 

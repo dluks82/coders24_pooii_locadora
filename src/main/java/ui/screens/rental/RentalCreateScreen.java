@@ -19,9 +19,11 @@ import ui.utils.Input;
 import ui.utils.Output;
 import ui.utils.Result;
 import ui.utils.ScreenUtils;
+import utils.DateTimeUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -38,8 +40,11 @@ public class RentalCreateScreen extends Screen {
     private Customer selectedCustomer;
     private Vehicle selectedVehicle;
 
-    private LocalDate startDate;
-    private LocalDate estimatedEndDate;
+    private LocalDateTime startDate;
+    private LocalDateTime estimatedEndDate;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
 
     private int rentalDays;
 
@@ -135,13 +140,12 @@ public class RentalCreateScreen extends Screen {
                     currentField = 3;
                 }
                 case 3 -> {
-                    startDate = LocalDate.now();
+                    startDate = LocalDateTime.now();
 
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     estimatedEndDate = null;
 
                     while (estimatedEndDate == null) {
-                        Result<LocalDate> estimatedReturnResult = Input.getAsDate(scanner, "Data de retorno (dd/MM/yyyy): ", false);
+                        Result<LocalDateTime> estimatedReturnResult = Input.getAsDateTime(scanner, "Data de retorno (dd/MM/yyyy HH:mm): ", false);
                         if (estimatedReturnResult.isFailure()) {
                             // TODO: errorMessage
                             Output.error(estimatedReturnResult.getErrorMessage());
@@ -150,10 +154,10 @@ public class RentalCreateScreen extends Screen {
                         estimatedEndDate = estimatedReturnResult.getValue();
                     }
 
-                    rentalDays = (int) (estimatedEndDate.toEpochDay() - startDate.toEpochDay());
+                    rentalDays = (int) DateTimeUtils.calculateDaysBetween(startDate, estimatedEndDate);
 
-                    Output.info(String.format("Data de início: %s", startDate));
-                    Output.info(String.format("Data estimada de término: %s", estimatedEndDate));
+                    Output.info(String.format("Data de início: %s", startDate.format(formatter)));
+                    Output.info(String.format("Data estimada de término: %s", estimatedEndDate.format(formatter)));
                     Output.info(String.format("Valor estimado: R$ %.2f", selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays))));
 
                     currentField = 5;
@@ -165,8 +169,6 @@ public class RentalCreateScreen extends Screen {
     }
 
     private void displayRentalRegistration() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         String[] fields = {
                 "Agência: " + (selectedAgency != null ? selectedAgency.getName() : ""),
                 "Veículo: " + (selectedVehicle != null ? selectedVehicle.getModel() : ""),
@@ -175,7 +177,7 @@ public class RentalCreateScreen extends Screen {
                 "Data estimada de término: " + (estimatedEndDate != null ? estimatedEndDate.format(formatter) : ""),
                 "Custo estimado da locação: " + (selectedVehicle != null && estimatedEndDate != null
                         ? "R$ " + (selectedVehicle.getDailyRate().multiply(BigDecimal.valueOf(rentalDays)))
-                        : "Não definido")
+                        : "")
         };
 
         String emptyLine = "║    " + " ".repeat(MAX_LINE_LENGTH) + "    ║";

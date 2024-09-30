@@ -6,6 +6,7 @@ import utils.Validator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -50,8 +51,8 @@ public class Input {
         }
     }
 
-    public static Result<LocalDate> getAsDate(Scanner scanner, String promptMessage, boolean canBeEmpty) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public static Result<LocalDateTime> getAsDateTime(Scanner scanner, String promptMessage, boolean canBeEmpty) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         Output.prompt(promptMessage);
         try {
             String value = scanner.nextLine().trim();
@@ -60,11 +61,11 @@ public class Input {
 
             if (value.equalsIgnoreCase("cancel")) throw new DataInputInterruptedException();
 
-            LocalDate date = LocalDate.parse(value, formatter);
+            LocalDateTime date = LocalDateTime.parse(value, formatter);
 
             return Result.success(date);
         } catch (DateTimeParseException e) {
-            return Result.fail("Data inválida! Por favor, insira uma data no formato dd/MM/aaaa.");
+            return Result.fail("Data inválida! Por favor, insira uma data no formato dd/MM/yyyy HH:mm.");
         } catch (Exception e) {
             return Result.fail("Erro desconhecido ao processar a data.");
         }
