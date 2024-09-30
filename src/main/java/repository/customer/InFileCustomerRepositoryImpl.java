@@ -7,14 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InFileCustomerRepositoryImpl implements CustomerRepository {
-
+    private static CustomerRepository instance;
     private List<Customer> customers;
 
-    public InFileCustomerRepositoryImpl(){
-
+    private InFileCustomerRepositoryImpl(){
         loadData();
     }
-    private void saveData(){
+
+    public static CustomerRepository getInstance() {
+        if (instance == null) {
+            instance = new InFileCustomerRepositoryImpl();
+        }
+        return instance;
+    }
+
+    public void saveData(){
         DataPersistence.save(customers, "customer-DB");
     }
     private void loadData(){

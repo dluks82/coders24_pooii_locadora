@@ -6,14 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryCustomerRepositoryImpl implements CustomerRepository {
+    private static CustomerRepository instance;
+    private final List<Customer> customers;
 
-    private List<Customer> customers;
-
-    public InMemoryCustomerRepositoryImpl(){
-
-        customers = new ArrayList<Customer>();
+    private InMemoryCustomerRepositoryImpl(){
+        customers = new ArrayList<>();
     }
 
+    public static CustomerRepository getInstance() {
+        if (instance == null) {
+            instance = new InMemoryCustomerRepositoryImpl();
+        }
+        return instance;
+    }
+
+    @Override
+    public void saveData() {
+
+    }
 
     @Override
     public Customer save(Customer customer) {
@@ -49,7 +59,6 @@ public class InMemoryCustomerRepositoryImpl implements CustomerRepository {
         }
         return temp;
     }
-
 
     @Override
     public List<Customer> findByName(String name) {

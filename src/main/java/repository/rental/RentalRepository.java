@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface RentalRepository extends Repository<Rental> {
 
+    void saveData();
+
     List<Rental> findByCustomer(Customer customer);
 
     List<Rental> findOpenRentals();

@@ -1,6 +1,5 @@
 package service.rental;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -10,13 +9,16 @@ import model.agency.Agency;
 import model.customer.Customer;
 import model.rental.Rental;
 import repository.rental.RentalRepository;
+import repository.vehicle.VehicleRepository;
 
 public class RentalServiceImpl implements RentalService {
 
     private final RentalRepository rentalRepository;
+    private final VehicleRepository vehicleRepository;
 
-    public RentalServiceImpl(RentalRepository rentalRepository) {
+    public RentalServiceImpl(RentalRepository rentalRepository, VehicleRepository vehicleRepository) {
         this.rentalRepository = rentalRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     @Override
@@ -34,8 +36,11 @@ public class RentalServiceImpl implements RentalService {
 
         newRental = new Rental(rentalId, rentalDTO.customer(), rentalDTO.vehicle(), rentalDTO.pickUpAgency(), rentalDTO.pickUpDate(), rentalDTO.estimatedReturnDate());
         newRental.getVehicle().setAvailable(false);
-        //TODO: acho que precisamos salvar os dados de veículo para garantir integridade
         rentalRepository.save(newRental);
+
+        // chamar o saveData do repositório de veículos
+        vehicleRepository.saveData();
+
         return newRental;
     }
 
@@ -56,8 +61,11 @@ public class RentalServiceImpl implements RentalService {
         existingRental.setReturnAgency(returnAgency);
         existingRental.setActualReturnDate(actualReturnDate);
 
+        // Atualizar estado do veículo
+        existingRental.getVehicle().setAgency(returnAgency);
         existingRental.getVehicle().setAvailable(true);
-        //TODO: acho que precisamos salvar os dados de veículo para garantir integridade
+        vehicleRepository.saveData();
+
         return rentalRepository.update(existingRental);
     }
 
