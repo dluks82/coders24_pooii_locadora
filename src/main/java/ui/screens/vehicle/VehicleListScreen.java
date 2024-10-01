@@ -169,7 +169,7 @@ public class VehicleListScreen extends Screen {
 
     private void searchVehicles(List<Vehicle> vehicles) {
         System.out.println("Digite o modelo que deseja buscar: ");
-        String searchQuery = scanner.nextLine().trim().toLowerCase();
+        searchQuery = scanner.nextLine().trim().toLowerCase();
 
         filteredVehicles = vehicles.stream()
                 .filter(vehicle -> vehicle.getModel().toLowerCase().contains(searchQuery))
